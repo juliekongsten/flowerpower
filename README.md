@@ -1,4 +1,4 @@
-# flowerpower
+# flowerpower!
 
 Game implementation for TDT4240
 
