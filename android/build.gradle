@@ -84,6 +84,7 @@ tasks.whenTaskAdded { packageTask ->
     }
 }
 
+
 task run(type: Exec) {
     def path
     def localProperties = project.file("../local.properties")
