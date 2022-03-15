@@ -1,4 +1,14 @@
+apply plugin: 'com.google.gms.google-services'
+
 android {
+    signingConfigs {
+        debug {
+            storePassword 'android'
+            storeFile file('/Users/juliekongsten/Documents/var2022/Progark/flowerpower/flowerpower/android/debug.keystore')
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
     buildToolsVersion "32.0.0"
     compileSdkVersion 32
     sourceSets {
@@ -28,10 +38,17 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            signingConfig signingConfigs.debug
+        }
     }
 }
 
-
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:29.2.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-database'
+}
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper libs/ folders
 // so they get packed with the APK.
