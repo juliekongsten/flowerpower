@@ -48,6 +48,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:29.2.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-database'
+
 }
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper libs/ folders
