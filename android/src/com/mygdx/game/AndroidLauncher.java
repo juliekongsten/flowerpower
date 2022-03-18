@@ -4,14 +4,13 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.mygdx.game.FlowerPowerGame;
-import com.mygdx.game.model.dbConnector;
+import com.mygdx.game.model.fireBaseConnector;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new FlowerPowerGame(new dbConnector()), config);
+		initialize(new FlowerPowerGame(new fireBaseConnector()), config);
 	}
 }

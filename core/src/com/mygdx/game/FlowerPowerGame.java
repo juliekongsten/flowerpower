@@ -8,25 +8,27 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 
-public class FlowerPowerGame extends ApplicationAdapter implements ApplicationListener {
+public class FlowerPowerGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
-	private final db database;
+	FireBaseInterface _FBIC;
 
-	public FlowerPowerGame(db database){
-		this.database = database;
+	public FlowerPowerGame(FireBaseInterface FBIC ){
+		_FBIC = FBIC;
 	}
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		_FBIC.writeToDb("message","fredag!");
+		_FBIC.readFromDb();
 	}
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
-		writeToDb("Hello, world!");
+		//writeToDb("Hello, world!");
 		batch.begin();
 		batch.draw(img, 0, 0);
 		batch.end();
@@ -37,9 +39,8 @@ public class FlowerPowerGame extends ApplicationAdapter implements ApplicationLi
 		batch.dispose();
 		img.dispose();
 	}
-
-	public void writeToDb(String message) {
+	/*public void writeToDb(String message) {
 		Gdx.app.log("core", message);
 		database.writeToDb(message);
-	}
+	}*/
 }
