@@ -1,11 +1,13 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+/**
+ * FlowerPowerGame
+ */
 
 
 public class FlowerPowerGame extends ApplicationAdapter {
@@ -13,6 +15,10 @@ public class FlowerPowerGame extends ApplicationAdapter {
 	Texture img;
 	FireBaseInterface _FBIC;
 
+	/**
+	 * Constructor that creates instance of FireBaseInterface
+	 * @param FBIC
+	 */
 	public FlowerPowerGame(FireBaseInterface FBIC ){
 		_FBIC = FBIC;
 	}
@@ -21,6 +27,7 @@ public class FlowerPowerGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		//calls methods in fireBaseConnector to test them out
 		_FBIC.writeToDb("message","fredag!");
 		_FBIC.readFromDb();
 	}
@@ -28,7 +35,6 @@ public class FlowerPowerGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
-		//writeToDb("Hello, world!");
 		batch.begin();
 		batch.draw(img, 0, 0);
 		batch.end();
@@ -39,8 +45,4 @@ public class FlowerPowerGame extends ApplicationAdapter {
 		batch.dispose();
 		img.dispose();
 	}
-	/*public void writeToDb(String message) {
-		Gdx.app.log("core", message);
-		database.writeToDb(message);
-	}*/
 }

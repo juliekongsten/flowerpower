@@ -1,8 +1,10 @@
 package com.mygdx.game.desktop;
 
-import com.badlogic.gdx.Gdx;
 import com.mygdx.game.FireBaseInterface;
 
+/**
+ * Currently not used but required for communication between modules
+ */
 public class fireBaseInterfaceDesktop implements FireBaseInterface {
 
     @Override

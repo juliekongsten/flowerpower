@@ -1,7 +1,8 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
-
+/**
+ * Currently not used but required for communication between modules
+ */
 public class fireBaseInterfaceCore implements FireBaseInterface{
     @Override
     public void writeToDb(String target, String value) { }
