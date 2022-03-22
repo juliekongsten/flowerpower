@@ -28,7 +28,7 @@ public class FlowerPowerGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 		//calls methods in fireBaseConnector to test them out
-		_FBIC.writeToDb("message","tirsdag!");
+		_FBIC.writeToDb("message","tir!");
 		_FBIC.readFromDb();
 	}
 
