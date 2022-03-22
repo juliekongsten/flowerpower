@@ -4,7 +4,7 @@ android {
     signingConfigs {
         debug {
             storePassword 'android'
-            storeFile file('/Users/juliekongsten/Documents/var2022/Progark/flowerpower/flowerpower/android/debug.keystore')
+            storeFile file("external/debug.keystore")
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
