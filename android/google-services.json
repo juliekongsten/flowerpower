@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "447393807426",
+    "project_id": "flowerpower-9b405",
+    "storage_bucket": "flowerpower-9b405.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447393807426:android:2372427e48dbe18de341db",
+        "android_client_info": {
+          "package_name": "com.mygdx.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "447393807426-b097k61tudels82gdlmp0v3pokghpf2i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-JDCPqIowZgzdmYtbLb9W6Gn4K5W4c4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "447393807426-b097k61tudels82gdlmp0v3pokghpf2i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
