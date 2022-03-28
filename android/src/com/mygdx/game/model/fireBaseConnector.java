@@ -42,6 +42,7 @@ public class fireBaseConnector implements FireBaseInterface {
 
     /**
      * readFromDb creates a listener that listens to the location of myRef and logs the value on that reference
+     * will implement the publish subscriber pattern
      */
     @Override
     public void readFromDb() {
