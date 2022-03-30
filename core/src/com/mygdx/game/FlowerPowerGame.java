@@ -34,7 +34,7 @@ public class FlowerPowerGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		vm = ViewManager.getViewManager();
-		vm.push(new RegisterView(vm));
+		vm.push(new StartView(vm));
 		//calls methods in fireBaseConnector to test them out
 		_FBIC.writeToDb("message","tir!");
 		_FBIC.readFromDb();
