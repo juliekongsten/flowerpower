@@ -3,6 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/flowerpower.iml" filepath="$PROJECT_DIR$/.idea/flowerpower.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android/flowerpower.android.iml" filepath="$PROJECT_DIR$/.idea/modules/android/flowerpower.android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/flowerpower.core.iml" filepath="$PROJECT_DIR$/.idea/modules/core/flowerpower.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/desktop/flowerpower.desktop.iml" filepath="$PROJECT_DIR$/.idea/modules/desktop/flowerpower.desktop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/html/flowerpower.html.iml" filepath="$PROJECT_DIR$/.idea/modules/html/flowerpower.html.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ios/flowerpower.ios.iml" filepath="$PROJECT_DIR$/.idea/modules/ios/flowerpower.ios.iml" />
     </modules>
   </component>
 </project>
