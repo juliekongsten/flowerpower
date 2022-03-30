@@ -55,7 +55,7 @@ public class StartView extends View{
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
-        sb.draw(logo,36,350);
+        sb.draw(logo,36,375);
         sb.draw(register,100,175);
         sb.draw(login,125,100);
         sb.end();
