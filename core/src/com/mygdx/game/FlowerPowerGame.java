@@ -14,6 +14,8 @@ import com.mygdx.game.Views.ViewManager;
 
 
 public class FlowerPowerGame extends ApplicationAdapter {
+	public static final int WIDTH = 375;
+	public static final int HEIGHT = 667;
 	private SpriteBatch batch;
 	private ViewManager vm;
 	FireBaseInterface _FBIC;

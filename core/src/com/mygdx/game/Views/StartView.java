@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.FlowerPowerGame;
 
 public class StartView extends View{
     private Texture logo;
@@ -22,6 +23,7 @@ public class StartView extends View{
         logo = new Texture("logo.png");
         register = new Texture("register.png");
         login = new Texture("login.png");
+        cam.setToOrtho(false, FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT);
     }
 
     @Override
@@ -50,6 +52,7 @@ public class StartView extends View{
 
     @Override
     public void render(SpriteBatch sb) {
+        sb.setProjectionMatrix(cam.combined);
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
         sb.draw(logo,36,350);
