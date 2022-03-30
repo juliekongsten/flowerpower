@@ -24,6 +24,10 @@ public class StartView extends View{
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
+            System.out.println("You pressed the screen" +
+                    " x: " + Gdx.input.getX() + " y: " + Gdx.input.getY());
+            // Dette viser at koordinatene blir helt forskjellig på desktop og emulator
+
             int x = Gdx.input.getX();
             int y = Gdx.graphics.getHeight() - Gdx.input.getY();
             Rectangle loginBounds = new Rectangle(125, 100, login.getWidth(), login.getHeight());
