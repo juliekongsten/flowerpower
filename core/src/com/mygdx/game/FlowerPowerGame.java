@@ -1,9 +1,12 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Views.StartView;
+import com.mygdx.game.Views.ViewManager;
 
 /**
  * FlowerPowerGame
@@ -11,8 +14,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 
 public class FlowerPowerGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+	private SpriteBatch batch;
+	private ViewManager vm;
 	FireBaseInterface _FBIC;
 
 	/**
@@ -21,12 +24,14 @@ public class FlowerPowerGame extends ApplicationAdapter {
 	 */
 	public FlowerPowerGame(FireBaseInterface FBIC ){
 		_FBIC = FBIC;
+
 	}
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		vm = ViewManager.getViewManager();
+		vm.push(new StartView(vm));
 		//calls methods in fireBaseConnector to test them out
 		_FBIC.writeToDb("message","tir!");
 		_FBIC.readFromDb();
@@ -34,15 +39,16 @@ public class FlowerPowerGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
+		/*ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
 		batch.draw(img, 0, 0);
-		batch.end();
+		batch.end();*/
+		vm.render(batch);
+		vm.update(Gdx.graphics.getDeltaTime());
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
 	}
 }
