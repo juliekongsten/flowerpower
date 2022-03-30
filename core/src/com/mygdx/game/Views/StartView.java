@@ -3,7 +3,6 @@ package com.mygdx.game.Views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -28,11 +27,8 @@ public class StartView extends View{
     protected void handleInput() {
         if(Gdx.input.isTouched()){
             Vector3 tmp = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
-            Rectangle loginBounds = new Rectangle(125,100,login.getWidth(),login.getHeight());
-            Rectangle registerBounds = new Rectangle(100,175,register.getWidth(),register.getHeight());
-            if(loginBounds.contains(tmp.x,tmp.y)){}
-        }
 
+        }
 
     }
 
