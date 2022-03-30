@@ -2,12 +2,14 @@ package com.mygdx.game.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -22,6 +24,7 @@ public class LoginView extends View {
     private TextField password;
     private String usernameTyped;
     private String passwordTyped;
+    private Pixmap cursorColor;
 
     protected LoginView(ViewManager vm) {
         super(vm);
@@ -32,25 +35,49 @@ public class LoginView extends View {
 
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
-        TextField.TextFieldStyle style = new TextField.TextFieldStyle();
-        style.background = new Image(new Texture("inputbox.png")).getDrawable();
-        style.font = new BitmapFont();
-        style.fontColor = Color.BLACK;
-        username = new TextField("", style);
-        username.setWidth(FlowerPowerGame.WIDTH-20);
-        username.setHeight(37);
-        username.setPosition(10, 240);
+
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.background = new Image(new Texture("inputbox.png")).getDrawable();
+        textFieldStyle.font = new BitmapFont();
+        textFieldStyle.fontColor = Color.BLACK;
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = new BitmapFont();
+
+        setCursor(labelStyle);
+        textFieldStyle.cursor = new Image(new Texture(cursorColor)).getDrawable();
+
+        setUsernameField(textFieldStyle);
         stage.addActor(username);
 
-        password = new TextField("", style);
-        password.setPasswordMode(true);
-        password.setPasswordCharacter('*');
-        password.setWidth(FlowerPowerGame.WIDTH-20);
-        password.setHeight(37);
-        password.setPosition(10, 140);
+        setPasswordField(textFieldStyle);
         stage.addActor(password);
     }
 
+
+    private void setUsernameField(TextField.TextFieldStyle ts) {
+        username = new TextField("", ts);
+        username.setWidth(FlowerPowerGame.WIDTH-80);
+        username.setHeight(37);
+        username.setPosition((FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 240);
+    }
+
+    private void setPasswordField(TextField.TextFieldStyle ts) {
+        password = new TextField("", ts);
+        password.setPasswordMode(true);
+        password.setPasswordCharacter('*');
+        password.setWidth(FlowerPowerGame.WIDTH-80);
+        password.setHeight(37);
+        password.setPosition((FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 140);
+    }
+
+    private void setCursor(Label.LabelStyle ls) {
+        Label oneCharSizeCalibrationThrowAway = new Label("|", ls);
+        cursorColor = new Pixmap((int) oneCharSizeCalibrationThrowAway.getWidth(),
+                (int) oneCharSizeCalibrationThrowAway.getHeight(), Pixmap.Format.RGB888);
+        cursorColor.setColor(Color.BLACK);
+        cursorColor.fill();
+    }
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
@@ -82,7 +109,7 @@ public class LoginView extends View {
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
         sb.draw(logo,36,375);
-        sb.draw(login, FlowerPowerGame.WIDTH/2-login.getWidth()/2,40);
+        sb.draw(login, ((FlowerPowerGame.WIDTH/2)-(login.getWidth()/2)),40);
         BitmapFont font = new BitmapFont();
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         font.getData().setScale((float) 1.3);
