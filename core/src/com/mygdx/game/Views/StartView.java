@@ -33,9 +33,11 @@ public class StartView extends View{
             Rectangle registerBounds = new Rectangle(100, 175, register.getWidth(), register.getHeight());
             if (loginBounds.contains(x, y)) {
                 System.out.println("LOGIN PRESSED!");
+                vm.set(new LoginView(vm));
             }
             if (registerBounds.contains(x, y)) {
                 System.out.println("REGISTER PRESSED!");
+                vm.set(new RegisterView(vm));
             }
         }
 
