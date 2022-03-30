@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Views.RegisterView;
 import com.mygdx.game.Views.StartView;
 import com.mygdx.game.Views.ViewManager;
 
@@ -33,7 +34,7 @@ public class FlowerPowerGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		vm = ViewManager.getViewManager();
-		vm.push(new StartView(vm));
+		vm.push(new RegisterView(vm));
 		//calls methods in fireBaseConnector to test them out
 		_FBIC.writeToDb("message","tir!");
 		_FBIC.readFromDb();

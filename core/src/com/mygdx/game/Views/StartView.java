@@ -1,12 +1,14 @@
 package com.mygdx.game.Views;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.FlowerPowerGame;
@@ -23,7 +25,7 @@ public class StartView extends View{
         logo = new Texture("logo.png");
         register = new Texture("register.png");
         login = new Texture("login.png");
-        cam.setToOrtho(false, FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT);
+
     }
 
     @Override
@@ -59,6 +61,7 @@ public class StartView extends View{
         sb.draw(register,100,175);
         sb.draw(login,125,100);
         sb.end();
+
 
 
 
