@@ -43,6 +43,8 @@ public class LoginView extends View {
         stage.addActor(username);
 
         password = new TextField("", style);
+        password.setPasswordMode(true);
+        password.setPasswordCharacter('*');
         password.setWidth(FlowerPowerGame.WIDTH-20);
         password.setHeight(37);
         password.setPosition(10, 140);
