@@ -7,13 +7,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.FlowerPowerGame;
+
+import java.awt.event.MouseAdapter;
 
 public class LoginView extends View {
 
@@ -59,7 +63,7 @@ public class LoginView extends View {
         username = new TextField("", ts);
         username.setWidth(FlowerPowerGame.WIDTH-80);
         username.setHeight(37);
-        username.setPosition((FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 240);
+        username.setPosition((float) (FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 240);
     }
 
     private void setPasswordField(TextField.TextFieldStyle ts) {
@@ -68,22 +72,24 @@ public class LoginView extends View {
         password.setPasswordCharacter('*');
         password.setWidth(FlowerPowerGame.WIDTH-80);
         password.setHeight(37);
-        password.setPosition((FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 140);
+        password.setPosition((float) (FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 140);
     }
 
     private void setCursor(Label.LabelStyle ls) {
-        Label oneCharSizeCalibrationThrowAway = new Label("|", ls);
-        cursorColor = new Pixmap((int) oneCharSizeCalibrationThrowAway.getWidth(),
-                (int) oneCharSizeCalibrationThrowAway.getHeight(), Pixmap.Format.RGB888);
+        Label label = new Label("|", ls);
+        cursorColor = new Pixmap((int) label.getWidth(),
+                (int) label.getHeight(), Pixmap.Format.RGB888);
         cursorColor.setColor(Color.BLACK);
         cursorColor.fill();
+
     }
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
             int x = Gdx.input.getX();
             int y = Gdx.graphics.getHeight() - Gdx.input.getY();
-            Rectangle loginBounds = new Rectangle(FlowerPowerGame.WIDTH/2-login.getWidth()/2, 40, login.getWidth(), login.getHeight());
+            Rectangle loginBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-(login.getWidth()/2)), 40,
+                    login.getWidth(), login.getHeight());
             if (loginBounds.contains(x, y)) {
                 usernameTyped = username.getText();
                 System.out.println("Username typed:");
@@ -109,7 +115,7 @@ public class LoginView extends View {
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
         sb.draw(logo,36,375);
-        sb.draw(login, ((FlowerPowerGame.WIDTH/2)-(login.getWidth()/2)),40);
+        sb.draw(login, (float) ((FlowerPowerGame.WIDTH/2)-(login.getWidth()/2)),40);
         BitmapFont font = new BitmapFont();
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         font.getData().setScale((float) 1.3);
