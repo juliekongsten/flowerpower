@@ -23,6 +23,8 @@ public class LoginView extends View {
     private Stage stage;
     private TextField username;
     private TextField password;
+    private Texture playbook;
+    private Texture settings;
     private String usernameTyped;
     private String passwordTyped;
     private Pixmap cursorColor;
@@ -31,6 +33,8 @@ public class LoginView extends View {
         super(vm);
         logo = new Texture("logo.png");
         login = new Texture("login.png");
+        playbook = new Texture("playbook.png");
+        settings = new Texture("settings.png");
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -85,6 +89,9 @@ public class LoginView extends View {
 
             Rectangle loginBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-(login.getWidth()/2)), 40,
                     login.getWidth(), login.getHeight());
+            float settings_x = FlowerPowerGame.WIDTH-playbook.getWidth()-10;
+            Rectangle playbookBounds = new Rectangle(10, 15, playbook.getWidth(), playbook.getHeight());
+            Rectangle settingsBounds = new Rectangle(settings_x, 15, settings.getWidth(), settings.getHeight());
             if (loginBounds.contains(pos.x, pos.y)) {
                 usernameTyped = username.getText();
                 System.out.println("Username typed:");
@@ -94,6 +101,15 @@ public class LoginView extends View {
                 System.out.println(passwordTyped);
                 //noe form for kontroll på om brukernavn og passord er riktig -> kontrolleren kan gjøre det
                 //sende videre til MenuView med innlogget bruker
+            }
+            if (playbookBounds.contains(pos.x, pos.y)) {
+                //Hvor skal Playbook ta oss? Har tatt tilbake til StartView foreløpig
+                vm.set(new StartView(vm));
+                System.out.println("Playbook pressed");
+            }
+            if (settingsBounds.contains(pos.x, pos.y)) {
+                //vm.set(new SettingsView(vm));
+                System.out.println("Settings pressed");
             }
         }
 
@@ -112,6 +128,9 @@ public class LoginView extends View {
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
         sb.draw(logo,36,375);
         sb.draw(login, (float) ((FlowerPowerGame.WIDTH/2)-(login.getWidth()/2)),40);
+        sb.draw(playbook, 10, 15);
+        float settings_x = FlowerPowerGame.WIDTH-playbook.getWidth()-10;
+        sb.draw(settings, settings_x, 15);
         BitmapFont font = new BitmapFont();
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         font.getData().setScale((float) 1.3);
