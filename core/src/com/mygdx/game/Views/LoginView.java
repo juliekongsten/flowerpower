@@ -18,13 +18,13 @@ import com.mygdx.game.FlowerPowerGame;
 
 public class LoginView extends View {
 
-    private Texture logo;
-    private Texture login;
+    private final Texture logo;
+    private final Texture login;
     private Stage stage;
     private TextField username;
     private TextField password;
-    private Texture playbook;
-    private Texture settings;
+    private final Texture playbook;
+    private final Texture settings;
     private String usernameTyped;
     private String passwordTyped;
     private Pixmap cursorColor;
@@ -130,8 +130,10 @@ public class LoginView extends View {
         sb.draw(logo,36,375);
         sb.draw(login, (float) ((FlowerPowerGame.WIDTH/2)-(login.getWidth()/2)),40);
         sb.draw(playbook, 10, 15);
-        float settings_x = FlowerPowerGame.WIDTH-playbook.getWidth()-10;
+        float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
         sb.draw(settings, settings_x, 15);
+        // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
+        // ikke helt skjønt hvorfor enda
         BitmapFont font = new BitmapFont();
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         font.getData().setScale((float) 1.3);
