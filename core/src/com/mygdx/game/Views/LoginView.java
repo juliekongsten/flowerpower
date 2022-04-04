@@ -101,6 +101,7 @@ public class LoginView extends View {
                 System.out.println(passwordTyped);
                 //noe form for kontroll på om brukernavn og passord er riktig -> kontrolleren kan gjøre det
                 //sende videre til MenuView med innlogget bruker
+                vm.set(new MenuView(vm));
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //Hvor skal Playbook ta oss? Har tatt tilbake til StartView foreløpig
