@@ -22,6 +22,7 @@ public class DesktopLauncher {
 		// NIGHTLY:
 
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.setWindowedMode(FlowerPowerGame.WIDTH,FlowerPowerGame.HEIGHT);
 		new Lwjgl3Application(new FlowerPowerGame(new fireBaseInterfaceDesktop()), config);
 
 	}
