@@ -7,17 +7,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.FlowerPowerGame;
-
-import java.awt.event.MouseAdapter;
 
 public class LoginView extends View {
 
@@ -35,9 +32,7 @@ public class LoginView extends View {
         logo = new Texture("logo.png");
         login = new Texture("login.png");
 
-        stage = new Stage();
-
-        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
@@ -81,16 +76,16 @@ public class LoginView extends View {
                 (int) label.getHeight(), Pixmap.Format.RGB888);
         cursorColor.setColor(Color.BLACK);
         cursorColor.fill();
-
     }
+
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
-            int x = Gdx.input.getX();
-            int y = Gdx.graphics.getHeight() - Gdx.input.getY();
+            Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+
             Rectangle loginBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-(login.getWidth()/2)), 40,
                     login.getWidth(), login.getHeight());
-            if (loginBounds.contains(x, y)) {
+            if (loginBounds.contains(pos.x, pos.y)) {
                 usernameTyped = username.getText();
                 System.out.println("Username typed:");
                 System.out.println(usernameTyped);
@@ -112,6 +107,7 @@ public class LoginView extends View {
 
     @Override
     public void render(SpriteBatch sb) {
+        sb.setProjectionMatrix(cam.combined);
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
         sb.draw(logo,36,375);

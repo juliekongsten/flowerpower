@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class StartView extends View{
@@ -24,19 +25,14 @@ public class StartView extends View{
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
-            System.out.println("You pressed the screen" +
-                    " x: " + Gdx.input.getX() + " y: " + Gdx.input.getY());
-            // Dette viser at koordinatene blir helt forskjellig på desktop og emulator
-
-            int x = Gdx.input.getX();
-            int y = Gdx.graphics.getHeight() - Gdx.input.getY();
+            Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             Rectangle loginBounds = new Rectangle(125, 100, login.getWidth(), login.getHeight());
             Rectangle registerBounds = new Rectangle(100, 175, register.getWidth(), register.getHeight());
-            if (loginBounds.contains(x, y)) {
+            if (loginBounds.contains(pos.x, pos.y)) {
                 System.out.println("LOGIN PRESSED!");
                 vm.set(new LoginView(vm));
             }
-            if (registerBounds.contains(x, y)) {
+            if (registerBounds.contains(pos.x, pos.y)) {
                 System.out.println("REGISTER PRESSED!");
                 vm.set(new RegisterView(vm));
             }
