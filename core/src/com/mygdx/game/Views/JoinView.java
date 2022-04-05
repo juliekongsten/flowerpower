@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -20,6 +22,7 @@ public class JoinView extends View {
     private final Texture settings;
     private final Texture pinText;
     private final Texture join;
+    private final Texture back;
     private Stage stage;
     private Pixmap cursorColor;
     private TextField gamePin;
@@ -31,6 +34,7 @@ public class JoinView extends View {
         settings = new Texture("settings.png");
         pinText = new Texture("join_pin.png");
         join = new Texture("join.png");
+        back = new Texture("back.png");
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -54,7 +58,7 @@ public class JoinView extends View {
         gamePin = new TextField("", ts);
         gamePin.setWidth(FlowerPowerGame.WIDTH-80);
         gamePin.setHeight(37);
-        gamePin.setPosition((float) (FlowerPowerGame.WIDTH/2)-(gamePin.getWidth()/2), 240);
+        gamePin.setPosition((float) (FlowerPowerGame.WIDTH/2)-(gamePin.getWidth()/2), 230);
     }
 
     private void setCursor(Label.LabelStyle ls) {
@@ -67,7 +71,32 @@ public class JoinView extends View {
 
     @Override
     protected void handleInput() {
+        if (Gdx.input.justTouched()) {
+            Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
+            float settings_x = FlowerPowerGame.WIDTH-playbook.getWidth()-10;
+            Rectangle playbookBounds = new Rectangle(10, 15, playbook.getWidth(), playbook.getHeight());
+            Rectangle settingsBounds = new Rectangle(settings_x, 15, settings.getWidth(), settings.getHeight());
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
+            Rectangle joinBounds = new Rectangle((FlowerPowerGame.WIDTH/2-join.getWidth()/2), 100, join.getWidth(), join.getHeight());
+
+            if (joinBounds.contains(pos.x, pos.y)) {
+                // Some way to check pin
+                //vm.set(new GameView(vm));
+                System.out.println("JOIN WAS PRESSED!");
+            }
+            if (playbookBounds.contains(pos.x, pos.y)) {
+                //vm.set(new PlaybookView(vm));
+                System.out.println("Playbook pressed");
+            }
+            if (settingsBounds.contains(pos.x, pos.y)) {
+                //vm.set(new SettingsView(vm));
+                System.out.println("Settings pressed");
+            }
+            if (backBounds.contains(pos.x, pos.y)) {
+                vm.set(new MenuView(vm));
+            }
+        }
     }
 
     @Override
@@ -84,8 +113,11 @@ public class JoinView extends View {
         sb.draw(playbook, 10, 15);
         float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
         sb.draw(settings, settings_x, 15);
-        sb.draw(pinText, (int) (FlowerPowerGame.WIDTH/2-pinText.getWidth()), 290);
-        sb.draw(join, (int) (FlowerPowerGame.WIDTH/2-join.getWidth()/2), 100);
+        sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
+        sb.draw(pinText, (FlowerPowerGame.WIDTH/2-pinText.getWidth()), 290);
+        sb.draw(join, (FlowerPowerGame.WIDTH/2-join.getWidth()/2), 100);
         sb.end();
+        stage.draw();
+        stage.act();
     }
 }

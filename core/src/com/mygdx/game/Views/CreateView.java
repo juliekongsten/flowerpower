@@ -19,6 +19,7 @@ public class CreateView extends View {
     private final Texture settings;
     private final Texture pinText;
     private final Texture waitText;
+    private final Texture back;
     private String gamePin;
 
     protected CreateView(ViewManager vm) {
@@ -28,6 +29,7 @@ public class CreateView extends View {
         settings = new Texture("settings.png");
         pinText = new Texture("create_pin.png");
         waitText = new Texture("create_wait.png");
+        back = new Texture("back.png");
         setGamePin();
     }
 
@@ -48,14 +50,17 @@ public class CreateView extends View {
             float settings_x = FlowerPowerGame.WIDTH - playbook.getWidth() - 10;
             Rectangle playbookBounds = new Rectangle(10, 15, playbook.getWidth(), playbook.getHeight());
             Rectangle settingsBounds = new Rectangle(settings_x, 15, settings.getWidth(), settings.getHeight());
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
             if (playbookBounds.contains(pos.x, pos.y)) {
-                //Hvor skal Playbook ta oss? Har tatt tilbake til StartView foreløpig
-                vm.set(new StartView(vm));
+                //vm.set(new PlaybookView(vm));
                 System.out.println("Playbook pressed");
             }
             if (settingsBounds.contains(pos.x, pos.y)) {
                 //vm.set(new SettingsView(vm));
                 System.out.println("Settings pressed");
+            }
+            if (backBounds.contains(pos.x, pos.y)) {
+                vm.set(new MenuView(vm));
             }
         }
     }
@@ -76,6 +81,7 @@ public class CreateView extends View {
         sb.draw(waitText, (float) (FlowerPowerGame.WIDTH/2-waitText.getWidth()/2), 200);
         float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
         sb.draw(settings, settings_x, 15);
+        sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
         BitmapFont font = new BitmapFont();
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         font.getData().setScale((float) 1.3);

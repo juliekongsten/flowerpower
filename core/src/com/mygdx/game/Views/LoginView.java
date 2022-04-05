@@ -104,8 +104,7 @@ public class LoginView extends View {
                 vm.set(new MenuView(vm));
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
-                //Hvor skal Playbook ta oss? Har tatt tilbake til StartView foreløpig
-                vm.set(new StartView(vm));
+                //vm.set(new PlaybookView(vm));
                 System.out.println("Playbook pressed");
             }
             if (settingsBounds.contains(pos.x, pos.y)) {
