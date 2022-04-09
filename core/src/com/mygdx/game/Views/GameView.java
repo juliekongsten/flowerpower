@@ -9,12 +9,18 @@ public class GameView extends View{
 
     private final Texture pool;
     private Texture ready;
+    private Texture op_board;
+    private Texture my_board;
+
 
 
     protected GameView(ViewManager vm) {
         super(vm);
         pool = new Texture("pool.png");
         ready = new Texture("Button.png");
+        op_board = new Texture("board.png");
+        my_board = new Texture("board.png");
+
     }
 
     @Override
@@ -32,11 +38,21 @@ public class GameView extends View{
 
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-        sb.draw(ready, 100, 50);
-        //sb.draw(ready,(float) (FlowerPowerGame.WIDTH/2-ready.getWidth()/2), (float) 100 );
-        //sb.draw(pool, (float) (FlowerPowerGame.WIDTH/2-pool.getWidth()/2),(float)(FlowerPowerGame.HEIGHT/2-pool.getHeight()/2));
-        sb.draw(pool, 10, 200);
         ScreenUtils.clear((float)254/255,(float)144/255,(float) 182/255,1);
+        //sb.draw(ready, 100, 50);
+        float ready_x = (float)(FlowerPowerGame.WIDTH/2-ready.getWidth()/2);
+        sb.draw(ready,ready_x, -10);
+
+        float board_x = (float) (FlowerPowerGame.WIDTH-op_board.getWidth())/2;
+        float my_board_y = ready.getHeight()-13;
+        sb.draw(my_board, board_x,my_board_y );
+
+        float pool_x = (float) (FlowerPowerGame.WIDTH/2-pool.getWidth()/2);
+        float pool_y = my_board_y+my_board.getHeight()+2;
+        sb.draw(pool, pool_x ,pool_y);
+
+        float op_board_y = pool_y+pool.getHeight()+2;
+        sb.draw(op_board, board_x, op_board_y);
         sb.end();
 
     }
