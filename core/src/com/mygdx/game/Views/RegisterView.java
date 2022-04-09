@@ -17,10 +17,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.FlowerPowerGame;
 
 public class RegisterView extends View {
-    private Texture logo;
-    private Texture register;
-    private Texture playbook;
-    private Texture settings;
+    private final Texture logo;
+    private final Texture register;
+    private final Texture playbook;
+    private final Texture settings;
     private Stage stage;
     private TextField username;
     private TextField password;
@@ -117,10 +117,10 @@ public class RegisterView extends View {
                 System.out.println("Password check typed: \n" + passwordCheckTyped);
                 // Sjekke at passordene stemmer overens
                 // Sende videre til MenuView med innlogget bruker
+                vm.set(new MenuView(vm));
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
-                //Hvor skal Playbook ta oss? Har tatt tilbake til StartView foreløpig
-                vm.set(new StartView(vm));
+                //vm.set(new PlaybookView(vm));
                 System.out.println("Playbook pressed");
             }
             if (settingsBounds.contains(pos.x, pos.y)) {
@@ -143,8 +143,10 @@ public class RegisterView extends View {
         sb.draw(logo,36,375);
         sb.draw(register,100,50);
         sb.draw(playbook, 10, 15);
-        float settings_x = FlowerPowerGame.WIDTH-playbook.getWidth()-10;
+        float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
         sb.draw(settings, settings_x, 15);
+        // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
+        // ikke helt skjønt hvorfor enda
         BitmapFont font = new BitmapFont();
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         font.getData().setScale((float) 1.2);
