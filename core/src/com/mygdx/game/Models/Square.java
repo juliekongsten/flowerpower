@@ -21,9 +21,7 @@ public class Square {
         return hasFlower;
     }
 
-    public boolean isHit() {
-        return isHit;
-    }
+    public boolean isHit() { return isHit; }
 
     public void setHit(boolean hit){
         isHit=hit;
@@ -31,6 +29,7 @@ public class Square {
     public void setHasFlower(boolean flower){
         hasFlower=flower;
     }
+
 
 
 }

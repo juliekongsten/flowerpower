@@ -13,6 +13,10 @@ public class GameController {
     private int numberSquaresHeight;
     private int numberSquaresWidth;
 
+    /* OBS: har foreløpig satt de rutene i motstander slik at de tre nederste rekkene har blomster
+            og de øverste ikke har det. Er for å teste at ting fungerer slik det skal.
+            De skal senere settes ut fra hvor motstanderen har plassert beds.
+    * */
     public GameController(){
         //tenker her at vi kan ha satt tall for de forskjellige vanskelighetsgradene
         squaresize = 32;
@@ -27,7 +31,11 @@ public class GameController {
         for (int i = 0; i< numberSquaresHeight; i++){
             for (int j = 0; j< numberSquaresWidth; j++){
                 myBoard.add(new Square(x, my_y, squaresize));
-                opBoard.add(new Square(x,op_y,squaresize));
+                Square opSquare = new Square(x,op_y,squaresize);
+                if (i<3){
+                    opSquare.setHasFlower(true);
+                }
+                opBoard.add(opSquare);
                 x+=squaresize;
 
             }
@@ -44,6 +52,20 @@ public class GameController {
 
     public List<Square> getMyBoard(){
         return myBoard;
+    }
+
+    /**
+     *
+     * @param square that is hit
+     * @return if the square contains a flower or not
+     */
+    public boolean hitSquare(Square square){
+        if (!opBoard.contains(square)){
+            return false;
+        }
+        square.setHit(true);
+        return square.hasFlower();
+
     }
 
 }

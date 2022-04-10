@@ -27,6 +27,7 @@ public class GameView extends View{
     private Texture opGrass;
     private Texture opFrame; //midlertidig? er fordi opGrass bare er grønt og uten svart ramme
     private Texture flower;
+    private Texture miss;
 
     private GameController controller;
 
@@ -60,6 +61,7 @@ public class GameView extends View{
         opGrass = new Texture("opsquare.png");
         opFrame = new Texture("opframe.png");
         flower = new Texture("flower.png");
+        miss = new Texture("miss.png");
         findStaticCoordinates();
         opBoard = controller.getOpBoard();
         myBoard = controller.getMyBoard();
@@ -81,9 +83,14 @@ public class GameView extends View{
             if (!waiting){
                 for (Square square : opBoard){
                     if (square.getBounds().contains(pos.x,pos.y)){
-                        //some logic, maybe make controller check the square and update its values !
+                        //Should make controller check the square and update the values
+                        //Controller gives feedback of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
+                        //View should give feedback to user if this was hit/miss
+                        //Do not need to do changes in spritebatch here, since we update square it will be taken care of in render
+
+
                         //Temporarily: sets the square to hit immediately without checking
-                        square.setHasFlower(true);
+                        controller.hitSquare(square);
                         System.out.println("Opponents square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
                     }
                 }
@@ -117,9 +124,16 @@ public class GameView extends View{
             int y = (int) square.getBounds().y;
             sb.draw(opGrass, x, y);
             sb.draw(opFrame, x, y);
-            if (square.hasFlower()){
-                sb.draw(flower,x,y);
+            if (square.isHit()){
+                if (square.hasFlower()){
+                    sb.draw(flower,x,y);
+                }
+                else{
+                    sb.draw(miss,x,y);
+                }
+
             }
+
         }
         //Draw my board
         List<Square> myBoard = controller.getMyBoard();
