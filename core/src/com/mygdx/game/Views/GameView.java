@@ -28,7 +28,7 @@ public class GameView extends View{
 
 
 
-    protected GameView(ViewManager vm) {
+    public GameView(ViewManager vm) {
         super(vm);
         controller = new GameController();
         pool = new Texture("pool.png");
@@ -52,7 +52,7 @@ public class GameView extends View{
 
     }
 
-    private void drawSquares(SpriteBatch sb){
+    /*private void drawSquares(SpriteBatch sb){
         //Draw opponents board
         List<Square> opBoard = controller.getOpBoard();
         for (Square square : opBoard){
@@ -68,7 +68,7 @@ public class GameView extends View{
             sb.draw(myGrass, x, y);
         }
 
-    }
+    }*/
 
 
 
@@ -112,7 +112,21 @@ public class GameView extends View{
             sb.draw(op_turn, waiting_x, waiting_y);
         }
 
-        drawSquares(sb);
+        //drawSquares(sb);
+        //Draw opponents board
+        List<Square> opBoard = controller.getOpBoard();
+        for (Square square : opBoard){
+            int x = (int) square.getBounds().x;
+            int y = (int) square.getBounds().y;
+            sb.draw(myGrass, x, y);
+        }
+        //Draw my board
+        List<Square> myBoard = controller.getMyBoard();
+        for (Square square : myBoard){
+            int x = (int) square.getBounds().x;
+            int y = (int) square.getBounds().y;
+            sb.draw(myGrass, x, y);
+        }
 
         sb.end();
 

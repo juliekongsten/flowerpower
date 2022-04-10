@@ -14,6 +14,7 @@ public class GameController {
     private int numberSquaresWidth;
 
     public GameController(){
+        //tenker her at vi kan ha satt tall for de forskjellige vanskelighetsgradene
         squaresize = 32;
         numberSquaresHeight = 5;
         numberSquaresWidth = 9;
@@ -30,6 +31,7 @@ public class GameController {
             x = 20;
             my_y+=squaresize;
             op_y+=squaresize;
+            System.out.println("fikset en rekke");
         }
 
     }
