@@ -16,11 +16,14 @@ public class GameController {
     public GameController(){
         //tenker her at vi kan ha satt tall for de forskjellige vanskelighetsgradene
         squaresize = 32;
-        numberSquaresHeight = 5;
+        numberSquaresHeight = 6;
         numberSquaresWidth = 9;
-        int x = 20;
-        int my_y = 50;
-        int op_y = 300;
+
+        //må hente x og y-verdier fra view heller sånn at vi får riktige :D
+        //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
+        int x = 26+15;
+        int my_y = 65+12;
+        int op_y = 424+12;
         for (int i = 0; i< numberSquaresHeight; i++){
             for (int j = 0; j< numberSquaresWidth; j++){
                 myBoard.add(new Square(x, my_y, squaresize));
@@ -28,10 +31,9 @@ public class GameController {
                 x+=squaresize;
 
             }
-            x = 20;
+            x = 26+15;
             my_y+=squaresize;
             op_y+=squaresize;
-            System.out.println("fikset en rekke");
         }
 
     }

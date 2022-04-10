@@ -23,7 +23,7 @@ public class JoinView extends View {
     private final Texture pinText;
     private final Texture join;
     private final Texture back;
-    private Stage stage;
+    private final Stage stage;
     private Pixmap cursorColor;
     private TextField gamePin;
 

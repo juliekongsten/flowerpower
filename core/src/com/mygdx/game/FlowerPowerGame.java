@@ -2,11 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Views.GameView;
-import com.mygdx.game.Views.RegisterView;
 import com.mygdx.game.Views.StartView;
 import com.mygdx.game.Views.ViewManager;
 
@@ -35,8 +32,7 @@ public class FlowerPowerGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		vm = ViewManager.getViewManager();
-		//vm.push(new StartView(vm));
-		vm.push(new GameView(vm));
+		vm.push(new StartView(vm));
 		//calls methods in fireBaseConnector to test them out
 		_FBIC.writeToDb("message","tir!");
 		_FBIC.readFromDb();
@@ -44,10 +40,6 @@ public class FlowerPowerGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		/*ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();*/
 		vm.render(batch);
 		vm.update(Gdx.graphics.getDeltaTime());
 	}
