@@ -1,10 +1,15 @@
 package com.mygdx.game.Views;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Controllers.GameController;
 import com.mygdx.game.FlowerPowerGame;
+import com.mygdx.game.Models.Square;
+
+import java.util.List;
 
 public class GameView extends View{
 
@@ -16,17 +21,24 @@ public class GameView extends View{
     private Texture my_board;
     private Texture my_turn;
     private Texture op_turn;
+    private Texture myGrass;
+    private Texture opGrass;
+
+    private GameController controller;
 
 
 
     protected GameView(ViewManager vm) {
         super(vm);
+        controller = new GameController();
         pool = new Texture("pool.png");
         ready = new Texture("Button.png");
         op_board = new Texture("board.png");
         my_board = new Texture("board.png");
         my_turn = new Texture("my_turn.png");
         op_turn = new Texture("waiting.png");
+        myGrass = new Texture("mysquare");
+        opGrass = new Texture("opsquare");
 
     }
 
@@ -41,6 +53,20 @@ public class GameView extends View{
     }
 
     private void drawSquares(SpriteBatch sb){
+        //Draw opponents board
+        List<Square> opBoard = controller.getOpBoard();
+        for (Square square : opBoard){
+            int x = (int) square.getBounds().x;
+            int y = (int) square.getBounds().y;
+            sb.draw(myGrass, x, y);
+        }
+        //Draw my board
+        List<Square> myBoard = controller.getMyBoard();
+        for (Square square : myBoard){
+            int x = (int) square.getBounds().x;
+            int y = (int) square.getBounds().y;
+            sb.draw(myGrass, x, y);
+        }
 
     }
 
