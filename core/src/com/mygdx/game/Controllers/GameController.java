@@ -55,17 +55,17 @@ public class GameController {
     }
 
     /**
-     *
+     * Method for when the player hits a square on opponents board.
      * @param square that is hit
-     * @return if the square contains a flower or not
+     * return if the hit square contains a flower
      */
     public boolean hitSquare(Square square){
+        //should probably also have logic that updates "myboard" for the opponent!
         if (!opBoard.contains(square)){
             return false;
         }
         square.setHit(true);
         return square.hasFlower();
-
     }
 
 }

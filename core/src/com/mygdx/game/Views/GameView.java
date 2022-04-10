@@ -80,6 +80,7 @@ public class GameView extends View{
                 System.out.println("READY PRESSED");
             }
             //Check if any of opponents squares is pushed
+            //Should do anything if opponents squares is pushed while waiting as it isn't your turn:)
             if (!waiting){
                 for (Square square : opBoard){
                     if (square.getBounds().contains(pos.x,pos.y)){
@@ -90,19 +91,25 @@ public class GameView extends View{
 
 
                         //Temporarily: sets the square to hit immediately without checking
-                        controller.hitSquare(square);
+                        boolean flower = controller.hitSquare(square);
+                        if (flower){
+                            //give feedback to user
+                            System.out.println("Hit!");
+                        } else {
+                            //give feedback to user
+                            System.out.println("Miss!");
+                        }
                         System.out.println("Opponents square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
                     }
                 }
             }
 
-            //Check if any of my squares is pushed
+            //Check if any of my squares is pressed
             //Not sure if this is needed? Maybe when we place the beds?
             for (Square square : myBoard){
                 if (square.getBounds().contains(pos.x,pos.y)){
                     //some logic
-                    //Temporarily: sets the square to hit immediately without checking
-                    square.setHasFlower(true);
+
                     System.out.println("My square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
                 }
             }
@@ -113,12 +120,12 @@ public class GameView extends View{
     @Override
     public void update(float dt) {
         handleInput();
-
     }
 
     private void drawSquares(SpriteBatch sb){
         //Draw opponents board
-        List<Square> opBoard = controller.getOpBoard();
+        //Goes through the list of squares in opponents board and draws the grass plus flower/miss(if hit) on given coordinates
+        //Should also make frame around bed if the whole bed is hit! Maybe iterate through opponents beds and for any full bed draw the frame for that bed?
         for (Square square : opBoard){
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
@@ -131,12 +138,14 @@ public class GameView extends View{
                 else{
                     sb.draw(miss,x,y);
                 }
-
             }
-
         }
+
         //Draw my board
-        List<Square> myBoard = controller.getMyBoard();
+
+        //for squares in list of beds -> draw the bed (should always be there, is background for flower/miss as well
+
+        //Goes through the list of squares in my board and draws the grass plus flower/miss(if hit) on given coordinates
         for (Square square : myBoard){
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
@@ -149,18 +158,15 @@ public class GameView extends View{
     }
 
     /**
-     * Finds the coordinates to where ready button, boards, pool and messages should be placed
+     * Help method: Finds the coordinates to where ready button, boards, pool and messages should be placed
      */
     private void findStaticCoordinates(){
         ready_x = (float)(FlowerPowerGame.WIDTH/2-ready.getWidth()/2);
         board_x = (float) (FlowerPowerGame.WIDTH-op_board.getWidth())/2;
-        System.out.println("boardx: "+board_x);
         my_board_y = ready.getHeight()-13;
-        System.out.println("my_y: "+my_board_y);
         pool_x = (float) (FlowerPowerGame.WIDTH/2-pool.getWidth()/2);
         pool_y = my_board_y+my_board.getHeight()+2;
         op_board_y = pool_y+pool.getHeight()+2;
-        System.out.println("op_y:: "+op_board_y);
         my_turn_x = pool_x+(pool.getWidth()/2)-my_turn.getWidth()/2;
         my_turn_y = pool_y+(pool.getHeight()/2)-my_turn.getHeight()/2;
         waiting_x = pool_x+(pool.getWidth()/2-op_turn.getWidth()/2);
@@ -201,7 +207,7 @@ public class GameView extends View{
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
 
-        //Draws message (your turn/waiting)
+        //Draws message (your turn/waiting) in the pool
         if (!waiting){
             sb.draw(my_turn, my_turn_x, my_turn_y);
         }

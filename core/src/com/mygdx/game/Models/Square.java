@@ -3,9 +3,9 @@ package com.mygdx.game.Models;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Square {
-    private Rectangle bounds;
+    private Rectangle bounds; //where the square is placed, contains the coordinates of the left bottom corner it starts and the width and height of the square
     private boolean hasFlower = false; //tenker vi alltid starter med false så oppdateres når det plasseres:)
-    private boolean isHit = false;
+    private boolean isHit = false; //if the opponent has hit this square
     //evt ha noe for om den er del av en fulltruffet bed, men det kan nok taes hånd om typ i bed-klassen slik at alle disse oppdateres til "full" ??
     //må også håndtere hvor de er for å sørge for riktig grafikk når det er fullt bed, men kan nok også gjøres annet sted
 
