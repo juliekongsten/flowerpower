@@ -1,6 +1,7 @@
 package com.mygdx.game.Views;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.FlowerPowerGame;
@@ -39,6 +40,12 @@ public class GameView extends View{
 
     }
 
+    private void drawSquares(SpriteBatch sb){
+
+    }
+
+
+
     @Override
     public void render(SpriteBatch sb) {
 
@@ -46,25 +53,29 @@ public class GameView extends View{
         sb.begin();
         ScreenUtils.clear((float)254/255,(float)144/255,(float) 182/255,1);
 
-
+        //Draws ready button
         //her må vi ha noe opplegg at denne kun skal vises om man er i "plassere beds stadier"
         float ready_x = (float)(FlowerPowerGame.WIDTH/2-ready.getWidth()/2);
         sb.draw(ready,ready_x, -10);
 
+        //Draws the background of "my board"
         float board_x = (float) (FlowerPowerGame.WIDTH-op_board.getWidth())/2;
         float my_board_y = ready.getHeight()-13;
         sb.draw(my_board, board_x,my_board_y );
 
+        //Draws the pool in the middle
         float pool_x = (float) (FlowerPowerGame.WIDTH/2-pool.getWidth()/2);
         float pool_y = my_board_y+my_board.getHeight()+2;
         sb.draw(pool, pool_x ,pool_y);
 
+        //Draws the background of "opponents board"
         float op_board_y = pool_y+pool.getHeight()+2;
         sb.draw(op_board, board_x, op_board_y);
 
         float my_turn_x = pool_x+(pool.getWidth()/2)-my_turn.getWidth()/2;
         float my_turn_y = pool_y+(pool.getHeight()/2)-my_turn.getHeight()/2;
 
+        //Draws message (your turn/waiting)
         float waiting_x = pool_x+(pool.getWidth()/2-op_turn.getWidth()/2);
         float waiting_y = pool_y+(pool.getHeight()/2)-op_turn.getHeight()/2;
 
@@ -74,6 +85,8 @@ public class GameView extends View{
         else{
             sb.draw(op_turn, waiting_x, waiting_y);
         }
+
+        drawSquares(sb);
 
         sb.end();
 
