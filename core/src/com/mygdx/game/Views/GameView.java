@@ -76,13 +76,17 @@ public class GameView extends View{
                 System.out.println("READY PRESSED");
             }
             //Check if any of opponents squares is pushed
-            for (Square square : opBoard){
-                if (square.getBounds().contains(pos.x,pos.y)){
-                    //some logic, maybe make controller check the square and update its values !
-                    System.out.println("Opponents square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
+            if (!waiting){
+                for (Square square : opBoard){
+                    if (square.getBounds().contains(pos.x,pos.y)){
+                        //some logic, maybe make controller check the square and update its values !
+                        System.out.println("Opponents square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
+                    }
                 }
             }
+
             //Check if any of my squares is pushed
+            //Not sure if this is needed? Maybe when we place the beds?
             for (Square square : myBoard){
                 if (square.getBounds().contains(pos.x,pos.y)){
                     //some logic
@@ -98,7 +102,7 @@ public class GameView extends View{
         handleInput();
 
     }
-/*
+
     private void drawSquares(SpriteBatch sb){
         //Draw opponents board
         List<Square> opBoard = controller.getOpBoard();
@@ -115,7 +119,7 @@ public class GameView extends View{
             sb.draw(myGrass, x, y);
         }
 
-    }*/
+    }
 
     /**
      * Finds the coordinates to where ready button, boards, pool and messages should be placed
@@ -178,20 +182,7 @@ public class GameView extends View{
             sb.draw(op_turn, waiting_x, waiting_y);
         }
 
-        //drawSquares(sb);
-        //Draw opponents board
-        for (Square square : opBoard){
-            int x = (int) square.getBounds().x;
-            int y = (int) square.getBounds().y;
-            sb.draw(opGrass, x, y);
-            sb.draw(opFrame, x, y);
-        }
-        //Draw my board
-        for (Square square : myBoard){
-            int x = (int) square.getBounds().x;
-            int y = (int) square.getBounds().y;
-            sb.draw(myGrass, x, y);
-        }
+        drawSquares(sb);
 
         sb.end();
 
