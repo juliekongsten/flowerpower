@@ -1,7 +1,10 @@
 package com.mygdx.game.Views;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Controllers.GameController;
 import com.mygdx.game.FlowerPowerGame;
@@ -27,6 +30,7 @@ public class GameView extends View{
     private GameController controller;
 
     private float ready_x;
+    private float ready_y = -10;
     private float board_x;
     private float my_board_y;
     private float pool_x;
@@ -36,6 +40,8 @@ public class GameView extends View{
     private float my_turn_y;
     private float waiting_x;
     private float waiting_y;
+    private List<Square> opBoard;
+    List<Square> myBoard;
 
 
 
@@ -53,15 +59,43 @@ public class GameView extends View{
         opGrass = new Texture("opsquare.png");
         opFrame = new Texture("opframe.png");
         findStaticCoordinates();
+        opBoard = controller.getOpBoard();
+        myBoard = controller.getMyBoard();
     }
 
     @Override
     protected void handleInput() {
+        //obs!! må sjekke tilstand til spillet, er man i waiting mode skal det ikke skje noe forskjell om man trykker på opponent sitt board
+        if (Gdx.input.justTouched()) {
+            Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+            //Check if ready-button is pushed
+            Rectangle readyBounds = new Rectangle(ready_x,ready_y,ready.getWidth(),ready.getHeight());
+            if (readyBounds.contains(pos.x,pos.y)){
+                //some logic
+                //send to waitingside
+                System.out.println("READY PRESSED");
+            }
+            //Check if any of opponents squares is pushed
+            for (Square square : opBoard){
+                if (square.getBounds().contains(pos.x,pos.y)){
+                    //some logic, maybe make controller check the square and update its values !
+                    System.out.println("Opponents square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
+                }
+            }
+            //Check if any of my squares is pushed
+            for (Square square : myBoard){
+                if (square.getBounds().contains(pos.x,pos.y)){
+                    //some logic
+                    System.out.println("My square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
+                }
+            }
 
+        }
     }
 
     @Override
     public void update(float dt) {
+        handleInput();
 
     }
 /*
@@ -83,6 +117,9 @@ public class GameView extends View{
 
     }*/
 
+    /**
+     * Finds the coordinates to where ready button, boards, pool and messages should be placed
+     */
     private void findStaticCoordinates(){
         ready_x = (float)(FlowerPowerGame.WIDTH/2-ready.getWidth()/2);
         board_x = (float) (FlowerPowerGame.WIDTH-op_board.getWidth())/2;
@@ -122,7 +159,7 @@ public class GameView extends View{
 
         //Draws ready button
         //her må vi ha noe opplegg at denne kun skal vises om man er i "plassere beds stadier"
-        sb.draw(ready,ready_x, -10);
+        sb.draw(ready,ready_x, ready_y);
 
         //Draws the background of "my board"
         sb.draw(my_board, board_x,my_board_y );
@@ -143,7 +180,6 @@ public class GameView extends View{
 
         //drawSquares(sb);
         //Draw opponents board
-        List<Square> opBoard = controller.getOpBoard();
         for (Square square : opBoard){
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
@@ -151,7 +187,6 @@ public class GameView extends View{
             sb.draw(opFrame, x, y);
         }
         //Draw my board
-        List<Square> myBoard = controller.getMyBoard();
         for (Square square : myBoard){
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
