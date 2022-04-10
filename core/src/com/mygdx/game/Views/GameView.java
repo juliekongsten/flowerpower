@@ -15,7 +15,7 @@ import java.util.List;
 
 public class GameView extends View{
 
-    private boolean waiting = true;
+    private boolean waiting = false;
 
     private final Texture pool;
     private Texture ready;
@@ -26,6 +26,7 @@ public class GameView extends View{
     private Texture myGrass;
     private Texture opGrass;
     private Texture opFrame; //midlertidig? er fordi opGrass bare er grønt og uten svart ramme
+    private Texture flower;
 
     private GameController controller;
 
@@ -58,6 +59,7 @@ public class GameView extends View{
         myGrass = new Texture("mysquare.png");
         opGrass = new Texture("opsquare.png");
         opFrame = new Texture("opframe.png");
+        flower = new Texture("flower.png");
         findStaticCoordinates();
         opBoard = controller.getOpBoard();
         myBoard = controller.getMyBoard();
@@ -80,6 +82,8 @@ public class GameView extends View{
                 for (Square square : opBoard){
                     if (square.getBounds().contains(pos.x,pos.y)){
                         //some logic, maybe make controller check the square and update its values !
+                        //Temporarily: sets the square to hit immediately without checking
+                        square.setHasFlower(true);
                         System.out.println("Opponents square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
                     }
                 }
@@ -90,6 +94,8 @@ public class GameView extends View{
             for (Square square : myBoard){
                 if (square.getBounds().contains(pos.x,pos.y)){
                     //some logic
+                    //Temporarily: sets the square to hit immediately without checking
+                    square.setHasFlower(true);
                     System.out.println("My square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
                 }
             }
@@ -110,6 +116,10 @@ public class GameView extends View{
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
             sb.draw(opGrass, x, y);
+            sb.draw(opFrame, x, y);
+            if (square.hasFlower()){
+                sb.draw(flower,x,y);
+            }
         }
         //Draw my board
         List<Square> myBoard = controller.getMyBoard();
@@ -117,6 +127,9 @@ public class GameView extends View{
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
             sb.draw(myGrass, x, y);
+            if (square.hasFlower()){
+                sb.draw(flower,x,y);
+            }
         }
 
     }
