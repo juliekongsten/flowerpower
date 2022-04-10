@@ -6,6 +6,8 @@ import java.util.List;
 public class Bed {
     private List<Square> squares = new ArrayList<>(); //the squares the bed consists of, the squares should have placement so that the bed is inside the pool at start
 
+    //TODO: alt:)
+
     public Bed(){
 
     }

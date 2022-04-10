@@ -1,5 +1,6 @@
 package com.mygdx.game.Controllers;
 
+import com.mygdx.game.Models.Bed;
 import com.mygdx.game.Models.Square;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ public class GameController {
     private int squaresize;
     private int numberSquaresHeight;
     private int numberSquaresWidth;
+    private List<Bed> myBeds = new ArrayList<>();
+    private List<Bed> opBeds = new ArrayList<>();
 
     /* OBS: har foreløpig satt de rutene i motstander slik at de tre nederste rekkene har blomster
             og de øverste ikke har det. Er for å teste at ting fungerer slik det skal.
@@ -23,6 +26,7 @@ public class GameController {
         numberSquaresHeight = 6;
         numberSquaresWidth = 9;
 
+        //TODO: Get x- and y-values without hardkoding :D
         //må hente x og y-verdier fra view heller sånn at vi får riktige :D
         //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
         int x = 26+15;
@@ -31,9 +35,9 @@ public class GameController {
         for (int i = 0; i< numberSquaresHeight; i++){
             for (int j = 0; j< numberSquaresWidth; j++){
                 myBoard.add(new Square(x, my_y, squaresize));
-                Square opSquare = new Square(x,op_y,squaresize);
+                Square opSquare = new Square(x,op_y,squaresize); //should find somewhere
                 if (i<3){
-                    opSquare.setHasFlower(true);
+                    opSquare.setHasFlower(true); //we probably don't need this as this should be taken care of by opponent and taken care of somewhere else?
                 }
                 opBoard.add(opSquare);
                 x+=squaresize;
@@ -46,13 +50,12 @@ public class GameController {
 
     }
 
-    public List<Square> getOpBoard(){
-        return opBoard;
-    }
+    public List<Square> getOpBoard(){ return opBoard; }
+    public List<Square> getMyBoard(){ return myBoard; }
+    public List<Bed> getMyBeds() { return myBeds; }
+    public List<Bed> getOpBeds() { return opBeds; }
 
-    public List<Square> getMyBoard(){
-        return myBoard;
-    }
+
 
     /**
      * Method for when the player hits a square on opponents board.
@@ -61,11 +64,26 @@ public class GameController {
      */
     public boolean hitSquare(Square square){
         //should probably also have logic that updates "myboard" for the opponent!
+        //TODO: find logic to update opponent as well
         if (!opBoard.contains(square)){
             return false;
         }
         square.setHit(true);
         return square.hasFlower();
+    }
+
+    public void setStartBeds(){
+        //TODO: find logic
+        //should make sure that startbeds are the same for both players
+        //might need some argument
+        //sets all beds inside pool
+
+
+    }
+
+    public void setOpBeds(List<Bed> beds){
+        //TODO: find logic
+        //should set OpBeds to be the beds that opponent has placed
     }
 
 }

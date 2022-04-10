@@ -1,5 +1,6 @@
 package com.mygdx.game.Views;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,12 +15,12 @@ import com.mygdx.game.Models.Square;
 import java.util.List;
 
 public class PlaceBedsView extends View{
+    private boolean isReady = false; //if the player is ready
+
     private final Texture pool;
     private Texture ready;
     private Texture op_board;
     private Texture my_board;
-    private Texture my_turn;
-    private Texture op_turn;
     private Texture myGrass;
     private Texture opGrass;
     private Texture opFrame;
@@ -33,10 +34,6 @@ public class PlaceBedsView extends View{
     private float pool_x;
     private float pool_y;
     private float op_board_y;
-    private float my_turn_x;
-    private float my_turn_y;
-    private float waiting_x;
-    private float waiting_y;
     private List<Square> opBoard;
     private List<Square> myBoard;
     private List<Bed> beds;
@@ -45,7 +42,7 @@ public class PlaceBedsView extends View{
     public PlaceBedsView(ViewManager vm){
         super(vm);
         controller = new GameController();
-        pool = new Texture("pool.png");
+        pool = new Texture("bedpool.png");
         ready = new Texture("Button.png");
         op_board = new Texture("board.png");
         my_board = new Texture("board.png");
@@ -56,6 +53,8 @@ public class PlaceBedsView extends View{
         findStaticCoordinates();
         opBoard = controller.getOpBoard();
         myBoard = controller.getMyBoard();
+        beds = controller.getMyBeds();
+
 
     }
 
@@ -67,14 +66,11 @@ public class PlaceBedsView extends View{
             //Check if ready-button is pushed
             Rectangle readyBounds = new Rectangle(ready_x, ready_y, ready.getWidth(), ready.getHeight());
             if (readyBounds.contains(pos.x, pos.y)) {
-                //some logic
-                //send to waitingside
-                vm.set(new GameView(vm)); //må forandres senere, må jo vente på at neste spiller er ready
                 System.out.println("READY PRESSED");
-
+                isReady = true; //sets to isReady, so that in render you will be sent to GameView if other player is ready
             }
 
-            //Handle drag-and-drop of beds
+            //TODO: Handle drag-and-drop of beds
 
         }
     }
@@ -104,14 +100,6 @@ public class PlaceBedsView extends View{
             int y = (int) square.getBounds().y;
             sb.draw(opGrass, x, y);
             sb.draw(opFrame, x, y);
-            /*if (square.isHit()){
-                if (square.hasFlower()){
-                    sb.draw(flower,x,y);
-                }
-                else{
-                    sb.draw(miss,x,y);
-                }
-            }*/ //probably doesn't need this as no squares will be hit at this point!
         }
         //Draw my board
         for (Square square : myBoard){
@@ -124,11 +112,33 @@ public class PlaceBedsView extends View{
 
     /**
      * Draw my beds based on their placements
-     * Should start with the given beds in the pool, don't know where this logic should be
+     * Should start with the given beds in the pool, don't know where this logic should be (controller?)
      * @param sb
      */
     private void drawBeds(SpriteBatch sb){
+        //TODO: find out how to do this
+        //if we find out logic for beds somewhere else we can probably just iterate through list of beds and draw it
 
+    }
+
+    /**
+     * Checks if the other player is ready and sends player to gameview if both players are ready
+     * @param sb
+     */
+    private void checkOtherPlayer(SpriteBatch sb){
+
+        //TODO: check if the other player is ready
+        boolean opReady = true; //set to true now, so that we get to next view, should be actual check here
+
+        if (opReady){
+            vm.set(new GameView(vm));
+        } else{
+            //TODO: fix waiting drawings
+            //draw seethrough black background color - don't know how yet
+            //draw text "Waiting for other player to get ready"
+
+            return;
+        }
 
     }
 
@@ -140,7 +150,6 @@ public class PlaceBedsView extends View{
         ScreenUtils.clear((float)254/255,(float)144/255,(float) 182/255,1);
 
         //Draws ready button
-        //her må vi ha noe opplegg at denne kun skal vises om man er i "plassere beds stadier"
         sb.draw(ready,ready_x, ready_y);
 
         //Draws the background of "my board"
@@ -148,6 +157,8 @@ public class PlaceBedsView extends View{
 
         //Draws the pool in the middle
         sb.draw(pool, pool_x ,pool_y);
+
+        //TODO: Draw text "Your beds:"
 
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
@@ -157,6 +168,10 @@ public class PlaceBedsView extends View{
 
         //Draw the beds
         drawBeds(sb);
+
+        if(isReady){
+            checkOtherPlayer(sb);
+        }
 
         sb.end();
 

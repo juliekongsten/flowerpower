@@ -31,8 +31,6 @@ public class GameView extends View{
 
     private GameController controller;
 
-    //private float ready_x;
-    //private float ready_y = -10;
     private float board_x;
     private float my_board_y;
     private float pool_x;
@@ -72,45 +70,29 @@ public class GameView extends View{
         //obs!! må sjekke tilstand til spillet, er man i waiting mode skal det ikke skje noe forskjell om man trykker på opponent sitt board
         if (Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            //Check if ready-button is pushed
-            /*Rectangle readyBounds = new Rectangle(ready_x,ready_y,ready.getWidth(),ready.getHeight());
-            if (readyBounds.contains(pos.x,pos.y)){
-                //some logic
-                //send to waitingside
-                System.out.println("READY PRESSED");
-            }*/
+
             //Check if any of opponents squares is pushed
-            //Should do anything if opponents squares is pushed while waiting as it isn't your turn:)
+            //Shouldn't do anything if opponents squares is pushed while waiting as it isn't your turn:)
             if (!waiting){
                 for (Square square : opBoard){
                     if (square.getBounds().contains(pos.x,pos.y)){
-                        //Should make controller check the square and update the values
+                        //Make controller check the square and update the values
                         //Controller gives feedback of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
                         //View should give feedback to user if this was hit/miss
                         //Do not need to do changes in spritebatch here, since we update square it will be taken care of in render
 
 
-                        //Temporarily: sets the square to hit immediately without checking
+                        //Temporarily: sets the square to hit immediately without checking, checking should probably be done in controller
                         boolean flower = controller.hitSquare(square);
                         if (flower){
-                            //give feedback to user
+                            //TODO: give visual feedback to user
                             System.out.println("Hit!");
                         } else {
-                            //give feedback to user
+                            //TODO: give visual feedback to user
                             System.out.println("Miss!");
                         }
                         System.out.println("Opponents square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
                     }
-                }
-            }
-
-            //Check if any of my squares is pressed
-            //Not sure if this is needed? Maybe when we place the beds?
-            for (Square square : myBoard){
-                if (square.getBounds().contains(pos.x,pos.y)){
-                    //some logic
-
-                    System.out.println("My square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
                 }
             }
 
@@ -126,6 +108,7 @@ public class GameView extends View{
         //Draw opponents board
         //Goes through the list of squares in opponents board and draws the grass plus flower/miss(if hit) on given coordinates
         //Should also make frame around bed if the whole bed is hit! Maybe iterate through opponents beds and for any full bed draw the frame for that bed?
+        //TODO: Find out how to frame fully hit beds
         for (Square square : opBoard){
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
@@ -143,8 +126,6 @@ public class GameView extends View{
 
         //Draw my board
 
-        //for squares in list of beds -> draw the bed (should always be there, is background for flower/miss as well
-
         //Goes through the list of squares in my board and draws the grass plus flower/miss(if hit) on given coordinates
         for (Square square : myBoard){
             int x = (int) square.getBounds().x;
@@ -157,11 +138,15 @@ public class GameView extends View{
 
     }
 
+    private void drawBeds(SpriteBatch sb){
+        //TODO: Fill with the same as in PlaceBedsView
+        //this should maybe be AFTER drawing square but BEFORE drawing miss/flower... Check this and if needed split "drawSquares" into "drawSquares" and "drawHits"
+    }
+
     /**
      * Help method: Finds the coordinates to where ready button, boards, pool and messages should be placed
      */
     private void findStaticCoordinates(){
-        //ready_x = (float)(FlowerPowerGame.WIDTH/2-ready.getWidth()/2);
         board_x = (float) (FlowerPowerGame.WIDTH-op_board.getWidth())/2;
         my_board_y = ready.getHeight()-13;
         pool_x = (float) (FlowerPowerGame.WIDTH/2-pool.getWidth()/2);
@@ -194,10 +179,6 @@ public class GameView extends View{
         sb.begin();
         ScreenUtils.clear((float)254/255,(float)144/255,(float) 182/255,1);
 
-        //Draws ready button
-        //her må vi ha noe opplegg at denne kun skal vises om man er i "plassere beds stadier"
-        //sb.draw(ready,ready_x, ready_y);
-
         //Draws the background of "my board"
         sb.draw(my_board, board_x,my_board_y );
 
@@ -216,6 +197,8 @@ public class GameView extends View{
         }
 
         drawSquares(sb);
+
+        drawBeds(sb);
 
         sb.end();
 
