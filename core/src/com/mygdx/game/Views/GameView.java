@@ -31,8 +31,8 @@ public class GameView extends View{
 
     private GameController controller;
 
-    private float ready_x;
-    private float ready_y = -10;
+    //private float ready_x;
+    //private float ready_y = -10;
     private float board_x;
     private float my_board_y;
     private float pool_x;
@@ -43,7 +43,7 @@ public class GameView extends View{
     private float waiting_x;
     private float waiting_y;
     private List<Square> opBoard;
-    List<Square> myBoard;
+    private List<Square> myBoard;
 
 
 
@@ -73,12 +73,12 @@ public class GameView extends View{
         if (Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             //Check if ready-button is pushed
-            Rectangle readyBounds = new Rectangle(ready_x,ready_y,ready.getWidth(),ready.getHeight());
+            /*Rectangle readyBounds = new Rectangle(ready_x,ready_y,ready.getWidth(),ready.getHeight());
             if (readyBounds.contains(pos.x,pos.y)){
                 //some logic
                 //send to waitingside
                 System.out.println("READY PRESSED");
-            }
+            }*/
             //Check if any of opponents squares is pushed
             //Should do anything if opponents squares is pushed while waiting as it isn't your turn:)
             if (!waiting){
@@ -161,7 +161,7 @@ public class GameView extends View{
      * Help method: Finds the coordinates to where ready button, boards, pool and messages should be placed
      */
     private void findStaticCoordinates(){
-        ready_x = (float)(FlowerPowerGame.WIDTH/2-ready.getWidth()/2);
+        //ready_x = (float)(FlowerPowerGame.WIDTH/2-ready.getWidth()/2);
         board_x = (float) (FlowerPowerGame.WIDTH-op_board.getWidth())/2;
         my_board_y = ready.getHeight()-13;
         pool_x = (float) (FlowerPowerGame.WIDTH/2-pool.getWidth()/2);
@@ -196,7 +196,7 @@ public class GameView extends View{
 
         //Draws ready button
         //her må vi ha noe opplegg at denne kun skal vises om man er i "plassere beds stadier"
-        sb.draw(ready,ready_x, ready_y);
+        //sb.draw(ready,ready_x, ready_y);
 
         //Draws the background of "my board"
         sb.draw(my_board, board_x,my_board_y );
