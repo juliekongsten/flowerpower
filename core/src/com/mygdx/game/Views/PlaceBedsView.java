@@ -135,6 +135,7 @@ public class PlaceBedsView extends View{
 
         //TODO: check if the other player is ready
         boolean opReady = false; //set to true now, so that we get to next view, should be actual check here
+        //changed^ to false, to check the waiting text and color.
 
         if (opReady){
             vm.set(new GameView(vm));

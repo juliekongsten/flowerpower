@@ -87,6 +87,7 @@ public class GameView extends View{
                         if (flower){
                             //TODO: give visual feedback to user
                             System.out.println("Hit!");
+
                         } else {
                             //TODO: give visual feedback to user
                             System.out.println("Miss!");
