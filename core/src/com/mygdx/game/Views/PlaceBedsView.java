@@ -25,6 +25,8 @@ public class PlaceBedsView extends View{
     private Texture opGrass;
     private Texture opFrame;
     private Texture your_beds;
+    private Texture waiting_black;
+    private Texture waiting_text;
 
     private GameController controller;
 
@@ -51,6 +53,8 @@ public class PlaceBedsView extends View{
         opGrass = new Texture("opsquare.png");
         opFrame = new Texture("opframe.png");
         your_beds = new Texture("your_beds.png");
+        waiting_black = new Texture("waiting_black.png");
+        waiting_text = new Texture("waiting_text.png");
 
         findStaticCoordinates();
         opBoard = controller.getOpBoard();
@@ -130,14 +134,15 @@ public class PlaceBedsView extends View{
     private void checkOtherPlayer(SpriteBatch sb){
 
         //TODO: check if the other player is ready
-        boolean opReady = true; //set to true now, so that we get to next view, should be actual check here
+        boolean opReady = false; //set to true now, so that we get to next view, should be actual check here
 
         if (opReady){
             vm.set(new GameView(vm));
         } else{
-            //TODO: fix waiting drawings
-            //draw seethrough black background color - don't know how yet
+            //draw seethrough black background color
+            sb.draw(waiting_black,0,0);
             //draw text "Waiting for other player to get ready"
+            sb.draw(waiting_text,FlowerPowerGame.WIDTH/2-waiting_text.getWidth()/2,FlowerPowerGame.HEIGHT/2);
 
             return;
         }
