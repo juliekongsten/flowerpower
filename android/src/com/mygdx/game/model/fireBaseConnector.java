@@ -2,6 +2,8 @@ package com.mygdx.game.model;
 
 import androidx.annotation.NonNull;
 import android.util.Log;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.mygdx.game.FireBaseInterface;
 
 import com.google.firebase.database.DataSnapshot;
@@ -21,13 +23,15 @@ import static android.content.ContentValues.TAG;
 public class fireBaseConnector implements FireBaseInterface {
      private FirebaseDatabase database;
      private DatabaseReference myRef;
+    private FirebaseAuth mAuth;
 
     /**
      * Constructor that gets an instance of the database
      */
     public fireBaseConnector() {
-         database = FirebaseDatabase.getInstance("https://flowerpower-9b405-default-rtdb.europe-west1.firebasedatabase.app");
-     }
+        database = FirebaseDatabase.getInstance("https://flowerpower-9b405-default-rtdb.europe-west1.firebasedatabase.app");
+        mAuth = FirebaseAuth.getInstance();
+    }
 
     /**
      *writeToDb writes to the database
@@ -38,6 +42,7 @@ public class fireBaseConnector implements FireBaseInterface {
     public void writeToDb(String target, String value){
             myRef = database.getReference(target);
             myRef.setValue(value);
+
     }
 
     /**
@@ -72,5 +77,6 @@ public class fireBaseConnector implements FireBaseInterface {
             }
         });
     }
+
 
 }
