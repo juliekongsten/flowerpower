@@ -24,6 +24,7 @@ public class PlaceBedsView extends View{
     private Texture myGrass;
     private Texture opGrass;
     private Texture opFrame;
+    private Texture your_beds;
 
     private GameController controller;
 
@@ -49,6 +50,7 @@ public class PlaceBedsView extends View{
         myGrass = new Texture("mysquare.png");
         opGrass = new Texture("opsquare.png");
         opFrame = new Texture("opframe.png");
+        your_beds = new Texture("your_beds.png");
 
         findStaticCoordinates();
         opBoard = controller.getOpBoard();
@@ -158,7 +160,9 @@ public class PlaceBedsView extends View{
         //Draws the pool in the middle
         sb.draw(pool, pool_x ,pool_y);
 
-        //TODO: Draw text "Your beds:"
+        //Draw text "Your beds:"
+        sb.draw(your_beds,pool_x+10,pool_y+pool.getHeight()-20);
+        
 
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
