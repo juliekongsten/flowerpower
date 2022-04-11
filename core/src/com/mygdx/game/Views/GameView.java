@@ -71,7 +71,7 @@ public class GameView extends View{
         if (Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            //Check if any of opponents squares is pushed
+            //Check if any of opponents squares is pressed
             //Shouldn't do anything if opponents squares is pushed while waiting as it isn't your turn:)
             if (!waiting){
                 for (Square square : opBoard){
@@ -91,6 +91,7 @@ public class GameView extends View{
                             //TODO: give visual feedback to user
                             System.out.println("Miss!");
                         }
+                        //TODO: Give feedback to controller so that the other player also is notified (or implement squarelistener in some way)
                         System.out.println("Opponents square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
                     }
                 }
@@ -99,9 +100,26 @@ public class GameView extends View{
         }
     }
 
+    protected void receiveOpMove(Square square){
+        //Should only be called when the opponent has made a move
+        //TODO: Give feedback to user that your square has been hit/miss
+        //Do not draw the flower/miss as this is done in render
+
+
+    }
+
     @Override
     public void update(float dt) {
         handleInput();
+        if (waiting){
+            //TODO: Find way to get square from controller
+            //TODO: Find out if we should implement this as squarelistener instead and how
+            Square square = new Square(1,1,1); //should get this from controller
+            if (square != null){
+                receiveOpMove(square);
+            }
+
+        }
     }
 
     private void drawSquares(SpriteBatch sb){
@@ -131,8 +149,13 @@ public class GameView extends View{
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
             sb.draw(myGrass, x, y);
-            if (square.hasFlower()){
-                sb.draw(flower,x,y);
+            if (square.isHit()){
+                if (square.hasFlower()){
+                    sb.draw(flower,x,y);
+                }
+                else{
+                    sb.draw(miss,x,y);
+                }
             }
         }
 
@@ -141,6 +164,7 @@ public class GameView extends View{
     private void drawBeds(SpriteBatch sb){
         //TODO: Fill with the same as in PlaceBedsView
         //this should maybe be AFTER drawing square but BEFORE drawing miss/flower... Check this and if needed split "drawSquares" into "drawSquares" and "drawHits"
+        //My beds should always be drawn in their placements on my board
     }
 
     /**
