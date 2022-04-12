@@ -75,6 +75,12 @@ public class PlaceBedsView extends View{
                 System.out.println("READY PRESSED");
                 isReady = true; //sets to isReady, so that in render you will be sent to GameView if other player is ready
             }
+            for (Bed bed : beds) {
+                if (bed.getBounds().contains(pos.x, pos.y)) {
+                    System.out.println("A bed was clicked!");
+                }
+            }
+
 
             //TODO: Handle drag-and-drop of beds
 
@@ -124,7 +130,23 @@ public class PlaceBedsView extends View{
     private void drawBeds(SpriteBatch sb){
         //TODO: find out how to do this
         //if we find out logic for beds somewhere else we can probably just iterate through list of beds and draw it
-
+        float bed1_x = pool.getWidth()/2;
+        float bed1_y = pool_y+pool.getHeight()/2-20;
+        float bed2_y = bed1_y - beds.get(1).getTexture().getHeight()-8;
+        float bed3_x = pool_x + 20;
+        float bed3_y = pool_y + 10;
+        float bed4_x = bed1_x - beds.get(3).getTexture().getWidth() - 20;
+        float bed5_y = bed1_y + beds.get(4).getTexture().getHeight()+8;
+        sb.draw(beds.get(0).getTexture(), bed1_x, bed1_y);
+        sb.draw(beds.get(1).getTexture(), bed1_x, bed2_y);
+        sb.draw(beds.get(2).getTexture(), bed3_x, bed3_y);
+        sb.draw(beds.get(3).getTexture(), bed4_x,bed3_y);
+        sb.draw(beds.get(4).getTexture(), bed1_x, bed5_y);
+        beds.get(0).setBounds(bed1_x, bed1_y);
+        beds.get(1).setBounds(bed1_x, bed2_y);
+        beds.get(2).setBounds(bed3_x, bed3_y);
+        beds.get(3).setBounds(bed4_x, bed3_y);
+        beds.get(4).setBounds(bed1_x, bed5_y);
     }
 
     /**
@@ -134,7 +156,7 @@ public class PlaceBedsView extends View{
     private void checkOtherPlayer(SpriteBatch sb){
 
         //TODO: check if the other player is ready
-        boolean opReady = false; //set to true now, so that we get to next view, should be actual check here
+        boolean opReady = true; //set to true now, so that we get to next view, should be actual check here
         //changed^ to false, to check the waiting text and color.
 
         if (opReady){

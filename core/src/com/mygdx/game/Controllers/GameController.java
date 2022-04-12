@@ -13,6 +13,7 @@ public class GameController {
     private int squaresize;
     private int numberSquaresHeight;
     private int numberSquaresWidth;
+    private int numberBeds = 5;
     private List<Bed> myBeds = new ArrayList<>();
     private List<Bed> opBeds = new ArrayList<>();
 
@@ -47,6 +48,17 @@ public class GameController {
             my_y+=squaresize;
             op_y+=squaresize;
         }
+
+        Bed bed1 = new Bed(3, true, "flowerbed_1.png");
+        Bed bed2 = new Bed(4, true, "flowerbed_2.png");
+        Bed bed3 = new Bed(3, false, "flowerbed_3.png");
+        Bed bed4 = new Bed(2, false, "flowerbed_4.png");
+        Bed bed5 = new Bed(5, true, "flowerbed_5.png");
+        myBeds.add(bed1);
+        myBeds.add(bed2);
+        myBeds.add(bed3);
+        myBeds.add(bed4);
+        myBeds.add(bed5);
 
     }
 
@@ -85,5 +97,7 @@ public class GameController {
         //TODO: find logic
         //should set OpBeds to be the beds that opponent has placed
     }
+
+
 
 }
