@@ -180,6 +180,7 @@ public class PlaceBedsView extends View{
         //changed^ to false, to check the waiting text and color.
 
         if (opReady){
+            vm.setController(controller);
             vm.set(new GameView(vm));
         } else{
             //draw seethrough black background color

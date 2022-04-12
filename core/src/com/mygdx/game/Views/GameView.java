@@ -50,7 +50,7 @@ public class GameView extends View{
 
     public GameView(ViewManager vm) {
         super(vm);
-        controller = new GameController();
+        controller = vm.getController();
         pool = new Texture("pool.png");
         ready = new Texture("Button.png");
         op_board = new Texture("board.png");

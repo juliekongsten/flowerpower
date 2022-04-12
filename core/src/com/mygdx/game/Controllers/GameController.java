@@ -74,10 +74,6 @@ public class GameController {
     }
 
     public void setStartBeds(){
-        //TODO: find logic
-        //should make sure that startbeds are the same for both players
-        //might need some argument
-        //sets all beds inside pool
         Bed bed1 = new Bed(3, true, "flowerbed_1.png");
         Bed bed2 = new Bed(4, true, "flowerbed_2.png");
         Bed bed3 = new Bed(3, false, "flowerbed_3.png");
