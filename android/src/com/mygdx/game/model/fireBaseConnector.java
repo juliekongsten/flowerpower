@@ -24,15 +24,16 @@ import static android.content.ContentValues.TAG;
 /**
  * fireBaseConnector connects the application to the Firebase Realtime Database and implements the
  * methods describes in FireBaseInterface from the core module.
+ * This class handles all database activity
  */
 
 public class fireBaseConnector implements FireBaseInterface {
      private FirebaseDatabase database;
      private DatabaseReference myRef;
-    private FirebaseAuth mAuth;
+     private FirebaseAuth mAuth;
 
     /**
-     * Constructor that gets an instance of the database
+     * Constructor that gets an instance of the database and authorization
      */
     public fireBaseConnector() {
         database = FirebaseDatabase.getInstance("https://flowerpower-9b405-default-rtdb.europe-west1.firebasedatabase.app");
@@ -85,22 +86,25 @@ public class fireBaseConnector implements FireBaseInterface {
         });
     }
 
+    /**
+     * This method adds a user to the database with email and password authentication
+     * @param username
+     * @param password
+     */
     public void newPlayer(String username, String password) {
-        mAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener( new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            // updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            // updateUI(null);
-                        }
-                    }
-                });
+        mAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Sign in success, the user is now both registered and signed in
+                Log.d(TAG, "createUserWithEmail:success");
+                //TODO: maybe send the user back to the player class to get id? otherwise remove
+                FirebaseUser user = mAuth.getCurrentUser();
+            } else {
+                // Sign in failed
+                //TODO: send message back to register class for error handling
+                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                // updateUI(null);
+            }
+        });
     }
 
     /*
