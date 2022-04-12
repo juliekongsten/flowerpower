@@ -12,6 +12,9 @@ public class Bed {
     private boolean horizontal;
     private Texture bed;
     private Rectangle bounds;
+    private float pos_x = 0;
+    private float pos_y = 0;
+    private boolean touched = false;
 
     //TODO: alt:)
 
@@ -34,9 +37,34 @@ public class Bed {
         return bounds;
     }
 
+    public void updatePosition(float x, float y) {
+        this.pos_x = x;
+        this.pos_y = y;
+        setBounds(x, y);
+    }
+
+    public float getPos_x() {
+        return pos_x;
+    }
+
+    public float getPos_y() {
+        return pos_y;
+    }
+
     public Texture getTexture() {
         return bed;
     }
 
+    public void setTouched(boolean touched) {
+        this.touched = touched;
+    }
+
+    public boolean getTouched() {
+        return touched;
+    }
+
+    public boolean isHorizontal() {
+        return horizontal;
+    }
 
 }

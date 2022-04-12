@@ -60,30 +60,48 @@ public class PlaceBedsView extends View{
         opBoard = controller.getOpBoard();
         myBoard = controller.getMyBoard();
         beds = controller.getMyBeds();
-
-
     }
 
     @Override
     protected void handleInput() {
+        //TODO: Handle no switch of touched bed: you should move one bed until you drop it
+        if (Gdx.input.isTouched()) {
+            Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+            Bed touchedBed = new Bed(0, true, "flowerbed_1.png");
+            for (Bed bed : beds) {
+                if (bed.getBounds().contains(pos.x, pos.y)) {
+                    touchedBed = bed;
+                }
+            }
+            touchedBed.updatePosition(pos.x-touchedBed.getTexture().getWidth()/2, pos.y - (touchedBed.getTexture().getHeight()/2));
+        }
+
         if (Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-
             //Check if ready-button is pushed
             Rectangle readyBounds = new Rectangle(ready_x, ready_y, ready.getWidth(), ready.getHeight());
             if (readyBounds.contains(pos.x, pos.y)) {
+                // TODO: Add adjecent squares to bed
+                for (Square square : myBoard) {
+                    for (Bed bed : beds) {
+                        if (!bed.isHorizontal()) {
+                            if (square.getBounds().contains(bed.getPos_x() + bed.getTexture().getWidth()/2, bed.getPos_y()) && !square.hasFlower()) {
+                                bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
+                                bed.addSquare(square);
+                                System.out.println("Vertical bed moved");
+                        }
+                        } else {
+                            if (square.getBounds().contains(bed.getPos_x(), bed.getPos_y()+bed.getTexture().getHeight()/2) && !square.hasFlower()) {
+                                bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
+                                bed.addSquare(square);
+                                System.out.println("Horizontal bed moved");
+                            }
+                        }
+                    }
+                }
                 System.out.println("READY PRESSED");
                 isReady = true; //sets to isReady, so that in render you will be sent to GameView if other player is ready
             }
-            for (Bed bed : beds) {
-                if (bed.getBounds().contains(pos.x, pos.y)) {
-                    System.out.println("A bed was clicked!");
-                }
-            }
-
-
-            //TODO: Handle drag-and-drop of beds
-
         }
     }
 
@@ -130,23 +148,25 @@ public class PlaceBedsView extends View{
     private void drawBeds(SpriteBatch sb){
         //TODO: find out how to do this
         //if we find out logic for beds somewhere else we can probably just iterate through list of beds and draw it
-        float bed1_x = pool.getWidth()/2;
-        float bed1_y = pool_y+pool.getHeight()/2-20;
-        float bed2_y = bed1_y - beds.get(1).getTexture().getHeight()-8;
-        float bed3_x = pool_x + 20;
-        float bed3_y = pool_y + 10;
-        float bed4_x = bed1_x - beds.get(3).getTexture().getWidth() - 20;
-        float bed5_y = bed1_y + beds.get(4).getTexture().getHeight()+8;
-        sb.draw(beds.get(0).getTexture(), bed1_x, bed1_y);
-        sb.draw(beds.get(1).getTexture(), bed1_x, bed2_y);
-        sb.draw(beds.get(2).getTexture(), bed3_x, bed3_y);
-        sb.draw(beds.get(3).getTexture(), bed4_x,bed3_y);
-        sb.draw(beds.get(4).getTexture(), bed1_x, bed5_y);
-        beds.get(0).setBounds(bed1_x, bed1_y);
-        beds.get(1).setBounds(bed1_x, bed2_y);
-        beds.get(2).setBounds(bed3_x, bed3_y);
-        beds.get(3).setBounds(bed4_x, bed3_y);
-        beds.get(4).setBounds(bed1_x, bed5_y);
+        if (beds.get(0).getPos_x() == 0 && beds.get(0).getPos_y() == 0) {
+            float bed1_x = pool.getWidth()/2;
+            float bed1_y = pool_y+pool.getHeight()/2-20;
+            float bed2_y = bed1_y - beds.get(1).getTexture().getHeight()-8;
+            float bed3_x = pool_x + 20;
+            float bed3_y = pool_y + 10;
+            float bed4_x = bed1_x - beds.get(3).getTexture().getWidth() - 20;
+            float bed5_y = bed1_y + beds.get(4).getTexture().getHeight()+8;
+            beds.get(0).updatePosition(bed1_x, bed1_y);
+            beds.get(1).updatePosition(bed1_x, bed2_y);
+            beds.get(2).updatePosition(bed3_x, bed3_y);
+            beds.get(3).updatePosition(bed4_x, bed3_y);
+            beds.get(4).updatePosition(bed1_x, bed5_y);
+        }
+        sb.draw(beds.get(0).getTexture(), beds.get(0).getPos_x(), beds.get(0).getPos_y());
+        sb.draw(beds.get(1).getTexture(), beds.get(1).getPos_x(), beds.get(1).getPos_y());
+        sb.draw(beds.get(2).getTexture(), beds.get(2).getPos_x(), beds.get(2).getPos_y());
+        sb.draw(beds.get(3).getTexture(), beds.get(3).getPos_x(), beds.get(3).getPos_y());
+        sb.draw(beds.get(4).getTexture(), beds.get(4).getPos_x(), beds.get(4).getPos_y());
     }
 
     /**
