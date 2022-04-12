@@ -51,6 +51,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-auth'
+    // TODO: Sjekke denne
+    implementation 'com.google.firebase:firebase-core:16.0.1'
 
 }
 // called every time gradle gets executed, takes the native dependencies of

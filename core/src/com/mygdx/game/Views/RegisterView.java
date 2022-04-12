@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class RegisterView extends View {
@@ -29,11 +30,13 @@ public class RegisterView extends View {
     private String passwordTyped;
     private String passwordCheckTyped;
     private Pixmap cursorColor;
+    private GameController gameController;
 
 
 
     public RegisterView(ViewManager vm) {
         super(vm);
+        gameController = new GameController();
         logo = new Texture("logo.png");
         register = new Texture("register.png");
         playbook = new Texture("playbook.png");
@@ -117,8 +120,13 @@ public class RegisterView extends View {
                 passwordCheckTyped = passwordCheck.getText();
                 System.out.println("Password check typed: \n" + passwordCheckTyped);
                 // Sjekke at passordene stemmer overens
-                // sendes videre for å sjekke med db
+
                 // Sende videre til MenuView med innlogget bruker
+                // sendes videre for å sjekke med db
+                /*
+                TODO: Mulig denne må endres på en del må se hvordan vi skal gjøre det med db
+                 */
+                gameController.newPlayer(usernameTyped, passwordTyped);
                 vm.set(new MenuView(vm));
             }
             if (playbookBounds.contains(pos.x, pos.y)) {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.Views.RegisterView;
 import com.mygdx.game.Views.StartView;
 import com.mygdx.game.Views.ViewManager;
@@ -19,7 +20,8 @@ public class FlowerPowerGame extends ApplicationAdapter {
 	public static final int HEIGHT = 667;
 	private SpriteBatch batch;
 	private ViewManager vm;
-	FireBaseInterface _FBIC;
+	public static FireBaseInterface _FBIC = null;
+
 
 	/**
 	 * Constructor that creates instance of FireBaseInterface
@@ -30,6 +32,17 @@ public class FlowerPowerGame extends ApplicationAdapter {
 
 	}
 
+	public static FireBaseInterface getFBIC(){
+		return _FBIC; 
+	}
+
+
+	public void newPlayer(String username, String password){
+		_FBIC.newPlayer(username, password);
+
+	}
+
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -38,7 +51,9 @@ public class FlowerPowerGame extends ApplicationAdapter {
 		//calls methods in fireBaseConnector to test them out
 		_FBIC.writeToDb("message","søn!");
 		_FBIC.readFromDb();
+		_FBIC.newPlayer("cec@prøver.no", "123");
 	}
+
 
 	@Override
 	public void render () {

@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+ 
+
 /**
  * Currently not used but required for communication between modules
  */
@@ -12,6 +14,10 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     }
 
+    @Override
+    public void newPlayer(String username, String password) {
+
+    }
 
 
 }
