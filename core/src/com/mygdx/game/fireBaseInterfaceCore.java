@@ -24,5 +24,10 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     }
 
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
 
 }

@@ -1,20 +1,7 @@
 package com.mygdx.game.Controller;
-import com.mygdx.game.Model.Player;
+import com.mygdx.game.model.Player;
 
 public class GameController {
 
-    private String username;
-    private String password;
 
-    public void newPlayer(String username, String password){
-        Player player = new Player(username, password);
-    }
-
-    public String getUsername(){
-        return this.username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 }

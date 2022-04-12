@@ -23,5 +23,10 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
 
     }
 
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
 
 }

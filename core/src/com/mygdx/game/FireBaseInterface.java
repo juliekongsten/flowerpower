@@ -9,4 +9,5 @@ public interface FireBaseInterface {
     public void readFromDb();
     void newPlayer(String username, String password);
     void signIn(String username, String password);
+    String getUsername();
 }

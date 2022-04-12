@@ -11,12 +11,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mygdx.game.FireBaseInterface;
 
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mygdx.game.Model.Player;
+
 
 
 import static android.content.ContentValues.TAG;
@@ -102,7 +103,6 @@ public class fireBaseConnector implements FireBaseInterface {
                 // Sign in failed
                 //TODO: send message back to register class for error handling
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                // updateUI(null);
             }
         });
     }
@@ -122,11 +122,20 @@ public class fireBaseConnector implements FireBaseInterface {
 
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());
-                    }
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());}
+
                 });
 
     }
+
+    public String getUsername(){
+        FirebaseUser user = mAuth.getCurrentUser();
+        return user.getEmail();
+    }
+
+    /*public boolean emailAlreadyInUse(String email){
+        UserRecord userRecord = mAuth.getUserByEmail(email);
+    }*/
 
     /*
     TODO: Disse burde kanskje være protected?
