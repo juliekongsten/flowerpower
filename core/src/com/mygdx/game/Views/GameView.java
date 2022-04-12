@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Controllers.GameController;
 import com.mygdx.game.FlowerPowerGame;
+import com.mygdx.game.Models.Bed;
 import com.mygdx.game.Models.Square;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class GameView extends View{
     private float waiting_y;
     private List<Square> opBoard;
     private List<Square> myBoard;
+    private List<Bed> myBeds;
 
 
 
@@ -63,6 +65,7 @@ public class GameView extends View{
         findStaticCoordinates();
         opBoard = controller.getOpBoard();
         myBoard = controller.getMyBoard();
+        myBeds = controller.getMyBeds();
     }
 
     @Override
@@ -166,6 +169,11 @@ public class GameView extends View{
         //TODO: Fill with the same as in PlaceBedsView
         //this should maybe be AFTER drawing square but BEFORE drawing miss/flower... Check this and if needed split "drawSquares" into "drawSquares" and "drawHits"
         //My beds should always be drawn in their placements on my board
+        sb.draw(myBeds.get(0).getTexture(), myBeds.get(0).getPos_x(), myBeds.get(0).getPos_y());
+        sb.draw(myBeds.get(1).getTexture(), myBeds.get(1).getPos_x(), myBeds.get(1).getPos_y());
+        sb.draw(myBeds.get(2).getTexture(), myBeds.get(2).getPos_x(), myBeds.get(2).getPos_y());
+        sb.draw(myBeds.get(3).getTexture(), myBeds.get(3).getPos_x(), myBeds.get(3).getPos_y());
+        sb.draw(myBeds.get(4).getTexture(), myBeds.get(4).getPos_x(), myBeds.get(4).getPos_y());
     }
 
     /**
