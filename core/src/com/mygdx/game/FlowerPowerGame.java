@@ -53,7 +53,7 @@ public class FlowerPowerGame extends ApplicationAdapter {
 		//TODO: remove
 		_FBIC.writeToDb("message","jasså!");
 		_FBIC.readFromDb();
-		_FBIC.newPlayer("testuser2@gmail.com", "123456");
+		_FBIC.signIn("testuser2@gmail.com", "123456");
 	}
 
 

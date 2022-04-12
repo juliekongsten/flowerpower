@@ -13,7 +13,15 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     @Override
     public void readFromDb() { }
 
+    @Override
+    public void newPlayer(String username, String password) {
 
+    }
+
+    @Override
+    public void signIn(String username, String password) {
+
+    }
 
 
 }

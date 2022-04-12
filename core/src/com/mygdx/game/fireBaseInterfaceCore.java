@@ -19,5 +19,10 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     }
 
+    @Override
+    public void signIn(String username, String password) {
+
+    }
+
 
 }

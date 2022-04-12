@@ -8,4 +8,5 @@ public interface FireBaseInterface {
     public void writeToDb(String target, String value);
     public void readFromDb();
     void newPlayer(String username, String password);
+    void signIn(String username, String password);
 }

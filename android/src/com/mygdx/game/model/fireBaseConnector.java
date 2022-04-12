@@ -107,6 +107,27 @@ public class fireBaseConnector implements FireBaseInterface {
         });
     }
 
+    /**
+     * method that signs in an existing user
+     * @param username
+     * @param password
+     */
+    public void signIn(String username, String password){
+        mAuth.signInWithEmailAndPassword(username, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                    }
+                });
+
+    }
+
     /*
     TODO: Disse burde kanskje være protected?
      */
