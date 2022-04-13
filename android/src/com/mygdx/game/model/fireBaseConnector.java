@@ -94,10 +94,15 @@ public class fireBaseConnector implements FireBaseInterface {
                 Log.d(TAG, "createUserWithEmail:success");
                 //TODO: maybe send the user back to the player class to get id? otherwise remove
                 FirebaseUser user = mAuth.getCurrentUser();
-                DatabaseReference usersRef = database.getReference().child("users");
+                DatabaseReference usersRef = database.getReference().child("/users");
                 //TODO: put in whole object simultaneously
-                usersRef.setValue(user.getEmail());
+                // database.getReference().child("/users/"+ "UID").setValue(user.getUid());
+                //DatabaseReference uidRef = usersRef.child("/UID");
                 usersRef.setValue(user.getUid());
+                DatabaseReference mailRef = usersRef.child(getUID()+"/Mail");
+                mailRef.setValue(user.getEmail());
+                //database.getReference().child("/users/" + user.getUid()).child("/Mail").setValue(user.getEmail());
+
 
             } else {
                 // Sign in failed
