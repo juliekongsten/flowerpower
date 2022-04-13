@@ -30,6 +30,12 @@ public class GameView extends View{
     private Texture flower;
     private Texture miss;
     private Texture back;
+    private Texture waiting_black;
+    private Texture sure;
+    private Texture no;
+    private Texture yes;
+
+    private boolean goBack = false;
 
     private GameController controller;
 
@@ -64,6 +70,10 @@ public class GameView extends View{
         flower = new Texture("flower.png");
         miss = new Texture("miss.png");
         back = new Texture("back.png");
+        waiting_black = new Texture("waiting_black.png");
+        sure = new Texture("sure.png");
+        no = new Texture("no.png");
+        yes = new Texture("yes.png");
         findStaticCoordinates();
         opBoard = controller.getOpBoard();
         myBoard = controller.getMyBoard();
@@ -101,9 +111,17 @@ public class GameView extends View{
                         System.out.println("Opponents square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
                     }
                 }
-                Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
+                Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth()+3, back.getHeight()+3);
+                Rectangle noBounds = new Rectangle(FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100,no.getWidth(),no.getHeight());
+                Rectangle yesBounds = new Rectangle(FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100,yes.getWidth(),yes.getHeight());
                 if (backBounds.contains(pos.x, pos.y)) {
-                    vm.set(new MenuView(vm)); //change to exit view
+                    goBack = true;
+                }
+                if(noBounds.contains(pos.x,pos.y)){
+                    goBack = false;
+                }
+                if(yesBounds.contains(pos.x,pos.y)){
+                    vm.set(new ExitView(vm));
                 }
             }
 
@@ -222,9 +240,6 @@ public class GameView extends View{
         //Draws the background of "my board"
         sb.draw(my_board, board_x,my_board_y );
 
-        //Draws the Back button
-        sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
-
         //Draws the pool in the middle
         sb.draw(pool, pool_x ,pool_y);
 
@@ -242,6 +257,17 @@ public class GameView extends View{
         drawSquares(sb);
 
         drawBeds(sb);
+
+        //draws Back button, if it isnt touched
+        if(!goBack){
+            sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
+        }
+        else{
+            sb.draw(waiting_black,0,0);
+            sb.draw(sure,FlowerPowerGame.WIDTH/2-sure.getWidth()/2,FlowerPowerGame.HEIGHT/2);
+            sb.draw(no, FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100);
+            sb.draw(yes,FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100);
+        }
 
         sb.end();
 
