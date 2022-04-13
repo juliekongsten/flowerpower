@@ -81,7 +81,6 @@ public class PlaceBedsView extends View{
             //Check if ready-button is pushed
             Rectangle readyBounds = new Rectangle(ready_x, ready_y, ready.getWidth(), ready.getHeight());
             if (readyBounds.contains(pos.x, pos.y)) {
-                // TODO: Add adjecent squares to bed
                 for (Square square : myBoard) {
                     for (Bed bed : beds) {
                         if (!bed.isHorizontal()) {
@@ -99,7 +98,14 @@ public class PlaceBedsView extends View{
                         }
                     }
                 }
-                System.out.println("READY PRESSED");
+                for( Square square: beds.get(2).getSquares()){ //only for testing and debugging
+                    System.out.println(square);
+                }
+                System.out.println("adding adjacent squares");
+                addAdjacentSquares();
+                for( Square square: beds.get(2).getSquares()){
+                    System.out.println(square);
+                }
                 isReady = true; //sets to isReady, so that in render you will be sent to GameView if other player is ready
             }
         }
@@ -142,12 +148,11 @@ public class PlaceBedsView extends View{
 
     /**
      * Draw my beds based on their placements
-     * Should start with the given beds in the pool, don't know where this logic should be (controller?)
+     * Should start with the given beds in the pool
      * @param sb
      */
     private void drawBeds(SpriteBatch sb){
-        //TODO: find out how to do this
-        //if we find out logic for beds somewhere else we can probably just iterate through list of beds and draw it
+
         if (beds.get(0).getPos_x() == 0 && beds.get(0).getPos_y() == 0) {
             float bed1_x = pool.getWidth()/2;
             float bed1_y = pool_y+pool.getHeight()/2-20;
@@ -167,6 +172,21 @@ public class PlaceBedsView extends View{
         sb.draw(beds.get(2).getTexture(), beds.get(2).getPos_x(), beds.get(2).getPos_y());
         sb.draw(beds.get(3).getTexture(), beds.get(3).getPos_x(), beds.get(3).getPos_y());
         sb.draw(beds.get(4).getTexture(), beds.get(4).getPos_x(), beds.get(4).getPos_y());
+    }
+
+    /**
+     *  Adds adjecent squares to each bed
+     *  Have to add 2 to the coordinates, to only get the square inside the bed
+     */
+    private void addAdjacentSquares(){
+        for (Bed bed : beds) {
+            for (Square square : myBoard){
+                if(bed.getBounds().contains(square.getBounds().x+2,square.getBounds().y+2) && !bed.getSquares().contains(square)){
+                    bed.addSquare(square);
+                    square.setHasFlower(true);
+                }
+            }
+        }
     }
 
     /**

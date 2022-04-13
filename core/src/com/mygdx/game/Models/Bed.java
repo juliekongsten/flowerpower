@@ -58,4 +58,6 @@ public class Bed {
         return horizontal;
     }
 
+    public List<Square> getSquares(){return squares;}
+
 }
