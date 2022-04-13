@@ -29,6 +29,7 @@ public class GameView extends View{
     private Texture opFrame; //midlertidig? er fordi opGrass bare er grønt og uten svart ramme
     private Texture flower;
     private Texture miss;
+    private Texture back;
 
     private GameController controller;
 
@@ -62,6 +63,7 @@ public class GameView extends View{
         opFrame = new Texture("opframe.png");
         flower = new Texture("flower.png");
         miss = new Texture("miss.png");
+        back = new Texture("back.png");
         findStaticCoordinates();
         opBoard = controller.getOpBoard();
         myBoard = controller.getMyBoard();
@@ -98,6 +100,10 @@ public class GameView extends View{
                         //TODO: Give feedback to controller so that the other player also is notified (or implement squarelistener in some way)
                         System.out.println("Opponents square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
                     }
+                }
+                Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
+                if (backBounds.contains(pos.x, pos.y)) {
+                    vm.set(new MenuView(vm)); //change to exit view
                 }
             }
 
@@ -165,10 +171,11 @@ public class GameView extends View{
 
     }
 
+    /**
+     * Draws your own beds, placed same as in PlaceBedsView
+     * @param sb
+     */
     private void drawBeds(SpriteBatch sb){
-        //TODO: Fill with the same as in PlaceBedsView
-        //this should maybe be AFTER drawing square but BEFORE drawing miss/flower... Check this and if needed split "drawSquares" into "drawSquares" and "drawHits"
-        //My beds should always be drawn in their placements on my board
         sb.draw(myBeds.get(0).getTexture(), myBeds.get(0).getPos_x(), myBeds.get(0).getPos_y());
         sb.draw(myBeds.get(1).getTexture(), myBeds.get(1).getPos_x(), myBeds.get(1).getPos_y());
         sb.draw(myBeds.get(2).getTexture(), myBeds.get(2).getPos_x(), myBeds.get(2).getPos_y());
@@ -214,6 +221,9 @@ public class GameView extends View{
 
         //Draws the background of "my board"
         sb.draw(my_board, board_x,my_board_y );
+
+        //Draws the Back button
+        sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
 
         //Draws the pool in the middle
         sb.draw(pool, pool_x ,pool_y);
