@@ -2,11 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.Controller.GameController;
-import com.mygdx.game.Views.RegisterView;
 import com.mygdx.game.Views.StartView;
 import com.mygdx.game.Views.ViewManager;
 
@@ -37,11 +33,6 @@ public class FlowerPowerGame extends ApplicationAdapter {
 	}
 
 
-	public void newPlayer(String username, String password){
-		_FBIC.newPlayer(username, password);
-
-	}
-
 
 	@Override
 	public void create () {
@@ -53,7 +44,7 @@ public class FlowerPowerGame extends ApplicationAdapter {
 		//TODO: remove
 		_FBIC.writeToDb("message","jasså!");
 		_FBIC.readFromDb();
-		_FBIC.signIn("testuser2@gmail.com", "123456");
+		//_FBIC.signIn("testuser2@gmail.com", "123456");
 	}
 
 

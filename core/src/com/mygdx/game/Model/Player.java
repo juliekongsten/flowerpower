@@ -3,21 +3,36 @@ package com.mygdx.game.model;
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class Player {
 
-    //skal denne ha disse eller bare get metoder for det?
     private String username;
-    private String password;
+    private String UID;
     private FireBaseInterface _FBIC;
 
 
-    public Player(String username, String password){
+    //oppretter nå en ny spiller i konstruktøren
+    //TODO: what are we going to put here thooo
+    public Player(){
+
+    }
+
+
+    public void registerPlayer(String username, String password){
         this._FBIC= FlowerPowerGame.getFBIC();
         //check username first
         _FBIC.newPlayer(username, password);
+        this.username = _FBIC.getUsername();
+        this.UID = _FBIC.getUID();
+        //_FBIC.writeUserDataToDb(this);
+    }
+
+
+
+
+
+    //TODO: boolean? error handling in firebaseconnector?
+    public void signIn(String username, String password){
+        _FBIC.signIn(username, password);
     }
 
     /**

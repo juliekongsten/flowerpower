@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.mygdx.game.model.Player;
+
 /**
  * Interface to enable communication between modules
  * Contains methods implemented by fireBaseConnector to access db
@@ -10,4 +12,8 @@ public interface FireBaseInterface {
     void newPlayer(String username, String password);
     void signIn(String username, String password);
     String getUsername();
+
+    String getUID();
+
+    //void writeUserDataToDb(Player player);
 }

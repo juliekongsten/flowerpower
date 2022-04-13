@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
- 
+
+import com.mygdx.game.model.Player;
 
 /**
  * Currently not used but required for communication between modules
@@ -28,6 +29,16 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public String getUsername() {
         return null;
     }
+
+    @Override
+    public String getUID() {
+        return null;
+    }
+
+    /**@Override
+    public void writeUserDataToDb(Player player) {
+
+    }**/
 
 
 }

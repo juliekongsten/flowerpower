@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.LoginController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class LoginView extends View {
@@ -28,6 +29,7 @@ public class LoginView extends View {
     private String usernameTyped;
     private String passwordTyped;
     private Pixmap cursorColor;
+    private LoginController LoginController;
 
     protected LoginView(ViewManager vm) {
         super(vm);
@@ -100,6 +102,7 @@ public class LoginView extends View {
                 System.out.println("Password typed:");
                 System.out.println(passwordTyped);
                 //noe form for kontroll på om brukernavn og passord er riktig -> kontrolleren kan gjøre det
+                LoginController = new LoginController(usernameTyped, passwordTyped);
                 //sende videre til MenuView med innlogget bruker
                 vm.set(new MenuView(vm));
             }

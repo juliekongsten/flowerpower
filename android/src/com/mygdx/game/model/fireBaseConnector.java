@@ -2,21 +2,16 @@ package com.mygdx.game.model;
 
 import androidx.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mygdx.game.FireBaseInterface;
-
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 
 
 
@@ -99,6 +94,11 @@ public class fireBaseConnector implements FireBaseInterface {
                 Log.d(TAG, "createUserWithEmail:success");
                 //TODO: maybe send the user back to the player class to get id? otherwise remove
                 FirebaseUser user = mAuth.getCurrentUser();
+                DatabaseReference usersRef = database.getReference().child("users");
+                //TODO: put in whole object simultaneously
+                usersRef.setValue(user.getEmail());
+                usersRef.setValue(user.getUid());
+
             } else {
                 // Sign in failed
                 //TODO: send message back to register class for error handling
@@ -116,9 +116,11 @@ public class fireBaseConnector implements FireBaseInterface {
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
+                        // Sign in success,
                         Log.d(TAG, "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
+
+                        Log.d(TAG, user.getEmail());
 
                     } else {
                         // If sign in fails, display a message to the user.
@@ -128,11 +130,26 @@ public class fireBaseConnector implements FireBaseInterface {
 
     }
 
+    /**public void writeUserDataToDb(Player player){
+        DatabaseReference usersRef = database.getReference().child("users");
+        usersRef.setValue(player);
+    }**/
+
+    /**
+     * returns current users username
+     * @return
+     */
     public String getUsername(){
         FirebaseUser user = mAuth.getCurrentUser();
         return user.getEmail();
     }
 
+    public String getUID(){
+        FirebaseUser user = mAuth.getCurrentUser();
+        return user.getUid();
+    }
+
+    //TODO: hvordan fikse dette?
     /*public boolean emailAlreadyInUse(String email){
         UserRecord userRecord = mAuth.getUserByEmail(email);
     }*/
