@@ -40,8 +40,9 @@ public class Bed {
 
 
     public void addSquare(Square square){
-        squares.add(square);
         square.setHasFlower(true);
+        squares.add(square);
+
     }
 
     private void setBounds(float x, float y) {
@@ -74,6 +75,20 @@ public class Bed {
         return horizontal;
     }
 
-    public List<Square> getSquares(){return squares;}
+    public List<Square> getSquares(){
+
+        return squares;}
+
+    public List<Square> getSquares(List<Square> squareBoard){
+        List<Square> squares = new ArrayList<>();
+
+        for (Square square : squareBoard){
+            if (bounds.contains(square.getBounds().x, square.getBounds().y)){
+                squares.add(square);
+            }
+        }
+
+        return squares;
+    }
 
 }

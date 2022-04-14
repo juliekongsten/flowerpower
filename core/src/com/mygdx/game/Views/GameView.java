@@ -109,6 +109,7 @@ public class GameView extends View{
 
                         //Temporarily: sets the square to hit immediately without checking, checking should probably be done in controller
                         boolean flower = controller.hitSquare(square);
+                        System.out.println("Squareobject: "+square);
                         if (flower){
                             //TODO: give visual feedback to user
                             System.out.println("Hit!");

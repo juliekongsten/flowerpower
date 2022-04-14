@@ -7,6 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
+    public void setOpBoard(List<Square> opBoard) {
+        this.opBoard = opBoard;
+    }
+
+    public void setMyBoard(List<Square> myBoard) {
+        this.myBoard = myBoard;
+    }
+
     //har per nå laget kun en liste, kan heller ha liste i liste for å lettere navigere seg opp/ned/sidelengs men har ikke det nå
     private List<Square> opBoard = new ArrayList<>();
     private List<Square> myBoard = new ArrayList<>();
@@ -127,7 +135,10 @@ public class GameController {
         //TODO: find logic
         //should set OpBeds to be the beds that opponent has placed
         List<Bed> newBeds = new ArrayList<>();
+        System.out.println("SentOpBeds: "+sentOpBeds);
+
         for (Bed bed : sentOpBeds){
+            System.out.println("SentOpBed: "+bed.getPos_x()+","+bed.getPos_y());
             int size = bed.getSize();
             boolean horizontal = bed.isHorizontal();
             String texturePath = bed.getTexturePath();
@@ -135,17 +146,29 @@ public class GameController {
             float y = bed.getPos_y()+distance;
             float x = bed.getPos_x();
             newBed.updatePosition(x, y);
+            System.out.println("Newbead: "+newBed.getPos_x()+","+newBed.getPos_y());
             newBeds.add(newBed);
             //endre squares til å ha flower
 
-
         }
 
-        opBeds = newBeds;
+        //
+
+        opBeds = newBeds;/*
         for (Square opSquare : opBoard){
             if (isSquareInBed(opSquare, opBeds)){
                 opSquare.setHasFlower(true);
                 System.out.println("Flower in square: "+opSquare.getBounds());
+            }
+        }*/
+
+        for (Bed bed : opBeds){
+            List<Square> squares = bed.getSquares(opBoard);
+            System.out.println("Squareslist: " + squares);
+            for (Square square : squares){
+                square.setHasFlower(true);
+                System.out.println("Square in opBed: "+square.getBounds());
+
             }
         }
 

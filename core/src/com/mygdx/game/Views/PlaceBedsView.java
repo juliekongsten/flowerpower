@@ -102,12 +102,16 @@ public class PlaceBedsView extends View{
                             if (square.getBounds().contains(bed.getPos_x() + bed.getTexture().getWidth()/2, bed.getPos_y()) && !square.hasFlower()) {
                                 bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
                                 //bed.addSquare(square);
+                                square.setHasFlower(true);
+                                System.out.println("Squareobject: "+square);
                                 System.out.println("Vertical bed moved");
                         }
                         } else {
                             if (square.getBounds().contains(bed.getPos_x(), bed.getPos_y()+bed.getTexture().getHeight()/2) && !square.hasFlower()) {
                                 bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
                                 //bed.addSquare(square);
+                                square.setHasFlower(true);
+                                System.out.println("Squareobject: "+square);
                                 System.out.println("Horizontal bed moved");
                             }
                         }
@@ -117,6 +121,9 @@ public class PlaceBedsView extends View{
                 addAdjacentSquares();
 
                 controller.setMyBeds(beds);
+                controller.setMyBoard(myBoard);
+                controller.setOpBoard(opBoard);
+
 
                 isReady = true; //sets to isReady, so that in render you will be sent to GameView if other player is ready
             }
@@ -195,7 +202,8 @@ public class PlaceBedsView extends View{
         for (Bed bed : beds) {
             for (Square square : myBoard){
                 if(bed.getBounds().contains(square.getBounds().x+2,square.getBounds().y+2) && !bed.getSquares().contains(square)){
-                    bed.addSquare(square);
+                    //bed.addSquare(square);
+                    square.setHasFlower(true);
                 }
             }
         }
