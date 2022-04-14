@@ -51,6 +51,7 @@ public class GameView extends View{
     private List<Square> opBoard;
     private List<Square> myBoard;
     private List<Bed> myBeds;
+    private List<Bed> opBeds;
 
 
 
@@ -75,9 +76,18 @@ public class GameView extends View{
         no = new Texture("no.png");
         yes = new Texture("yes.png");
         findStaticCoordinates();
-        opBoard = controller.getOpBoard();
-        myBoard = controller.getMyBoard();
+        //opBoard = controller.getOpBoard();
         myBeds = controller.getMyBeds();
+        myBoard = controller.getMyBoard();
+        for (Bed bed : myBeds){
+            System.out.println("MyBed: "+bed.getBounds());
+        }
+        controller.setOpBeds(myBeds);
+        opBeds = controller.getOpBeds();
+        opBoard = controller.getOpBoard();
+        for (Bed bed : opBeds){
+            System.out.println("OpBed: "+bed.getBounds());
+        }
     }
 
     @Override

@@ -17,6 +17,8 @@ public class GameController {
     private List<Bed> myBeds = new ArrayList<>();
     private List<Bed> opBeds = new ArrayList<>();
 
+    private int distance = 359;
+
     /* OBS: har foreløpig satt de rutene i motstander slik at de tre nederste rekkene har blomster
             og de øverste ikke har det. Er for å teste at ting fungerer slik det skal.
             De skal senere settes ut fra hvor motstanderen har plassert beds.
@@ -33,13 +35,15 @@ public class GameController {
         int x = 26+15;
         int my_y = 65+12;
         int op_y = 424+12;
+        setMyBeds(null);
+        List<Bed> sentOpBeds = new ArrayList<>(); //TODO: Get this from other player
+        setOpBeds(sentOpBeds);
         for (int i = 0; i< numberSquaresHeight; i++){
             for (int j = 0; j< numberSquaresWidth; j++){
-                myBoard.add(new Square(x, my_y, squaresize));
+                Square mySquare = new Square(x, my_y, squaresize);
                 Square opSquare = new Square(x,op_y,squaresize); //should find somewhere
-                if (i<3){
-                    opSquare.setHasFlower(true); //we probably don't need this as this should be taken care of by opponent and taken care of somewhere else?
-                }
+
+                myBoard.add(mySquare);
                 opBoard.add(opSquare);
                 x+=squaresize;
 
@@ -48,8 +52,20 @@ public class GameController {
             my_y+=squaresize;
             op_y+=squaresize;
         }
-        setStartBeds();
+
+
+
     }
+
+    public boolean isSquareInBed(Square square, List<Bed> beds){
+        for (Bed bed : beds){
+            return bed.getBounds().contains(square.getBounds().x, square.getBounds().y);
+        }
+        return false;
+    }
+
+
+
 
     public List<Square> getOpBoard(){ return opBoard; }
     public List<Square> getMyBoard(){ return myBoard; }
@@ -73,7 +89,21 @@ public class GameController {
         return square.hasFlower();
     }
 
-    public void setStartBeds(){
+    public void setMyBeds(List<Bed> beds){
+        if (beds == null){
+            setStartBeds();
+        } else {
+            myBeds = beds;
+            //i tillegg endre på squaresene til å ha flowers
+            for (Square mySquare : myBoard){
+                if (isSquareInBed(mySquare,myBeds)){
+                    mySquare.setHasFlower(true);
+                }
+            }
+
+        }
+    }
+    private void setStartBeds(){
         Bed bed1 = new Bed(3, true, "flowerbed_1.png");
         Bed bed2 = new Bed(4, true, "flowerbed_2.png");
         Bed bed3 = new Bed(3, false, "flowerbed_3.png");
@@ -87,9 +117,38 @@ public class GameController {
 
     }
 
-    public void setOpBeds(List<Bed> beds){
+    /**
+     * Moves Opponents bed to the opponent board as the sent beds have myboard coordinates
+     * @param sentOpBeds
+     * @return
+     */
+
+    public void setOpBeds(List<Bed> sentOpBeds){
         //TODO: find logic
         //should set OpBeds to be the beds that opponent has placed
+        List<Bed> newBeds = new ArrayList<>();
+        for (Bed bed : sentOpBeds){
+            int size = bed.getSize();
+            boolean horizontal = bed.isHorizontal();
+            String texturePath = bed.getTexturePath();
+            Bed newBed = new Bed(size, horizontal, texturePath);
+            float y = bed.getPos_y()+distance;
+            float x = bed.getPos_x();
+            newBed.updatePosition(x, y);
+            newBeds.add(newBed);
+            //endre squares til å ha flower
+
+
+        }
+
+        opBeds = newBeds;
+        for (Square opSquare : opBoard){
+            if (isSquareInBed(opSquare, opBeds)){
+                opSquare.setHasFlower(true);
+                System.out.println("Flower in square: "+opSquare.getBounds());
+            }
+        }
+
     }
 
 

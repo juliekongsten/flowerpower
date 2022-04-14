@@ -12,6 +12,7 @@ import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Models.Bed;
 import com.mygdx.game.Models.Square;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlaceBedsView extends View{
@@ -60,6 +61,19 @@ public class PlaceBedsView extends View{
         opBoard = controller.getOpBoard();
         myBoard = controller.getMyBoard();
         beds = controller.getMyBeds();
+        for (Square square : opBoard){
+            int x = (int) square.getBounds().x;
+            int y = (int) square.getBounds().y;
+
+            System.out.println("OpSquare: "+x+","+y);
+        }
+        //Draw my board
+        for (Square square : myBoard){
+            int x = (int) square.getBounds().x;
+            int y = (int) square.getBounds().y;
+
+            System.out.println("MySquare: "+x+","+y);
+        }
     }
 
     @Override
@@ -82,34 +96,33 @@ public class PlaceBedsView extends View{
             Rectangle readyBounds = new Rectangle(ready_x, ready_y, ready.getWidth(), ready.getHeight());
             if (readyBounds.contains(pos.x, pos.y)) {
                 for (Square square : myBoard) {
+                    //Move beds to actual squares if they are between
                     for (Bed bed : beds) {
                         if (!bed.isHorizontal()) {
                             if (square.getBounds().contains(bed.getPos_x() + bed.getTexture().getWidth()/2, bed.getPos_y()) && !square.hasFlower()) {
                                 bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
-                                bed.addSquare(square);
+                                //bed.addSquare(square);
                                 System.out.println("Vertical bed moved");
                         }
                         } else {
                             if (square.getBounds().contains(bed.getPos_x(), bed.getPos_y()+bed.getTexture().getHeight()/2) && !square.hasFlower()) {
                                 bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
-                                bed.addSquare(square);
+                                //bed.addSquare(square);
                                 System.out.println("Horizontal bed moved");
                             }
                         }
                     }
                 }
-                for( Square square: beds.get(2).getSquares()){ //only for testing and debugging
-                    System.out.println(square);
-                }
-                System.out.println("adding adjacent squares");
+
                 addAdjacentSquares();
-                for( Square square: beds.get(2).getSquares()){
-                    System.out.println(square);
-                }
+
+                controller.setMyBeds(beds);
+
                 isReady = true; //sets to isReady, so that in render you will be sent to GameView if other player is ready
             }
         }
     }
+
 
     @Override
     public void update(float dt) {
@@ -183,7 +196,6 @@ public class PlaceBedsView extends View{
             for (Square square : myBoard){
                 if(bed.getBounds().contains(square.getBounds().x+2,square.getBounds().y+2) && !bed.getSquares().contains(square)){
                     bed.addSquare(square);
-                    square.setHasFlower(true);
                 }
             }
         }
