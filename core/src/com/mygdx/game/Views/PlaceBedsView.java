@@ -102,7 +102,7 @@ public class PlaceBedsView extends View{
                             if (square.getBounds().contains(bed.getPos_x() + bed.getTexture().getWidth()/2, bed.getPos_y()) && !square.hasFlower()) {
                                 bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
                                 //bed.addSquare(square);
-                                square.setHasFlower(true);
+                                //square.setHasFlower(true);
                                 System.out.println("Squareobject: "+square);
                                 System.out.println("Vertical bed moved");
                         }
@@ -110,7 +110,7 @@ public class PlaceBedsView extends View{
                             if (square.getBounds().contains(bed.getPos_x(), bed.getPos_y()+bed.getTexture().getHeight()/2) && !square.hasFlower()) {
                                 bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
                                 //bed.addSquare(square);
-                                square.setHasFlower(true);
+                                //square.setHasFlower(true);
                                 System.out.println("Squareobject: "+square);
                                 System.out.println("Horizontal bed moved");
                             }
@@ -118,7 +118,7 @@ public class PlaceBedsView extends View{
                     }
                 }
 
-                addAdjacentSquares();
+                //addAdjacentSquares();
 
                 controller.setMyBeds(beds);
                 controller.setMyBoard(myBoard);
