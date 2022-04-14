@@ -3,19 +3,28 @@ package com.mygdx.game.model;
 import androidx.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.mygdx.game.FireBaseInterface;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-
+import com.mygdx.game.Model.Game;
+import com.mygdx.game.Model.Player;
 
 
 import static android.content.ContentValues.TAG;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * fireBaseConnector connects the application to the Firebase Realtime Database and implements the
@@ -27,6 +36,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private FirebaseDatabase database;
      private DatabaseReference myRef;
      private FirebaseAuth mAuth;
+     private FirebaseFirestore db;
 
     /**
      * Constructor that gets an instance of the database and authorization
@@ -34,6 +44,7 @@ public class fireBaseConnector implements FireBaseInterface {
     public fireBaseConnector() {
         database = FirebaseDatabase.getInstance("https://flowerpower-9b405-default-rtdb.europe-west1.firebasedatabase.app");
         mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
     }
 
 
@@ -154,6 +165,7 @@ public class fireBaseConnector implements FireBaseInterface {
         return user.getUid();
     }
 
+
     //TODO: hvordan fikse dette?
     /*public boolean emailAlreadyInUse(String email){
         UserRecord userRecord = mAuth.getUserByEmail(email);
@@ -162,6 +174,28 @@ public class fireBaseConnector implements FireBaseInterface {
     /*
     TODO: Disse burde kanskje være protected?
      */
+
+    //TODO: opprette et game - tenker egt at man skal ta inn player som er current user her
+    public void createGame(){
+        //oppretter et nytt spill inni games
+        Game game = new Game("ingrid");
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        //gameRef.setValue(game.getGID());
+        int GID = game.getGID();
+        DatabaseReference playerRef = gameRef.child(GID+"/Players");
+        playerRef.push().setValue("player1");
+    }
+
+
+    
+    //TODO: bli med i spill
+    public void joinGame(int gameID){
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gameID+"/Players");
+        playerRef.push().setValue("player2");
+        //check user logged in - getID
+        //check gamepin - if the same, get user into the game
+    }
 
     public FirebaseDatabase getDatabase(){
         return this.database;

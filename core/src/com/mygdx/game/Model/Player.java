@@ -1,4 +1,4 @@
-package com.mygdx.game.model;
+package com.mygdx.game.Model;
 
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
@@ -14,6 +14,10 @@ public class Player {
     //TODO: what are we going to put here thooo
     public Player(){
 
+    }
+
+    public Player(String username, String password) {
+        registerPlayer(username, password);
     }
 
 
