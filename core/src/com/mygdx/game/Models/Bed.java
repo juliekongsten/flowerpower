@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bed {
-    private List<Square> squares = new ArrayList<>(); //the squares the bed consists of, the squares should have placement so that the bed is inside the pool at start
-
     private int size; // Antall ruter man har plass til i en bed
     private boolean horizontal;
     private Texture bed;
@@ -36,13 +34,6 @@ public class Bed {
 
     public Texture getBed() {
         return bed;
-    }
-
-
-    public void addSquare(Square square){
-        square.setHasFlower(true);
-        squares.add(square);
-
     }
 
     private void setBounds(float x, float y) {
@@ -74,10 +65,6 @@ public class Bed {
     public boolean isHorizontal() {
         return horizontal;
     }
-
-    public List<Square> getSquares(){
-
-        return squares;}
 
     public List<Square> getSquares(List<Square> squareBoard){
         List<Square> squares = new ArrayList<>();

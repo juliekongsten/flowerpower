@@ -96,6 +96,7 @@ public class PlaceBedsView extends View{
             Rectangle readyBounds = new Rectangle(ready_x, ready_y, ready.getWidth(), ready.getHeight());
             if (readyBounds.contains(pos.x, pos.y)) {
                 for (Square square : myBoard) {
+                    // TODO: implement check that all beds are inside the board, give feedback to keep moving if no
                     //Move beds to actual squares if they are between
                     for (Bed bed : beds) {
                         if (!bed.isHorizontal()) {
@@ -198,6 +199,7 @@ public class PlaceBedsView extends View{
      *  Adds adjecent squares to each bed
      *  Have to add 2 to the coordinates, to only get the square inside the bed
      */
+    /*
     private void addAdjacentSquares(){
         for (Bed bed : beds) {
             for (Square square : myBoard){
@@ -208,6 +210,7 @@ public class PlaceBedsView extends View{
             }
         }
     }
+    */
 
     /**
      * Checks if the other player is ready and sends player to gameview if both players are ready
