@@ -1,5 +1,7 @@
 package com.mygdx.game.Controller;
-import com.mygdx.game.model.Player;
+/*
+TODO: Controller for game
+ */
 
 public class GameController {
 

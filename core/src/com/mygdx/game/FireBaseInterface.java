@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import com.mygdx.game.model.Player;
+import com.mygdx.game.Model.Player;
 
 /**
  * Interface to enable communication between modules

@@ -142,9 +142,17 @@ public class RegisterView extends View {
         }
         }
 
-        //TODO: fix check
+        //TODO: ha med noen beskjed at de ikke matcher
     public boolean checkPassword(String password, String passwordCheckTyped){
-        return true;
+
+        if (password.equals(passwordCheckTyped)){
+            System.out.println("Passwords match!");
+            return true;
+        } else{
+            System.out.println("Passwords does not match");
+            return false;
+        }
+
     }
     @Override
     public void update(float dt) {
