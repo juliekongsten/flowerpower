@@ -83,7 +83,7 @@ public class Bed {
         List<Square> squares = new ArrayList<>();
 
         for (Square square : squareBoard){
-            if (bounds.contains(square.getBounds().x, square.getBounds().y)){
+            if (bounds.contains(square.getBounds().x +2, square.getBounds().y +2)){
                 squares.add(square);
             }
         }
