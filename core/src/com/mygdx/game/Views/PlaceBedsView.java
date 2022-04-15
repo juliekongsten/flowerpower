@@ -28,6 +28,8 @@ public class PlaceBedsView extends View{
     private Texture your_beds;
     private Texture waiting_black;
     private Texture waiting_text;
+    private Texture overlapping_text;
+    private Texture replace;
 
     private GameController controller;
 
@@ -41,6 +43,7 @@ public class PlaceBedsView extends View{
     private List<Square> opBoard;
     private List<Square> myBoard;
     private List<Bed> beds;
+    private boolean overlappingBeds;
 
 
     public PlaceBedsView(ViewManager vm){
@@ -56,6 +59,9 @@ public class PlaceBedsView extends View{
         your_beds = new Texture("your_beds.png");
         waiting_black = new Texture("waiting_black.png");
         waiting_text = new Texture("waiting_text.png");
+        overlapping_text = new Texture("overlapping_text.png");
+        replace = new Texture("replace.png");
+        overlappingBeds = false;
 
         findStaticCoordinates();
         opBoard = controller.getOpBoard();
@@ -78,7 +84,7 @@ public class PlaceBedsView extends View{
 
     @Override
     protected void handleInput() {
-        //TODO: Handle no switch of touched bed: you should move one bed until you drop it
+        //TODO: (low priority) Handle no switch of touched bed: you should move one bed until you drop it
         if (Gdx.input.isTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             Bed touchedBed = new Bed(0, true, "flowerbed_1.png");
@@ -98,38 +104,58 @@ public class PlaceBedsView extends View{
                 for (Square square : myBoard) {
                     // TODO: implement check that all beds are inside the board, give feedback to keep moving if no
                     //Move beds to actual squares if they are between
+                    List<Square> occupiedSquares = new ArrayList<>();
                     for (Bed bed : beds) {
                         if (!bed.isHorizontal()) {
-                            if (square.getBounds().contains(bed.getPos_x() + bed.getTexture().getWidth()/2, bed.getPos_y()) && !square.hasFlower()) {
+                            if (square.getBounds().contains(bed.getPos_x() + bed.getTexture().getWidth()/2, bed.getPos_y()) && !occupiedSquares.contains(square)) {
                                 bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
-                                //bed.addSquare(square);
-                                //square.setHasFlower(true);
+                                occupiedSquares.addAll(bed.getSquares(myBoard));
                                 System.out.println("Squareobject: "+square);
                                 System.out.println("Vertical bed moved");
                         }
                         } else {
-                            if (square.getBounds().contains(bed.getPos_x(), bed.getPos_y()+bed.getTexture().getHeight()/2) && !square.hasFlower()) {
+                            if (square.getBounds().contains(bed.getPos_x(), bed.getPos_y()+bed.getTexture().getHeight()/2) && !!occupiedSquares.contains(square)) {
                                 bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
-                                //bed.addSquare(square);
-                                //square.setHasFlower(true);
+                                occupiedSquares.addAll(bed.getSquares(myBoard));
                                 System.out.println("Squareobject: "+square);
                                 System.out.println("Horizontal bed moved");
                             }
                         }
                     }
-                }
 
-                //addAdjacentSquares();
+                }
 
                 controller.setMyBeds(beds);
                 controller.setMyBoard(myBoard);
                 controller.setOpBoard(opBoard);
 
+                overlappingBeds = checkOverlappingBeds();
+                if(!overlappingBeds){
+                    isReady = true; //sets to isReady, so that in render you will be sent to GameView if other player is ready
+                }
 
-                isReady = true; //sets to isReady, so that in render you will be sent to GameView if other player is ready
-            }
         }
+            Rectangle replaceBounds = new Rectangle(FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150,replace.getWidth(),replace.getHeight());
+            if(replaceBounds.contains(pos.x,pos.y)){
+                System.out.println("REPLACE TOUCHED");
+                overlappingBeds = false;
+            }
     }
+    }
+
+    private boolean checkOverlappingBeds(){
+        List<Square> tmp = new ArrayList<>();
+        for(Bed bed : beds){
+            for(Square square: bed.getSquares(myBoard)){
+                if(tmp.contains(square)){
+                    return true;
+                }
+            }
+            tmp.addAll(bed.getSquares(myBoard));
+        }
+        return false;
+    }
+
 
 
     @Override
@@ -195,22 +221,6 @@ public class PlaceBedsView extends View{
         sb.draw(beds.get(4).getTexture(), beds.get(4).getPos_x(), beds.get(4).getPos_y());
     }
 
-    /**
-     *  Adds adjecent squares to each bed
-     *  Have to add 2 to the coordinates, to only get the square inside the bed
-     */
-    /*
-    private void addAdjacentSquares(){
-        for (Bed bed : beds) {
-            for (Square square : myBoard){
-                if(bed.getBounds().contains(square.getBounds().x+2,square.getBounds().y+2) && !bed.getSquares().contains(square)){
-                    //bed.addSquare(square);
-                    square.setHasFlower(true);
-                }
-            }
-        }
-    }
-    */
 
     /**
      * Checks if the other player is ready and sends player to gameview if both players are ready
@@ -264,6 +274,12 @@ public class PlaceBedsView extends View{
 
         //Draw the beds
         drawBeds(sb);
+
+        if(overlappingBeds){
+            sb.draw(waiting_black,0,0);
+            sb.draw(overlapping_text,FlowerPowerGame.WIDTH/2-overlapping_text.getWidth()/2,FlowerPowerGame.HEIGHT-50);
+            sb.draw(replace,FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150);
+        }
 
         if(isReady){
             checkOtherPlayer(sb);
