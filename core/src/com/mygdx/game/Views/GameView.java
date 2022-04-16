@@ -36,7 +36,6 @@ public class GameView extends View{
     private Texture yes;
 
     private boolean goBack = false;
-
     private boolean gameOver = false;
 
     private GameController controller;
@@ -62,6 +61,20 @@ public class GameView extends View{
         super(vm);
         controller = vm.getController();
         pool = new Texture("pool.png");
+        createTextures();
+        findStaticCoordinates();
+        myBeds = controller.getMyBeds();
+        myBoard = controller.getMyBoard();
+        controller.setOpBeds(myBeds); //TODO: get the beds from the player
+        opBeds = controller.getOpBeds();
+        opBoard = controller.getOpBoard();
+
+    }
+
+    /**
+     * Prepares textures for parts of the view
+     */
+    private void createTextures(){
         ready = new Texture("Button.png");
         op_board = new Texture("board.png");
         my_board = new Texture("board.png");
@@ -77,41 +90,26 @@ public class GameView extends View{
         sure = new Texture("sure.png");
         no = new Texture("no.png");
         yes = new Texture("yes.png");
-        findStaticCoordinates();
-        //opBoard = controller.getOpBoard();
-        myBeds = controller.getMyBeds();
-        myBoard = controller.getMyBoard();
-        for (Bed bed : myBeds){
-            System.out.println("MyBed: "+bed.getBounds());
-        }
-        controller.setOpBeds(myBeds);
-        opBeds = controller.getOpBeds();
-        opBoard = controller.getOpBoard();
-        for (Bed bed : opBeds){
-            System.out.println("OpBed: "+bed.getBounds());
-        }
     }
 
+    /**
+     * Handles input from user
+     */
     @Override
     protected void handleInput() {
-        //obs!! må sjekke tilstand til spillet, er man i waiting mode skal det ikke skje noe forskjell om man trykker på opponent sitt board
+        //TODO: Handle state of game - do not handle playing input if not in playing state (partially implemented)
         if (Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            //Check if any of opponents squares is pressed
-            //Shouldn't do anything if opponents squares is pushed while waiting as it isn't your turn:)
+            //If player is not waiting on opponents move we check if player presses any of opponents
+            //squares and act accordingly
             if (!waiting){
                 for (Square square : opBoard){
                     if (square.getBounds().contains(pos.x,pos.y)){
-                        //Make controller check the square and update the values
-                        //Controller gives feedback of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
-                        //View should give feedback to user if this was hit/miss
-                        //Do not need to do changes in spritebatch here, since we update square it will be taken care of in render
+                        //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
+                        //Gives feedback to user if this was hit/miss
 
-
-                        //Temporarily: sets the square to hit immediately without checking, checking should probably be done in controller
                         boolean flower = controller.hitSquare(square);
-                        System.out.println("Squareobject: "+square);
                         if (flower){
                             //TODO: give visual feedback to user
                             System.out.println("Hit!");
@@ -121,15 +119,16 @@ public class GameView extends View{
                             System.out.println("Miss!");
                         }
                         //TODO: Give feedback to controller so that the other player also is notified (or implement squarelistener in some way)
-                        System.out.println("Opponents square was pressed: ["+square.getBounds().x+","+square.getBounds().y+"]");
                     }
                 }
+                //TODO: Move outside "if(!waiting)"!!
                 Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth()+3, back.getHeight()+3);
                 Rectangle noBounds = new Rectangle(FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100,no.getWidth(),no.getHeight());
                 Rectangle yesBounds = new Rectangle(FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100,yes.getWidth(),yes.getHeight());
                 if (backBounds.contains(pos.x, pos.y)) {
                     goBack = true;
                 }
+                //TODO: Put inside an "if goBack" ?
                 if(noBounds.contains(pos.x,pos.y)){
                     goBack = false;
                 }
@@ -141,6 +140,10 @@ public class GameView extends View{
         }
     }
 
+    /**
+     *
+     * @param square
+     */
     protected void receiveOpMove(Square square){
         //Should only be called when the opponent has made a move
         //TODO: Give feedback to user that your square has been hit/miss
@@ -151,11 +154,15 @@ public class GameView extends View{
 
     @Override
     public void update(float dt) {
+        //TODO: Implement "check if waiting" here
         handleInput();
+
+        //Checks if the game is over and takes player to ExitView
         if (gameOver){
             boolean won = controller.getWinner();
             vm.set(new ExitView(vm, won));
         }
+        //If waiting we check if the opponent has made a move so we can give give feedback
         if (waiting){
             //TODO: Find way to get square from controller
             //TODO: Find out if we should implement this as squarelistener instead and how
@@ -167,9 +174,12 @@ public class GameView extends View{
         }
     }
 
+    /**
+     * Draws the graphics of squares to the boards
+     * @param sb
+     */
     private void drawSquares(SpriteBatch sb){
         //Draw opponents board
-        //Goes through the list of squares in opponents board and draws the grass plus flower/miss(if hit) on given coordinates
         for (Square square : opBoard){
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
@@ -179,7 +189,6 @@ public class GameView extends View{
         }
 
         //Draw my board
-        //Goes through the list of squares in my board and draws the grass plus flower/miss(if hit) on given coordinates
         for (Square square : myBoard){
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
@@ -192,6 +201,7 @@ public class GameView extends View{
      * Draw flower/miss on the squares that are hit
      * @param sb
      */
+    //TODO: Consider implementing a list "hitSquares" that all hit squares are added to so that we could iterate through only these
     private void drawHits(SpriteBatch sb) {
         for (Square square : opBoard) {
             int x = (int) square.getBounds().x;
@@ -220,11 +230,12 @@ public class GameView extends View{
     }
 
 
-        /**
-         * Draws your own beds, placed same as in PlaceBedsView
-         * @param sb
-         */
+    /**
+     * Draws all of own beds, and fully hit beds on opponents board
+     * @param sb
+     */
     private void drawBeds(SpriteBatch sb){
+        //TODO: Change to iterate through list instead
         sb.draw(myBeds.get(0).getTexture(), myBeds.get(0).getPos_x(), myBeds.get(0).getPos_y());
         sb.draw(myBeds.get(1).getTexture(), myBeds.get(1).getPos_x(), myBeds.get(1).getPos_y());
         sb.draw(myBeds.get(2).getTexture(), myBeds.get(2).getPos_x(), myBeds.get(2).getPos_y());
@@ -252,20 +263,6 @@ public class GameView extends View{
         my_turn_y = pool_y+(pool.getHeight()/2)-my_turn.getHeight()/2;
         waiting_x = pool_x+(pool.getWidth()/2-op_turn.getWidth()/2);
         waiting_y = pool_y+(pool.getHeight()/2)-op_turn.getHeight()/2;
-    }
-
-    public List<Float> getMyBoardCoords(){
-        List<Float> list = new ArrayList<>();
-        list.add(board_x);
-        list.add(my_board_y);
-        return list;
-    }
-
-    public List<Float> getOpBoardCoords(){
-        List<Float> list = new ArrayList<>();
-        list.add(board_x);
-        list.add(op_board_y);
-        return list;
     }
 
     @Override

@@ -6,16 +6,22 @@ import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Bed class that defines a flowerbed in the game.
+ * A bed is defined by a size, (number of squares it covers), direction (if it is horizontal or
+ * vertical) and a texturepath (for graphics)
+ * A bed can only be rectangular.
+ * A bed is initially always placed in origo, but can be moved.
+ */
 public class Bed {
-    private int size; // Antall ruter man har plass til i en bed
+    private int size; //Number of squares this bed covers
     private boolean horizontal;
     private Texture bed;
-    private Rectangle bounds;
+    private Rectangle bounds; //Defines the space this bed covers
     private float pos_x = 0;
     private float pos_y = 0;
     private String texturePath;
 
-    //TODO: alt:)
 
     public Bed(int size, boolean horizontal, String texturePath){
         this.size = size;
@@ -42,48 +48,35 @@ public class Bed {
         return false;
     }
 
-    public String getTexturePath(){
-        return texturePath;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public Texture getBed() {
-        return bed;
-    }
+    public String getTexturePath(){ return texturePath; }
+    public int getSize() { return size; }
+    public Rectangle getBounds() { return bounds; }
+    public float getPos_x() { return pos_x; }
+    public float getPos_y() { return pos_y; }
+    public Texture getTexture() { return bed; }
+    public boolean isHorizontal() { return horizontal; }
 
     private void setBounds(float x, float y) {
         bounds = new Rectangle(x, y, bed.getWidth(), bed.getHeight());
     }
 
-    public Rectangle getBounds() {
-        return bounds;
-    }
-
+    /**
+     * Moves the bed to given coordinates
+     * @param x x-position the bed should be placed
+     * @param y y-position the bed should be placed
+     */
     public void updatePosition(float x, float y) {
         this.pos_x = x;
         this.pos_y = y;
         setBounds(x, y);
     }
 
-    public float getPos_x() {
-        return pos_x;
-    }
-
-    public float getPos_y() {
-        return pos_y;
-    }
-
-    public Texture getTexture() {
-        return bed;
-    }
-
-    public boolean isHorizontal() {
-        return horizontal;
-    }
-
+    /**
+     * Returns the squares of a board that this bed covers.
+     * @param squareBoard Board that is covered
+     * @return List of squares that the bed covers. Empty list if this bed does not cover any of the
+     * board's squares.
+     */
     public List<Square> getSquares(List<Square> squareBoard){
         List<Square> squares = new ArrayList<>();
 

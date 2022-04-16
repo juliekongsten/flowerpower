@@ -43,13 +43,15 @@ public class PlaceBedsView extends View{
     private List<Square> opBoard;
     private List<Square> myBoard;
     private List<Bed> beds;
-    private boolean overlappingBeds;
-    private boolean bedsOutsideBoard;
+    private boolean overlappingBeds = false;
+    private boolean bedsOutsideBoard = false;
 
 
     public PlaceBedsView(ViewManager vm){
         super(vm);
         controller = new GameController();
+        //TODO: Create helpmethod "createTextures"
+        //Prepares textures for parts of the view
         pool = new Texture("bedpool.png");
         ready = new Texture("Button.png");
         op_board = new Texture("board.png");
@@ -62,33 +64,25 @@ public class PlaceBedsView extends View{
         waiting_text = new Texture("waiting_text.png");
         overlapping_text = new Texture("overlapping_text.png");
         replace = new Texture("replace.png");
-        overlappingBeds = false;
+
 
         findStaticCoordinates();
         opBoard = controller.getOpBoard();
         myBoard = controller.getMyBoard();
         beds = controller.getMyBeds();
-        for (Square square : opBoard){
-            int x = (int) square.getBounds().x;
-            int y = (int) square.getBounds().y;
 
-            System.out.println("OpSquare: "+x+","+y);
-        }
-        //Draw my board
-        for (Square square : myBoard){
-            int x = (int) square.getBounds().x;
-            int y = (int) square.getBounds().y;
-
-            System.out.println("MySquare: "+x+","+y);
-        }
     }
 
+    /**
+     * Handles input from user
+     */
     @Override
     protected void handleInput() {
         //TODO: (low priority) Handle no switch of touched bed: you should move one bed until you drop it
         if (Gdx.input.isTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             Bed touchedBed = new Bed(0, true, "flowerbed_1.png");
+            //Update position to bed touched
             for (Bed bed : beds) {
                 if (bed.getBounds().contains(pos.x, pos.y)) {
                     touchedBed = bed;
@@ -101,7 +95,7 @@ public class PlaceBedsView extends View{
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             Rectangle readyBounds = new Rectangle(ready_x, ready_y, ready.getWidth(), ready.getHeight());
 
-            //Check if ready-button is pushed
+            //Check if ready-button is pressed
             if (readyBounds.contains(pos.x, pos.y)) {
                 //Find position to each bed and checks that they are inside board and not overlapping
                 for (Square square : myBoard) {
@@ -133,12 +127,14 @@ public class PlaceBedsView extends View{
 
 
                 controller.setMyBeds(beds);
+                //TODO: Find out if this is needed? (does not do any changes on boards anymore)
                 controller.setMyBoard(myBoard);
                 controller.setOpBoard(opBoard);
 
                 overlappingBeds = checkOverlappingBeds();
                 if(!overlappingBeds & !bedsOutsideBoard){
-                    isReady = true; //sets to isReady, so that in render you will be sent to GameView if other player is ready
+                    //Set isReady to true so render will act accordingly
+                    isReady = true;
                 }
 
         }
@@ -153,6 +149,10 @@ public class PlaceBedsView extends View{
     }
 
 
+    /**
+     * Check position to beds to see if any are overlapping
+     * @return True if there are any overlapping beds, false if not
+     */
     private boolean checkOverlappingBeds(){
         List<Square> tmp = new ArrayList<>();
         for(Bed bed : beds){
@@ -173,6 +173,9 @@ public class PlaceBedsView extends View{
         handleInput();
     }
 
+    /**
+     * Finds coordinates to boards, button and pool based on the size of the game
+     */
     public void findStaticCoordinates(){
         ready_x = (float)(FlowerPowerGame.WIDTH/2-ready.getWidth()/2);
         board_x = (float) (FlowerPowerGame.WIDTH-op_board.getWidth())/2;
@@ -183,7 +186,7 @@ public class PlaceBedsView extends View{
     }
 
     /**
-     * Only draw the static squares
+     * Draws the graphics of squares to the boards
      * @param sb
      */
     private void drawSquares(SpriteBatch sb){
@@ -209,6 +212,8 @@ public class PlaceBedsView extends View{
      * @param sb
      */
     private void drawBeds(SpriteBatch sb){
+        //Set the placement to inside pool IF they're not moved yet
+        //TODO: Implement this in "setStartBeds" in GameController instead?
 
         if (beds.get(0).getPos_x() == 0 && beds.get(0).getPos_y() == 0) {
             float bed1_x = pool.getWidth()/2;
@@ -224,11 +229,16 @@ public class PlaceBedsView extends View{
             beds.get(3).updatePosition(bed4_x, bed3_y);
             beds.get(4).updatePosition(bed1_x, bed5_y);
         }
-        sb.draw(beds.get(0).getTexture(), beds.get(0).getPos_x(), beds.get(0).getPos_y());
+        //TODO: Change to iterate through list instead so it works for more/less beds as well (see suggestion below)
+        /*sb.draw(beds.get(0).getTexture(), beds.get(0).getPos_x(), beds.get(0).getPos_y());
         sb.draw(beds.get(1).getTexture(), beds.get(1).getPos_x(), beds.get(1).getPos_y());
         sb.draw(beds.get(2).getTexture(), beds.get(2).getPos_x(), beds.get(2).getPos_y());
         sb.draw(beds.get(3).getTexture(), beds.get(3).getPos_x(), beds.get(3).getPos_y());
         sb.draw(beds.get(4).getTexture(), beds.get(4).getPos_x(), beds.get(4).getPos_y());
+        */
+        for (Bed bed : beds){
+            sb.draw(bed.getTexture(), bed.getPos_x(), bed.getPos_y());
+        }
     }
 
 
@@ -239,19 +249,17 @@ public class PlaceBedsView extends View{
     private void checkOtherPlayer(SpriteBatch sb){
 
         //TODO: check if the other player is ready
+        //Should have a method in GameController "getOpStatus" or something --> opReady = controller.getOpStatus
         boolean opReady = true; //set to true now, so that we get to next view, should be actual check here
-        //changed^ to false, to check the waiting text and color.
 
         if (opReady){
             vm.setController(controller);
             vm.set(new GameView(vm));
         } else{
-            //draw seethrough black background color
+            //Draw waiting-graphics
             sb.draw(waiting_black,0,0);
-            //draw text "Waiting for other player to get ready"
             sb.draw(waiting_text,FlowerPowerGame.WIDTH/2-waiting_text.getWidth()/2,FlowerPowerGame.HEIGHT/2);
-
-            return;
+            return; //is this neaded???
         }
 
     }
@@ -285,6 +293,7 @@ public class PlaceBedsView extends View{
         //Draw the beds
         drawBeds(sb);
 
+        //Draws message and replace button if there are overlapping beds or beds outside board
         if(overlappingBeds){
             sb.draw(waiting_black,0,0);
             sb.draw(overlapping_text,FlowerPowerGame.WIDTH/2-overlapping_text.getWidth()/2,FlowerPowerGame.HEIGHT-50);
