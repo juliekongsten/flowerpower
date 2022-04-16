@@ -44,6 +44,7 @@ public class PlaceBedsView extends View{
     private List<Square> myBoard;
     private List<Bed> beds;
     private boolean overlappingBeds;
+    private boolean bedsOutsideBoard;
 
 
     public PlaceBedsView(ViewManager vm){
@@ -133,12 +134,13 @@ public class PlaceBedsView extends View{
                 //If there are any beds placed outside board, you should not be able to "be ready"
                 //Give feedback that player should keep placing beds
                 if (!bedsOutsideBoard.isEmpty()){
+                    this.bedsOutsideBoard = true;
                     for (Bed bed : bedsOutsideBoard){
                         System.out.println("Bed: "+bed.getBounds()+" is outside board try again;)");
                         //TODO: Give visual feedback
                         //Can be on each bed or just one message (if so outside for loop)
                     }
-                    return;
+                    //return;
                 }
 
                 controller.setMyBeds(beds);
@@ -146,7 +148,7 @@ public class PlaceBedsView extends View{
                 controller.setOpBoard(opBoard);
 
                 overlappingBeds = checkOverlappingBeds();
-                if(!overlappingBeds){
+                if(!overlappingBeds & !this.bedsOutsideBoard){
                     isReady = true; //sets to isReady, so that in render you will be sent to GameView if other player is ready
                 }
 
@@ -155,6 +157,7 @@ public class PlaceBedsView extends View{
             if(replaceBounds.contains(pos.x,pos.y)){
                 System.out.println("REPLACE TOUCHED");
                 overlappingBeds = false;
+                bedsOutsideBoard = false;
             }
     }
     }
@@ -293,6 +296,13 @@ public class PlaceBedsView extends View{
 
         if(overlappingBeds){
             sb.draw(waiting_black,0,0);
+            sb.draw(overlapping_text,FlowerPowerGame.WIDTH/2-overlapping_text.getWidth()/2,FlowerPowerGame.HEIGHT-50);
+            sb.draw(replace,FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150);
+        }
+
+        if (bedsOutsideBoard){
+            sb.draw(waiting_black,0,0);
+            //TODO: Change text to "You have not placed all beds"
             sb.draw(overlapping_text,FlowerPowerGame.WIDTH/2-overlapping_text.getWidth()/2,FlowerPowerGame.HEIGHT-50);
             sb.draw(replace,FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150);
         }
