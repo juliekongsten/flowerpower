@@ -100,59 +100,49 @@ public class PlaceBedsView extends View{
         if (Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             Rectangle readyBounds = new Rectangle(ready_x, ready_y, ready.getWidth(), ready.getHeight());
+
             //Check if ready-button is pushed
             if (readyBounds.contains(pos.x, pos.y)) {
-                List<Bed> bedsOutsideBoard = new ArrayList<>();
+                //Find position to each bed and checks that they are inside board and not overlapping
                 for (Square square : myBoard) {
-                    // TODO: implement check that all beds are inside the board, give feedback to keep moving if no
-                    //Move beds to actual squares if they are between
-                    //TODO: Check easier way? (ha en occupied=false; inne i square, og så hvis man prøver å occupye en occupied avslutte og sende til replacegreia?
-                    List<Square> occupiedSquares = new ArrayList<>(); //does not use lol
+                    List<Square> occupiedSquares = new ArrayList<>();
                     for (Bed bed : beds) {
                         if (!bed.isHorizontal()) {
                             if (square.getBounds().contains(bed.getPos_x() + bed.getTexture().getWidth()/2, bed.getPos_y()) && !occupiedSquares.contains(square)) {
-                                bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
+                                bed.updatePosition(square.getBounds().getX(), square.getBounds().getY()); //Move beds to actual squares if they are between
                                 occupiedSquares.addAll(bed.getSquares(myBoard));
+
                         }
                         } else {
                             if (square.getBounds().contains(bed.getPos_x(), bed.getPos_y()+bed.getTexture().getHeight()/2) && !occupiedSquares.contains(square)) {
-                                bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
+                                bed.updatePosition(square.getBounds().getX(), square.getBounds().getY()); //Move beds to actual squares if they are between
                                 occupiedSquares.addAll(bed.getSquares(myBoard));
+
                             }
                         }
+
                         //Checks if given bed is inside the board (my board)
                         List<Square> squares = bed.getSquares(myBoard);
                         if (squares.size() < bed.getSize()){ //means that some part of the bed is outside the board
-                            if (!bedsOutsideBoard.contains(bed)){
-                                bedsOutsideBoard.add(bed);
-                            }
+                            bedsOutsideBoard = true;
                         }
                     }
 
+
                 }
 
-                //If there are any beds placed outside board, you should not be able to "be ready"
-                //Give feedback that player should keep placing beds
-                if (!bedsOutsideBoard.isEmpty()){
-                    this.bedsOutsideBoard = true;
-                    for (Bed bed : bedsOutsideBoard){
-                        System.out.println("Bed: "+bed.getBounds()+" is outside board try again;)");
-                        //TODO: Give visual feedback
-                        //Can be on each bed or just one message (if so outside for loop)
-                    }
-                    //return;
-                }
 
                 controller.setMyBeds(beds);
                 controller.setMyBoard(myBoard);
                 controller.setOpBoard(opBoard);
 
                 overlappingBeds = checkOverlappingBeds();
-                if(!overlappingBeds & !this.bedsOutsideBoard){
+                if(!overlappingBeds & !bedsOutsideBoard){
                     isReady = true; //sets to isReady, so that in render you will be sent to GameView if other player is ready
                 }
 
         }
+            //Checks if replace-button is pressed
             Rectangle replaceBounds = new Rectangle(FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150,replace.getWidth(),replace.getHeight());
             if(replaceBounds.contains(pos.x,pos.y)){
                 System.out.println("REPLACE TOUCHED");
@@ -161,6 +151,7 @@ public class PlaceBedsView extends View{
             }
     }
     }
+
 
     private boolean checkOverlappingBeds(){
         List<Square> tmp = new ArrayList<>();
