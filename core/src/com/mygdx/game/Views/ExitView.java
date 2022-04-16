@@ -23,7 +23,7 @@ public class ExitView extends View{
     private boolean winner;
 
 
-    protected ExitView(ViewManager vm) {
+    protected ExitView(ViewManager vm, boolean won) {
         super(vm);
         this.logo = new Texture("small_logo.png");
         this.gameOver = new Texture("game_over.png");
@@ -35,7 +35,7 @@ public class ExitView extends View{
         this.lost_text = new Texture("lost_text.png");
         this.exit = new Texture("exit.png");
 
-        this.winner = true; //TODO: get information if the user won or not, from db
+        this.winner = won;
     }
 
     @Override

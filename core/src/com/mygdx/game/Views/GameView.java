@@ -37,6 +37,8 @@ public class GameView extends View{
 
     private boolean goBack = false;
 
+    private boolean gameOver = false;
+
     private GameController controller;
 
     private float board_x;
@@ -132,7 +134,7 @@ public class GameView extends View{
                     goBack = false;
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
-                    vm.set(new ExitView(vm));
+                    vm.set(new ExitView(vm, false));
                 }
             }
 
@@ -150,6 +152,10 @@ public class GameView extends View{
     @Override
     public void update(float dt) {
         handleInput();
+        if (gameOver){
+            boolean won = controller.getWinner();
+            vm.set(new ExitView(vm, won));
+        }
         if (waiting){
             //TODO: Find way to get square from controller
             //TODO: Find out if we should implement this as squarelistener instead and how
@@ -300,6 +306,7 @@ public class GameView extends View{
             sb.draw(no, FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100);
             sb.draw(yes,FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100);
         }
+        gameOver = controller.getGameOver();
 
         sb.end();
 

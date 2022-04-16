@@ -7,13 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
-    public void setOpBoard(List<Square> opBoard) {
-        this.opBoard = opBoard;
-    }
 
-    public void setMyBoard(List<Square> myBoard) {
-        this.myBoard = myBoard;
-    }
 
     //har per nå laget kun en liste, kan heller ha liste i liste for å lettere navigere seg opp/ned/sidelengs men har ikke det nå
     private List<Square> opBoard = new ArrayList<>();
@@ -26,6 +20,9 @@ public class GameController {
     private List<Bed> opBeds = new ArrayList<>();
 
     private int distance = 359;
+
+    private boolean gameOver = false;
+    private boolean won = false;
 
     /* OBS: har foreløpig satt de rutene i motstander slik at de tre nederste rekkene har blomster
             og de øverste ikke har det. Er for å teste at ting fungerer slik det skal.
@@ -72,6 +69,13 @@ public class GameController {
         return false;
     }
 
+    public void setOpBoard(List<Square> opBoard) {
+        this.opBoard = opBoard;
+    }
+
+    public void setMyBoard(List<Square> myBoard) {
+        this.myBoard = myBoard;
+    }
 
 
 
@@ -172,6 +176,56 @@ public class GameController {
             }
         }
 
+    }
+
+
+    /**
+     * Updates status on won and gameOver. Checks if all beds of either opBeds or MyBeds is fully hit.
+     * If so the game is over. If opBeds fully hit you won, if myBeds fully hit you lost.
+     */
+    private void updateStatus(){
+        boolean myBedsFullyHit = true;
+        boolean opBedsFullyHit = true;
+
+        for (Bed bed : opBeds){
+            if (!bed.isFullyHit(opBoard)){
+                //If any of ops beds aren't fully hit, I have not won
+                opBedsFullyHit = false;
+            }
+        }
+        for (Bed bed : myBeds){
+            if (!bed.isFullyHit(myBoard)){
+                //If any of my beds aren't fully hit, op has not won
+                myBedsFullyHit = false;
+            }
+        }
+        if (myBedsFullyHit){
+            won = false;
+            gameOver = true;
+        }
+        else if (opBedsFullyHit){
+            won = true;
+            gameOver = true;
+        }
+
+
+    }
+
+    /**
+     * Returns if the player has won the game.
+     */
+    public boolean getWinner() {
+        updateStatus();
+        return won;
+    }
+
+    /**
+     * Returns if the game is over.
+     * @return
+     */
+    public boolean getGameOver(){
+        updateStatus();
+        return gameOver;
     }
 
 
