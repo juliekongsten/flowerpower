@@ -164,52 +164,73 @@ public class GameView extends View{
     private void drawSquares(SpriteBatch sb){
         //Draw opponents board
         //Goes through the list of squares in opponents board and draws the grass plus flower/miss(if hit) on given coordinates
-        //Should also make frame around bed if the whole bed is hit! Maybe iterate through opponents beds and for any full bed draw the frame for that bed?
-        //TODO: Find out how to frame fully hit beds
         for (Square square : opBoard){
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
             sb.draw(opGrass, x, y);
             sb.draw(opFrame, x, y);
-            if (square.isHit()){
-                if (square.hasFlower()){
-                    sb.draw(flower,x,y);
-                }
-                else{
-                    sb.draw(miss,x,y);
-                }
-            }
+
         }
 
         //Draw my board
-
         //Goes through the list of squares in my board and draws the grass plus flower/miss(if hit) on given coordinates
         for (Square square : myBoard){
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
             sb.draw(myGrass, x, y);
-            if (square.isHit()){
-                if (square.hasFlower()){
-                    sb.draw(flower,x,y);
+        }
+
+    }
+
+    /**
+     * Draw flower/miss on the squares that are hit
+     * @param sb
+     */
+    private void drawHits(SpriteBatch sb) {
+        for (Square square : opBoard) {
+            int x = (int) square.getBounds().x;
+            int y = (int) square.getBounds().y;
+            if (square.isHit()) {
+                if (square.hasFlower()) {
+                    sb.draw(flower, x, y);
+                } else {
+                    sb.draw(miss, x, y);
                 }
-                else{
-                    sb.draw(miss,x,y);
+            }
+        }
+
+        for (Square square : myBoard) {
+            int x = (int) square.getBounds().x;
+            int y = (int) square.getBounds().y;
+            if (square.isHit()) {
+                if (square.hasFlower()) {
+                    sb.draw(flower, x, y);
+                } else {
+                    sb.draw(miss, x, y);
                 }
             }
         }
 
     }
 
-    /**
-     * Draws your own beds, placed same as in PlaceBedsView
-     * @param sb
-     */
+
+        /**
+         * Draws your own beds, placed same as in PlaceBedsView
+         * @param sb
+         */
     private void drawBeds(SpriteBatch sb){
         sb.draw(myBeds.get(0).getTexture(), myBeds.get(0).getPos_x(), myBeds.get(0).getPos_y());
         sb.draw(myBeds.get(1).getTexture(), myBeds.get(1).getPos_x(), myBeds.get(1).getPos_y());
         sb.draw(myBeds.get(2).getTexture(), myBeds.get(2).getPos_x(), myBeds.get(2).getPos_y());
         sb.draw(myBeds.get(3).getTexture(), myBeds.get(3).getPos_x(), myBeds.get(3).getPos_y());
         sb.draw(myBeds.get(4).getTexture(), myBeds.get(4).getPos_x(), myBeds.get(4).getPos_y());
+
+        //Iterate through beds - only draw if fully hit
+        for (Bed bed : opBeds){
+            if(bed.isFullyHit(opBoard)){
+                sb.draw(bed.getTexture(),bed.getPos_x(),bed.getPos_y());
+            }
+        }
     }
 
     /**
@@ -266,8 +287,8 @@ public class GameView extends View{
         }
 
         drawSquares(sb);
-
         drawBeds(sb);
+        drawHits(sb);
 
         //draws Back button, if it isnt touched
         if(!goBack){

@@ -24,6 +24,24 @@ public class Bed {
         this.texturePath = texturePath;
     }
 
+    /**
+     * Returns if the bed is fully hit given board it covers
+     * @param board
+     * @return
+     */
+    public boolean isFullyHit(List<Square> board){
+        int hitSquares = 0;
+        for (Square square : getSquares(board)){
+            if (square.isHit()){
+                hitSquares++;
+            }
+        }
+        if (hitSquares==size){
+            return true;
+        }
+        return false;
+    }
+
     public String getTexturePath(){
         return texturePath;
     }

@@ -114,7 +114,7 @@ public class PlaceBedsView extends View{
                                 System.out.println("Vertical bed moved");
                         }
                         } else {
-                            if (square.getBounds().contains(bed.getPos_x(), bed.getPos_y()+bed.getTexture().getHeight()/2) && !!occupiedSquares.contains(square)) {
+                            if (square.getBounds().contains(bed.getPos_x(), bed.getPos_y()+bed.getTexture().getHeight()/2) && !occupiedSquares.contains(square)) {
                                 bed.updatePosition(square.getBounds().getX(), square.getBounds().getY());
                                 occupiedSquares.addAll(bed.getSquares(myBoard));
                                 System.out.println("Squareobject: "+square);
