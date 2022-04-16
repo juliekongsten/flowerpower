@@ -1,6 +1,5 @@
 package com.mygdx.game.Views;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,29 +18,29 @@ public class PlaceBedsView extends View{
     private boolean isReady = false; //if the player is ready
 
     private final Texture pool;
-    private Texture ready;
-    private Texture op_board;
-    private Texture my_board;
-    private Texture myGrass;
-    private Texture opGrass;
-    private Texture opFrame;
-    private Texture your_beds;
-    private Texture waiting_black;
-    private Texture waiting_text;
-    private Texture overlapping_text;
-    private Texture replace;
+    private final Texture ready;
+    private final Texture op_board;
+    private final Texture my_board;
+    private final Texture myGrass;
+    private final Texture opGrass;
+    private final Texture opFrame;
+    private final Texture your_beds;
+    private final Texture waiting_black;
+    private final Texture waiting_text;
+    private final Texture overlapping_text;
+    private final Texture replace;
 
     private GameController controller;
 
     private float ready_x;
-    private float ready_y = -10;
+    private final float ready_y = -10;
     private float board_x;
     private float my_board_y;
     private float pool_x;
     private float pool_y;
     private float op_board_y;
-    private List<Square> opBoard;
-    private List<Square> myBoard;
+    private final List<Square> opBoard;
+    private final List<Square> myBoard;
     private List<Bed> beds;
     private boolean overlappingBeds = false;
     private boolean bedsOutsideBoard = false;
@@ -50,7 +49,6 @@ public class PlaceBedsView extends View{
     public PlaceBedsView(ViewManager vm){
         super(vm);
         controller = new GameController();
-        //TODO: Create helpmethod "createTextures"
         //Prepares textures for parts of the view
         pool = new Texture("bedpool.png");
         ready = new Texture("Button.png");
