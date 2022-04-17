@@ -89,4 +89,32 @@ public class Bed {
         return squares;
     }
 
+    /**
+     * Moves position to bed to fit in a squareboard
+     * @param squareBoard
+     */
+    public void moveToNearestSquares(List<Square> squareBoard){
+        Square s = null;
+        for (Square square : squareBoard){
+            //TODO: (low priority) Try to find way to more exact movements
+            if (!horizontal){
+                if (square.getBounds().contains(pos_x+ getTexture().getWidth()/2,pos_y)){
+                    s = square;
+                }
+            } else {
+                if (square.getBounds().contains(pos_x,pos_y+getTexture().getHeight()/2)){
+                    s = square;
+                }
+            }
+
+        }
+        if (s!=null){
+            updatePosition(s.getBounds().x, s.getBounds().y);
+        }
+    }
+
+
+
+
+
 }

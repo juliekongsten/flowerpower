@@ -95,47 +95,24 @@ public class PlaceBedsView extends View{
 
             //Check if ready-button is pressed
             if (readyBounds.contains(pos.x, pos.y)) {
-                //Find position to each bed and checks that they are inside board and not overlapping
-                for (Square square : myBoard) {
-                    List<Square> occupiedSquares = new ArrayList<>();
-                    for (Bed bed : beds) {
-                        if (!bed.isHorizontal()) {
-                            if (square.getBounds().contains(bed.getPos_x() + bed.getTexture().getWidth()/2, bed.getPos_y()) && !occupiedSquares.contains(square)) {
-                                bed.updatePosition(square.getBounds().getX(), square.getBounds().getY()); //Move beds to actual squares if they are between
-                                occupiedSquares.addAll(bed.getSquares(myBoard));
+                for (Bed bed : beds){
+                    //Makes sure bed is placed on squares
+                    bed.moveToNearestSquares(myBoard);
 
-                        }
-                        } else {
-                            if (square.getBounds().contains(bed.getPos_x(), bed.getPos_y()+bed.getTexture().getHeight()/2) && !occupiedSquares.contains(square)) {
-                                bed.updatePosition(square.getBounds().getX(), square.getBounds().getY()); //Move beds to actual squares if they are between
-                                occupiedSquares.addAll(bed.getSquares(myBoard));
-
-                            }
-                        }
-
-                        //Checks if given bed is inside the board (my board)
-                        List<Square> squares = bed.getSquares(myBoard);
-                        if (squares.size() < bed.getSize()){ //means that some part of the bed is outside the board
-                            bedsOutsideBoard = true;
+                    //Checks if given bed is inside the board (my board)
+                    List<Square> squares = bed.getSquares(myBoard);
+                    if (squares.size() < bed.getSize()){ //means that some part of the bed is outside the board
+                        bedsOutsideBoard = true;
                         }
                     }
 
-
-                }
-
-
                 controller.setMyBeds(beds);
-                //TODO: Find out if this is needed? (does not do any changes on boards anymore)
-                controller.setMyBoard(myBoard);
-                controller.setOpBoard(opBoard);
 
                 overlappingBeds = checkOverlappingBeds();
                 if(!overlappingBeds & !bedsOutsideBoard){
                     //Set isReady to true so render will act accordingly
                     isReady = true;
-                }
-
-        }
+                }}
             //Checks if replace-button is pressed
             Rectangle replaceBounds = new Rectangle(FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150,replace.getWidth(),replace.getHeight());
             if(replaceBounds.contains(pos.x,pos.y)){
@@ -143,9 +120,9 @@ public class PlaceBedsView extends View{
                 overlappingBeds = false;
                 bedsOutsideBoard = false;
             }
-    }
-    }
+        }
 
+    }
 
     /**
      * Check position to beds to see if any are overlapping
