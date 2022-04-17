@@ -118,14 +118,16 @@ public class GameView extends View{
                         //TODO: Give feedback to controller so that the other player also is notified (or implement squarelistener in some way)
                     }
                 }
-                //TODO: Move outside "if(!waiting)"!!
-                Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth()+3, back.getHeight()+3);
-                Rectangle noBounds = new Rectangle(FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100,no.getWidth(),no.getHeight());
-                Rectangle yesBounds = new Rectangle(FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100,yes.getWidth(),yes.getHeight());
-                if (backBounds.contains(pos.x, pos.y)) {
-                    goBack = true;
-                }
-                //TODO: Put inside an "if goBack" ?
+
+            }
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth()+3, back.getHeight()+3);
+            Rectangle noBounds = new Rectangle(FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100,no.getWidth(),no.getHeight());
+            Rectangle yesBounds = new Rectangle(FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100,yes.getWidth(),yes.getHeight());
+            if (backBounds.contains(pos.x, pos.y)) {
+                goBack = true;
+            }
+
+            if(goBack){
                 if(noBounds.contains(pos.x,pos.y)){
                     goBack = false;
                 }
@@ -151,7 +153,6 @@ public class GameView extends View{
 
     @Override
     public void update(float dt) {
-        //TODO: Implement "check if waiting" here
         handleInput();
 
         //Checks if the game is over and takes player to ExitView
@@ -198,7 +199,7 @@ public class GameView extends View{
      * Draw flower/miss on the squares that are hit
      * @param sb
      */
-    //TODO: Consider implementing a list "hitSquares" that all hit squares are added to so that we could iterate through only these
+    //TODO: (low priority) Consider implementing a list "hitSquares" that all hit squares are added to so that we could iterate through only these
     private void drawHits(SpriteBatch sb) {
         for (Square square : opBoard) {
             int x = (int) square.getBounds().x;
@@ -232,12 +233,9 @@ public class GameView extends View{
      * @param sb
      */
     private void drawBeds(SpriteBatch sb){
-        //TODO: Change to iterate through list instead
-        sb.draw(myBeds.get(0).getTexture(), myBeds.get(0).getPos_x(), myBeds.get(0).getPos_y());
-        sb.draw(myBeds.get(1).getTexture(), myBeds.get(1).getPos_x(), myBeds.get(1).getPos_y());
-        sb.draw(myBeds.get(2).getTexture(), myBeds.get(2).getPos_x(), myBeds.get(2).getPos_y());
-        sb.draw(myBeds.get(3).getTexture(), myBeds.get(3).getPos_x(), myBeds.get(3).getPos_y());
-        sb.draw(myBeds.get(4).getTexture(), myBeds.get(4).getPos_x(), myBeds.get(4).getPos_y());
+        for (Bed bed : myBeds){
+            sb.draw(bed.getTexture(),bed.getPos_x(),bed.getPos_y());
+        }
 
         //Iterate through beds - only draw if fully hit
         for (Bed bed : opBeds){

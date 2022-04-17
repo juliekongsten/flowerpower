@@ -112,6 +112,7 @@ public class PlaceBedsView extends View{
                 if(!overlappingBeds & !bedsOutsideBoard){
                     //Set isReady to true so render will act accordingly
                     isReady = true;
+                    controller.setMyReady();
                 }}
             //Checks if replace-button is pressed
             Rectangle replaceBounds = new Rectangle(FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150,replace.getWidth(),replace.getHeight());
@@ -188,8 +189,6 @@ public class PlaceBedsView extends View{
      */
     private void drawBeds(SpriteBatch sb){
         //Set the placement to inside pool IF they're not moved yet
-        //TODO: Implement this in "setStartBeds" in GameController instead?
-
         if (beds.get(0).getPos_x() == 0 && beds.get(0).getPos_y() == 0) {
             float bed1_x = pool.getWidth()/2;
             float bed1_y = pool_y+pool.getHeight()/2-20;
@@ -204,28 +203,17 @@ public class PlaceBedsView extends View{
             beds.get(3).updatePosition(bed4_x, bed3_y);
             beds.get(4).updatePosition(bed1_x, bed5_y);
         }
-        //TODO: Change to iterate through list instead so it works for more/less beds as well (see suggestion below)
-        /*sb.draw(beds.get(0).getTexture(), beds.get(0).getPos_x(), beds.get(0).getPos_y());
-        sb.draw(beds.get(1).getTexture(), beds.get(1).getPos_x(), beds.get(1).getPos_y());
-        sb.draw(beds.get(2).getTexture(), beds.get(2).getPos_x(), beds.get(2).getPos_y());
-        sb.draw(beds.get(3).getTexture(), beds.get(3).getPos_x(), beds.get(3).getPos_y());
-        sb.draw(beds.get(4).getTexture(), beds.get(4).getPos_x(), beds.get(4).getPos_y());
-        */
         for (Bed bed : beds){
             sb.draw(bed.getTexture(), bed.getPos_x(), bed.getPos_y());
         }
     }
-
 
     /**
      * Checks if the other player is ready and sends player to gameview if both players are ready
      * @param sb
      */
     private void checkOtherPlayer(SpriteBatch sb){
-
-        //TODO: check if the other player is ready
-        //Should have a method in GameController "getOpStatus" or something --> opReady = controller.getOpStatus
-        boolean opReady = true; //set to true now, so that we get to next view, should be actual check here
+        boolean opReady = controller.getOpReady();
 
         if (opReady){
             controller.sendMyBeds(beds);

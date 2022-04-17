@@ -24,34 +24,28 @@ public class GameController {
     private boolean gameOver = false;
     private boolean won = false;
 
-    /* OBS: har foreløpig satt de rutene i motstander slik at de tre nederste rekkene har blomster
-            og de øverste ikke har det. Er for å teste at ting fungerer slik det skal.
-            De skal senere settes ut fra hvor motstanderen har plassert beds.
-    * */
     public GameController(){
         //tenker her at vi kan ha satt tall for de forskjellige vanskelighetsgradene
+        //burde endres uansett om vi implementerer vanskelighetsgrader eller ikke, for å vise modifiability
         squaresize = 32;
         numberSquaresHeight = 6;
         numberSquaresWidth = 9;
 
-        //TODO: Get x- and y-values without hardkoding :D
+        //TODO: (Low priority) Get x- and y-values without hardkoding :D
         //må hente x og y-verdier fra view heller sånn at vi får riktige :D
         //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
         int x = 26+15;
         int my_y = 65+12;
         int op_y = 424+12;
         setMyBeds(null);
-        List<Bed> sentOpBeds = new ArrayList<>(); //TODO: Get this from other player
-        moveOpBeds(sentOpBeds);
+
         for (int i = 0; i< numberSquaresHeight; i++){
             for (int j = 0; j< numberSquaresWidth; j++){
                 Square mySquare = new Square(x, my_y, squaresize);
                 Square opSquare = new Square(x,op_y,squaresize); //should find somewhere
-
                 myBoard.add(mySquare);
                 opBoard.add(opSquare);
                 x+=squaresize;
-
             }
             x = 26+15;
             my_y+=squaresize;
@@ -69,22 +63,10 @@ public class GameController {
         return false;
     }
 
-    public void setOpBoard(List<Square> opBoard) {
-        this.opBoard = opBoard;
-    }
-
-    public void setMyBoard(List<Square> myBoard) {
-        this.myBoard = myBoard;
-    }
-
-
-
     public List<Square> getOpBoard(){ return opBoard; }
     public List<Square> getMyBoard(){ return myBoard; }
     public List<Bed> getMyBeds() { return myBeds; }
     public List<Bed> getOpBeds() { return opBeds; }
-
-
 
     /**
      * Method for when the player hits a square on opponents board.
@@ -92,7 +74,6 @@ public class GameController {
      * return if the hit square contains a flower
      */
     public boolean hitSquare(Square square){
-        //should probably also have logic that updates "myboard" for the opponent!
         //TODO: find logic to update opponent as well
         if (!opBoard.contains(square)){
             return false;
@@ -106,16 +87,16 @@ public class GameController {
             setStartBeds();
         } else {
             myBeds = beds;
-            //i tillegg endre på squaresene til å ha flowers
             for (Square mySquare : myBoard){
                 if (isSquareInBed(mySquare,myBeds)){
                     mySquare.setHasFlower(true);
                 }
             }
-
         }
     }
+
     private void setStartBeds(){
+        //TODO: (Low Priority) Have beds as argument so we can have different beds for different games
         Bed bed1 = new Bed(3, true, "flowerbed_1.png");
         Bed bed2 = new Bed(4, true, "flowerbed_2.png");
         Bed bed3 = new Bed(3, false, "flowerbed_3.png");
@@ -126,7 +107,19 @@ public class GameController {
         myBeds.add(bed3);
         myBeds.add(bed4);
         myBeds.add(bed5);
+    }
 
+    /**
+     * Set my ready to true in the database
+     */
+    public void setMyReady(){
+        //TODO: Logic database
+    }
+
+    public boolean getOpReady(){
+        //TODO: Logic, database
+        boolean ready = true; //get from database
+        return ready;
     }
 
     /**
@@ -136,10 +129,7 @@ public class GameController {
         //TODO: Logic, database
         List<Bed> receivedOpBeds = myBeds; //get from database
         moveOpBeds(receivedOpBeds);
-
-
     }
-
 
     /**
      * Sends my beds to database
@@ -148,14 +138,13 @@ public class GameController {
     public void sendMyBeds(List<Bed> beds){
         //TODO: Logic
     }
+
     /**
      * Moves Opponents bed to the opponent board as the sent beds have myboard coordinates
      * @param receivedOpBeds
      * @return
      */
     private void moveOpBeds(List<Bed> receivedOpBeds){
-        //TODO: find logic
-        //should set OpBeds to be the beds that opponent has placed
         List<Bed> newBeds = new ArrayList<>();
         System.out.println("SentOpBeds: "+receivedOpBeds);
 
@@ -172,9 +161,6 @@ public class GameController {
             newBeds.add(newBed);
 
         }
-
-
-
         opBeds = newBeds;
 
         for (Bed bed : opBeds){
@@ -184,9 +170,7 @@ public class GameController {
 
             }
         }
-
     }
-
 
     /**
      * Updates status on won and gameOver. Checks if all beds of either opBeds or MyBeds is fully hit.
@@ -216,8 +200,6 @@ public class GameController {
             won = true;
             gameOver = true;
         }
-
-
     }
 
     /**
