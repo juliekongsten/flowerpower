@@ -11,7 +11,6 @@ import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Models.Bed;
 import com.mygdx.game.Models.Square;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameView extends View{
@@ -65,7 +64,7 @@ public class GameView extends View{
         findStaticCoordinates();
         myBeds = controller.getMyBeds();
         myBoard = controller.getMyBoard();
-        controller.setOpBeds(myBeds); //TODO: get the beds from the player
+        controller.receiveOpBeds();
         opBeds = controller.getOpBeds();
         opBoard = controller.getOpBoard();
 
@@ -110,12 +109,10 @@ public class GameView extends View{
                         //Gives feedback to user if this was hit/miss
 
                         boolean flower = controller.hitSquare(square);
+                        //TODO: (low priority) give visual feedback ("Hit!"/"Miss")
                         if (flower){
-                            //TODO: give visual feedback to user
                             System.out.println("Hit!");
-
                         } else {
-                            //TODO: give visual feedback to user
                             System.out.println("Miss!");
                         }
                         //TODO: Give feedback to controller so that the other player also is notified (or implement squarelistener in some way)

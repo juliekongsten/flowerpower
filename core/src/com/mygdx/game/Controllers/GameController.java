@@ -42,7 +42,7 @@ public class GameController {
         int op_y = 424+12;
         setMyBeds(null);
         List<Bed> sentOpBeds = new ArrayList<>(); //TODO: Get this from other player
-        setOpBeds(sentOpBeds);
+        moveOpBeds(sentOpBeds);
         for (int i = 0; i< numberSquaresHeight; i++){
             for (int j = 0; j< numberSquaresWidth; j++){
                 Square mySquare = new Square(x, my_y, squaresize);
@@ -130,18 +130,36 @@ public class GameController {
     }
 
     /**
+     * Receive opponents beds from database
+     */
+    public void receiveOpBeds(){
+        //TODO: Logic, database
+        List<Bed> receivedOpBeds = myBeds; //get from database
+        moveOpBeds(receivedOpBeds);
+
+
+    }
+
+
+    /**
+     * Sends my beds to database
+     * @param beds
+     */
+    public void sendMyBeds(List<Bed> beds){
+        //TODO: Logic
+    }
+    /**
      * Moves Opponents bed to the opponent board as the sent beds have myboard coordinates
-     * @param sentOpBeds
+     * @param receivedOpBeds
      * @return
      */
-
-    public void setOpBeds(List<Bed> sentOpBeds){
+    private void moveOpBeds(List<Bed> receivedOpBeds){
         //TODO: find logic
         //should set OpBeds to be the beds that opponent has placed
         List<Bed> newBeds = new ArrayList<>();
-        System.out.println("SentOpBeds: "+sentOpBeds);
+        System.out.println("SentOpBeds: "+receivedOpBeds);
 
-        for (Bed bed : sentOpBeds){
+        for (Bed bed : receivedOpBeds){
             System.out.println("SentOpBed: "+bed.getPos_x()+","+bed.getPos_y());
             int size = bed.getSize();
             boolean horizontal = bed.isHorizontal();
@@ -150,28 +168,19 @@ public class GameController {
             float y = bed.getPos_y()+distance;
             float x = bed.getPos_x();
             newBed.updatePosition(x, y);
-            System.out.println("Newbead: "+newBed.getPos_x()+","+newBed.getPos_y());
+            System.out.println("Newbed: "+newBed.getPos_x()+","+newBed.getPos_y());
             newBeds.add(newBed);
-            //endre squares til å ha flower
 
         }
 
-        //
 
-        opBeds = newBeds;/*
-        for (Square opSquare : opBoard){
-            if (isSquareInBed(opSquare, opBeds)){
-                opSquare.setHasFlower(true);
-                System.out.println("Flower in square: "+opSquare.getBounds());
-            }
-        }*/
+
+        opBeds = newBeds;
 
         for (Bed bed : opBeds){
             List<Square> squares = bed.getSquares(opBoard);
-            System.out.println("Squareslist: " + squares);
             for (Square square : squares){
                 square.setHasFlower(true);
-                System.out.println("Square in opBed: "+square.getBounds());
 
             }
         }

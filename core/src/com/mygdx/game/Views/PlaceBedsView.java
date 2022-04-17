@@ -228,13 +228,13 @@ public class PlaceBedsView extends View{
         boolean opReady = true; //set to true now, so that we get to next view, should be actual check here
 
         if (opReady){
+            controller.sendMyBeds(beds);
             vm.setController(controller);
             vm.set(new GameView(vm));
         } else{
             //Draw waiting-graphics
             sb.draw(waiting_black,0,0);
             sb.draw(waiting_text,FlowerPowerGame.WIDTH/2-waiting_text.getWidth()/2,FlowerPowerGame.HEIGHT/2);
-            return; //is this neaded???
         }
 
     }
