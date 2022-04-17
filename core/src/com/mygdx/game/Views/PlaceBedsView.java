@@ -259,15 +259,14 @@ public class PlaceBedsView extends View{
         drawBeds(sb);
 
         //Draws message and replace button if there are overlapping beds or beds outside board
-        if(overlappingBeds){
-            sb.draw(waiting_black,0,0);
-            sb.draw(overlapping_text,FlowerPowerGame.WIDTH/2-overlapping_text.getWidth()/2,FlowerPowerGame.HEIGHT-50);
-            sb.draw(replace,FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150);
-        }
-
         if (bedsOutsideBoard){
             sb.draw(waiting_black,0,0);
             sb.draw(beds_outside_board,FlowerPowerGame.WIDTH/2-beds_outside_board.getWidth()/2,FlowerPowerGame.HEIGHT-50);
+            sb.draw(replace,FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150);
+        }
+        else if(overlappingBeds){
+            sb.draw(waiting_black,0,0);
+            sb.draw(overlapping_text,FlowerPowerGame.WIDTH/2-overlapping_text.getWidth()/2,FlowerPowerGame.HEIGHT-50);
             sb.draw(replace,FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150);
         }
 
