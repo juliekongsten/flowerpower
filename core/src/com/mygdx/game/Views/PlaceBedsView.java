@@ -29,6 +29,7 @@ public class PlaceBedsView extends View{
     private final Texture waiting_text;
     private final Texture overlapping_text;
     private final Texture replace;
+    private final Texture beds_outside_board;
 
     private GameController controller;
 
@@ -62,6 +63,7 @@ public class PlaceBedsView extends View{
         waiting_text = new Texture("waiting_text.png");
         overlapping_text = new Texture("overlapping_text.png");
         replace = new Texture("replace.png");
+        beds_outside_board = new Texture("beds_outside_board.png");
 
 
         findStaticCoordinates();
@@ -265,8 +267,7 @@ public class PlaceBedsView extends View{
 
         if (bedsOutsideBoard){
             sb.draw(waiting_black,0,0);
-            //TODO: Change text to "You have not placed all beds"
-            sb.draw(overlapping_text,FlowerPowerGame.WIDTH/2-overlapping_text.getWidth()/2,FlowerPowerGame.HEIGHT-50);
+            sb.draw(beds_outside_board,FlowerPowerGame.WIDTH/2-beds_outside_board.getWidth()/2,FlowerPowerGame.HEIGHT-50);
             sb.draw(replace,FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150);
         }
 
