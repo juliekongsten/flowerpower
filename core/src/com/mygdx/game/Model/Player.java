@@ -3,6 +3,8 @@ package com.mygdx.game.Model;
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
 
+import java.util.ArrayList;
+
 public class Player {
 
     private String username;
@@ -23,9 +25,16 @@ public class Player {
     public void registerPlayer(String username, String password){
         this._FBIC= FlowerPowerGame.getFBIC();
         //check username first
-        _FBIC.newPlayer(username, password);
-        this.username = _FBIC.getUsername();
-        this.UID = _FBIC.getUID();
+        if(passwordCheck(password)&&usernameCheck(username)){
+            System.out.println("Påske");
+            _FBIC.newPlayer(username, password);
+            this.username = _FBIC.getUsername();
+            this.UID = _FBIC.getUID();
+        }else {
+            System.out.println("Could not create user, wrong input");
+        }
+
+
         //_FBIC.writeUserDataToDb(this);
     }
 
@@ -37,7 +46,42 @@ public class Player {
     public void signIn(String username, String password){
         this._FBIC= FlowerPowerGame.getFBIC();
         _FBIC.signIn(username, password);
+
+
     }
+
+    /**
+     * Check for password
+     * @param password given
+     * @return boolean value
+     */
+
+    public boolean passwordCheck(String password){
+        if (password.length()<6){
+            System.out.println("Password too short!");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Checkf ro username must be email
+     * @param username written
+     * @return boolean value
+     */
+
+    public boolean usernameCheck(String username){
+        if(!username.contains("@")){
+            System.out.println("Username must contain @!");
+            return false;
+        }
+        if(!username.contains(".com") || !username.contains(".no")){
+            System.out.println("Username must contain .no or .com");
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * gets username of player

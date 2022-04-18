@@ -125,7 +125,6 @@ public class fireBaseConnector implements FireBaseInterface {
                         // Sign in success,
                         Log.d(TAG, "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
-
                         Log.d(TAG, user.getEmail());
 
                     } else {
