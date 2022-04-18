@@ -35,6 +35,7 @@ public class Player {
 
     //TODO: boolean? error handling in firebaseconnector?
     public void signIn(String username, String password){
+        this._FBIC= FlowerPowerGame.getFBIC();
         _FBIC.signIn(username, password);
     }
 

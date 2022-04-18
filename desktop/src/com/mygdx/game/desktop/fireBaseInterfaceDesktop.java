@@ -1,7 +1,7 @@
 package com.mygdx.game.desktop;
 
 import com.mygdx.game.FireBaseInterface;
-import com.mygdx.game.model.Player;
+import com.mygdx.game.Model.Player;
 
 /**
  * Currently not used but required for communication between modules
@@ -34,10 +34,7 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
         return null;
     }
 
-    @Override
-    public void writeUserDataToDb(Player player) {
 
-    }
 
 
 }
