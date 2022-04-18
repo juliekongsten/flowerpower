@@ -15,7 +15,7 @@ public interface FireBaseInterface {
 
     String getUID();
 
-    void createGame();
+    void createGame(int GID);
     void joinGame(int GID);
 
     //void writeUserDataToDb(Player player);

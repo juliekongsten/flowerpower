@@ -39,7 +39,7 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public void writeUserDataToDb(Player player) {}*/
 
     @Override
-    public void createGame(){}
+    public void createGame(int GID){}
 
     @Override
     public void joinGame(int GID){}

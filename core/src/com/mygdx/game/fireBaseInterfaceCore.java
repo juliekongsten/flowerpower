@@ -36,7 +36,7 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     }
 
     @Override
-    public void createGame(){}
+    public void createGame(int GID){}
 
     @Override
     public void joinGame(int GID){}

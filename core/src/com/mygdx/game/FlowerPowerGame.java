@@ -48,7 +48,7 @@ public class FlowerPowerGame extends ApplicationAdapter {
 		//_FBIC.signIn("testuser2@gmail.com", "123456");
 		//Player ingrid = new Player("ingrid", "123456");
 		//_FBIC.createGame();
-		_FBIC.joinGame(4452);
+		//_FBIC.joinGame(4452);
 	}
 
 

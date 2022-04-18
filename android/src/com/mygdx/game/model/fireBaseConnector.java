@@ -7,8 +7,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.mygdx.game.FireBaseInterface;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,7 +34,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private FirebaseDatabase database;
      private DatabaseReference myRef;
      private FirebaseAuth mAuth;
-     private FirebaseFirestore db;
+
 
     /**
      * Constructor that gets an instance of the database and authorization
@@ -44,7 +42,7 @@ public class fireBaseConnector implements FireBaseInterface {
     public fireBaseConnector() {
         database = FirebaseDatabase.getInstance("https://flowerpower-9b405-default-rtdb.europe-west1.firebasedatabase.app");
         mAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     }
 
 
@@ -176,12 +174,14 @@ public class fireBaseConnector implements FireBaseInterface {
      */
 
     //TODO: opprette et game - tenker egt at man skal ta inn player som er current user her
-    public void createGame(){
+    public void createGame(int GID){
         //oppretter et nytt spill inni games
-        Game game = new Game("ingrid");
+        // TODO: kan fjerne game?
+        // Game game = new Game();
         DatabaseReference gameRef = database.getReference().child("/Games");
         //gameRef.setValue(game.getGID());
-        int GID = game.getGID();
+        // TODO: kan fjerne int GID ettersom den blir sendt som parameter?
+        //int GID = game.getGID();
         DatabaseReference playerRef = gameRef.child(GID+"/Players");
         playerRef.push().setValue("player1");
     }
