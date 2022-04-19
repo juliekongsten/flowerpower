@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.GameController;
+import com.mygdx.game.Controller.RegisterController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class RegisterView extends View {
@@ -29,10 +31,14 @@ public class RegisterView extends View {
     private String passwordTyped;
     private String passwordCheckTyped;
     private Pixmap cursorColor;
+    private RegisterController registerController;
+    private GameController gameController;
+
 
 
     public RegisterView(ViewManager vm) {
         super(vm);
+        gameController = new GameController();
         logo = new Texture("logo.png");
         register = new Texture("register.png");
         playbook = new Texture("playbook.png");
@@ -115,8 +121,14 @@ public class RegisterView extends View {
                 System.out.println(passwordTyped);
                 passwordCheckTyped = passwordCheck.getText();
                 System.out.println("Password check typed: \n" + passwordCheckTyped);
-                // Sjekke at passordene stemmer overens
+                // Sjekke at passordene stemmer overens og hvis de gjør det, send videre til Registercontroller og player
+                if (checkPassword(passwordTyped, passwordCheckTyped)){
+                    registerController = new RegisterController(usernameTyped, passwordTyped);
+                }
                 // Sende videre til MenuView med innlogget bruker
+                // sendes videre for å sjekke med db
+
+
                 vm.set(new MenuView(vm));
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
@@ -130,6 +142,18 @@ public class RegisterView extends View {
         }
         }
 
+        //TODO: ha med noen beskjed at de ikke matcher
+    public boolean checkPassword(String password, String passwordCheckTyped){
+
+        if (password.equals(passwordCheckTyped)){
+            System.out.println("Passwords match!");
+            return true;
+        } else{
+            System.out.println("Passwords does not match");
+            return false;
+        }
+
+    }
     @Override
     public void update(float dt) {
         handleInput();
