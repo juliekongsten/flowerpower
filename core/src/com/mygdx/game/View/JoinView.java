@@ -1,4 +1,4 @@
-package com.mygdx.game.Views;
+package com.mygdx.game.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -23,7 +23,7 @@ public class JoinView extends View {
     private final Texture pinText;
     private final Texture join;
     private final Texture back;
-    private Stage stage;
+    private final Stage stage;
     private Pixmap cursorColor;
     private TextField gamePin;
 
@@ -81,8 +81,9 @@ public class JoinView extends View {
             Rectangle joinBounds = new Rectangle((FlowerPowerGame.WIDTH/2-join.getWidth()/2), 100, join.getWidth(), join.getHeight());
 
             if (joinBounds.contains(pos.x, pos.y)) {
-                // Some way to check pin
+                //TODO: Some way to check pin
                 //vm.set(new GameView(vm));
+                vm.set(new PlaceBedsView(vm));
                 System.out.println("JOIN WAS PRESSED!");
             }
             if (playbookBounds.contains(pos.x, pos.y)) {

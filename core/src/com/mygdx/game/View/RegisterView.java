@@ -1,4 +1,4 @@
-package com.mygdx.game.Views;
+package com.mygdx.game.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -23,6 +23,13 @@ public class RegisterView extends View {
     private final Texture register;
     private final Texture playbook;
     private final Texture settings;
+    private final Texture enter_username;
+    private final Texture enter_password;
+    private final Texture password_again;
+    private final Texture passwordMessage;
+    private final Texture weakPasswordMessage;
+    private final Texture invalidEmailMessage;
+    private final Texture usernameTakenMessage;
     private Stage stage;
     private TextField username;
     private TextField password;
@@ -31,18 +38,33 @@ public class RegisterView extends View {
     private String passwordTyped;
     private String passwordCheckTyped;
     private Pixmap cursorColor;
-    private RegisterController registerController;
-    private GameController gameController;
+    //private RegisterController registerController; //not needed as field
+    //private GameController gameController; //not used
+
+
+
+    private boolean passwordMatch = true;
+    private boolean strongPassword = true;
+    private boolean validEmail = true;
+    private boolean newEmail = true;
 
 
 
     public RegisterView(ViewManager vm) {
         super(vm);
-        gameController = new GameController();
+        //gameController = new GameController(); //never used
         logo = new Texture("logo.png");
         register = new Texture("register.png");
         playbook = new Texture("playbook.png");
         settings = new Texture("settings.png");
+        enter_username = new Texture("enter_username.png");
+        enter_password = new Texture("enter_password.png");
+        password_again = new Texture("password_again.png");
+        passwordMessage = new Texture("passwordMatch.png");
+        weakPasswordMessage = new Texture("weakPassword.png");
+        invalidEmailMessage = new Texture("invalidEmail.png");
+        usernameTakenMessage = new Texture("usernameTaken.png");
+
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -72,7 +94,7 @@ public class RegisterView extends View {
         username = new TextField("", ts);
         username.setWidth(FlowerPowerGame.WIDTH-80);
         username.setHeight(37);
-        username.setPosition((float) (FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 280);
+        username.setPosition((float) (FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 300);
     }
 
     private void setPasswordField(TextField.TextFieldStyle ts) {
@@ -81,7 +103,7 @@ public class RegisterView extends View {
         password.setPasswordCharacter('*');
         password.setWidth(FlowerPowerGame.WIDTH-80);
         password.setHeight(37);
-        password.setPosition((float) (FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 210);
+        password.setPosition((float) (FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 230);
     }
 
     private void setPasswordCheckField(TextField.TextFieldStyle ts) {
@@ -90,7 +112,7 @@ public class RegisterView extends View {
         passwordCheck.setPasswordCharacter('*');
         passwordCheck.setWidth(FlowerPowerGame.WIDTH-80);
         passwordCheck.setHeight(37);
-        passwordCheck.setPosition((float) (FlowerPowerGame.WIDTH/2)-(passwordCheck.getWidth()/2), 140);
+        passwordCheck.setPosition((float) (FlowerPowerGame.WIDTH/2)-(passwordCheck.getWidth()/2), 160);
     }
 
     private void setCursor(Label.LabelStyle ls) {
@@ -113,6 +135,11 @@ public class RegisterView extends View {
             Rectangle settingsBounds = new Rectangle(settings_x, 15, settings.getWidth(), settings.getHeight());
             if (registerBounds.contains(pos.x, pos.y)) {
                 // Sende inn til databasen ny bruker
+                passwordMatch=true;
+                validEmail=true;
+                strongPassword=true;
+                newEmail=true;
+
                 usernameTyped = username.getText();
                 System.out.println("Username typed:");
                 System.out.println(usernameTyped);
@@ -122,27 +149,39 @@ public class RegisterView extends View {
                 passwordCheckTyped = passwordCheck.getText();
                 System.out.println("Password check typed: \n" + passwordCheckTyped);
                 // Sjekke at passordene stemmer overens og hvis de gjør det, send videre til Registercontroller og player
-                try{
+
+
+
+
                 if (checkPassword(passwordTyped, passwordCheckTyped)){
-                    registerController = new RegisterController(usernameTyped, passwordTyped);
-                }}
-                catch  (Exception e) {
-                    if (e.toString().equals("Email already in use")){
 
-                    }
-                    else if(e.toString().equals("Invalid user")){
 
-                    }
-                    else if(e.toString().equals("Weak password")){
+                    // Sende videre til MenuView med innlogget bruker
+                    // sendes videre for å sjekke med db
+                    try {
+                        //call registercontroller and try to make user
+                        System.out.println("Making controller");
+                        RegisterController controller = new RegisterController(usernameTyped, passwordTyped);
+                        vm.set(new MenuView(vm));
 
+                    } catch (Exception e) {
+                        //TODO: Check different instances and give feedback accordingly
+                        newEmail = false;
+                        System.out.println("In exception");
                     }
+
+                    passwordMatch = true;
+
+
+                } else {
+                    //Give feedback to user that password doesnt match
+                    passwordMatch = false;
+
                 }
 
-                // Sende videre til MenuView med innlogget bruker
-                // sendes videre for å sjekke med db
 
 
-                vm.set(new MenuView(vm));
+
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
@@ -155,7 +194,6 @@ public class RegisterView extends View {
         }
         }
 
-        //TODO: ha med noen beskjed at de ikke matcher
     public boolean checkPassword(String password, String passwordCheckTyped){
 
         if (password.equals(passwordCheckTyped)){
@@ -177,20 +215,26 @@ public class RegisterView extends View {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
-        sb.draw(logo,36,375);
+        sb.draw(logo,36,395);
         sb.draw(register,100,50);
         sb.draw(playbook, 10, 15);
         float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
         sb.draw(settings, settings_x, 15);
         // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
         // ikke helt skjønt hvorfor enda
-        BitmapFont font = new BitmapFont();
-        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
-        font.getData().setScale((float) 1.2);
-        font.setColor(Color.BLACK);
-        font.draw(sb, "Enter username",80,340);
-        font.draw(sb,"Enter password",80,270);
-        font.draw(sb,"Enter password again",80,200);
+        sb.draw(enter_username,60,345);
+        sb.draw(enter_password,60,275);
+        sb.draw(password_again,60,200);
+        if (!passwordMatch){
+            sb.draw(passwordMessage, 60,130);
+        } else if (!newEmail) {
+            sb.draw(usernameTakenMessage, 60,130);
+        } else if (!validEmail){
+            sb.draw(invalidEmailMessage, 60, 130);
+        } else if (!strongPassword){
+            sb.draw(weakPasswordMessage, 40,130);
+        }
+
         sb.end();
         stage.draw();
         stage.act();

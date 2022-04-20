@@ -1,4 +1,4 @@
-package com.mygdx.game.Views;
+package com.mygdx.game.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -26,6 +26,8 @@ public class LoginView extends View {
     private TextField password;
     private final Texture playbook;
     private final Texture settings;
+    private final Texture enter_username;
+    private final Texture enter_password;
     private String usernameTyped;
     private String passwordTyped;
     private Pixmap cursorColor;
@@ -38,6 +40,8 @@ public class LoginView extends View {
         login = new Texture("login.png");
         playbook = new Texture("playbook.png");
         settings = new Texture("settings.png");
+        enter_username = new Texture("enter_username.png");
+        enter_password = new Texture("enter_password.png");
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -145,12 +149,8 @@ public class LoginView extends View {
         sb.draw(settings, settings_x, 15);
         // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
         // ikke helt skjønt hvorfor enda
-        BitmapFont font = new BitmapFont();
-        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
-        font.getData().setScale((float) 1.3);
-        font.setColor(Color.BLACK);
-        font.draw(sb, "Enter username",80,315);
-        font.draw(sb,"Enter password",80,215);
+        sb.draw(enter_username, 60,290);
+        sb.draw(enter_password,60,190);
         sb.end();
         stage.draw();
         stage.act();
