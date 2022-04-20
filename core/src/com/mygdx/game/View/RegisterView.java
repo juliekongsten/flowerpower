@@ -39,6 +39,10 @@ public class RegisterView extends View {
 
 
 
+    private boolean passwordMatch = true;
+
+
+
     public RegisterView(ViewManager vm) {
         super(vm);
         gameController = new GameController(); //never used
@@ -49,6 +53,7 @@ public class RegisterView extends View {
         enter_username = new Texture("enter_username.png");
         enter_password = new Texture("enter_password.png");
         password_again = new Texture("password_again.png");
+
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -119,6 +124,7 @@ public class RegisterView extends View {
             Rectangle settingsBounds = new Rectangle(settings_x, 15, settings.getWidth(), settings.getHeight());
             if (registerBounds.contains(pos.x, pos.y)) {
                 // Sende inn til databasen ny bruker
+
                 usernameTyped = username.getText();
                 System.out.println("Username typed:");
                 System.out.println(usernameTyped);
@@ -128,14 +134,33 @@ public class RegisterView extends View {
                 passwordCheckTyped = passwordCheck.getText();
                 System.out.println("Password check typed: \n" + passwordCheckTyped);
                 // Sjekke at passordene stemmer overens og hvis de gjør det, send videre til Registercontroller og player
+
+
+
+
                 if (checkPassword(passwordTyped, passwordCheckTyped)){
                     registerController = new RegisterController(usernameTyped, passwordTyped);
+                    // Sende videre til MenuView med innlogget bruker
+                    // sendes videre for å sjekke med db
+                    try {
+                        //call registercontroller and try to make user
+
+                    } catch (Exception e) {
+                        //TODO: Check different instances and give feedback accordingly
+                    }
+
+                    passwordMatch = true;
+
+                    vm.set(new MenuView(vm));
+                } else {
+                    //Give feedback to user that password doesnt match
+                    passwordMatch = false;
+
                 }
-                // Sende videre til MenuView med innlogget bruker
-                // sendes videre for å sjekke med db
 
 
-                vm.set(new MenuView(vm));
+
+
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
@@ -180,6 +205,10 @@ public class RegisterView extends View {
         sb.draw(enter_username,60,325);
         sb.draw(enter_password,60,255);
         sb.draw(password_again,60,185);
+        if (!passwordMatch){
+
+        }
+
         sb.end();
         stage.draw();
         stage.act();
