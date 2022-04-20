@@ -30,6 +30,7 @@ public class PlaceBedsView extends View{
     private final Texture overlapping_text;
     private final Texture replace;
     private final Texture beds_outside_board;
+    private final Texture pop_up;
 
     private GameController controller;
 
@@ -64,6 +65,7 @@ public class PlaceBedsView extends View{
         overlapping_text = new Texture("overlapping_text.png");
         replace = new Texture("replace.png");
         beds_outside_board = new Texture("beds_outside_board.png");
+        pop_up = new Texture("POP-UP.png");
 
 
         findStaticCoordinates();
@@ -248,7 +250,6 @@ public class PlaceBedsView extends View{
         //Draw text "Your beds:"
         sb.draw(your_beds,pool_x+10,pool_y+pool.getHeight()-20);
 
-
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
 
@@ -273,6 +274,9 @@ public class PlaceBedsView extends View{
         if(isReady){
             checkOtherPlayer(sb);
         }
+
+        //Draw pop-up
+        sb.draw(pop_up,pool_x+150,pool_y+pool.getHeight()-20);
 
         sb.end();
 
