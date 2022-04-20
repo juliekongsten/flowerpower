@@ -81,7 +81,7 @@ public class JoinView extends View {
             Rectangle joinBounds = new Rectangle((FlowerPowerGame.WIDTH/2-join.getWidth()/2), 100, join.getWidth(), join.getHeight());
 
             if (joinBounds.contains(pos.x, pos.y)) {
-                // Some way to check pin
+                //TODO: Some way to check pin
                 //vm.set(new GameView(vm));
                 vm.set(new PlaceBedsView(vm));
                 System.out.println("JOIN WAS PRESSED!");
