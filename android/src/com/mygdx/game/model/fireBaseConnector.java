@@ -30,6 +30,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private FirebaseDatabase database;
      private DatabaseReference myRef;
      private FirebaseAuth mAuth;
+     private Exception execption = null;
 
     /**
      * Constructor that gets an instance of the database and authorization
@@ -104,11 +105,13 @@ public class fireBaseConnector implements FireBaseInterface {
                 userData.put("Mail", user.getEmail());
                 usersRef.setValue(userData);
 
-
             } else {
                 // Sign in failed
                 //TODO: send message back to register class for error handling
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                this.execption = task.getException();
+
+
             }
         });
     }
@@ -130,6 +133,7 @@ public class fireBaseConnector implements FireBaseInterface {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());}
+                        this.execption = task.getException();
 
                 });
 
@@ -148,6 +152,9 @@ public class fireBaseConnector implements FireBaseInterface {
     public String getUID(){
         FirebaseUser user = mAuth.getCurrentUser();
         return user.getUid();
+    }
+    public Exception getExecption(){
+        return this.execption;
     }
 
     //TODO: hvordan fikse dette?

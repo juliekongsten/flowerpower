@@ -5,6 +5,7 @@ import com.mygdx.game.Model.Player;
 public class LoginController {
 
     private Player player;
+    private Exception exception;
 
     /**
      *
@@ -15,6 +16,17 @@ public class LoginController {
     public LoginController(String username, String password){
         player = new Player();
         player.signIn(username, password);
+    }
+
+    public boolean checkValid(){
+        if(player.getException()!=null){
+            this.exception = player.getException();
+            return false;
+        }
+        return true;
+    }
+    public Exception getException(){
+        return this.exception;
     }
 
 }

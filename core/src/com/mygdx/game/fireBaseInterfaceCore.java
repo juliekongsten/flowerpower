@@ -34,6 +34,8 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public String getUID() {
         return null;
     }
+    @Override
+    public Exception getExecption(){return null; }
 
     /**@Override
     public void writeUserDataToDb(Player player) {

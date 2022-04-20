@@ -10,6 +10,7 @@ public class Player {
     private String username;
     private String UID;
     private FireBaseInterface _FBIC;
+    private Exception exception = null;
 
     /**
      * Creates a new player for the game
@@ -25,14 +26,13 @@ public class Player {
     public void registerPlayer(String username, String password){
         this._FBIC= FlowerPowerGame.getFBIC();
         //check username first
-        if(passwordCheck(password)&&usernameCheck(username)){
-            System.out.println("Påske");
-            _FBIC.newPlayer(username, password);
-            this.username = _FBIC.getUsername();
-            this.UID = _FBIC.getUID();
-        }else {
-            System.out.println("Could not create user, wrong input");
-        }
+        // if(passwordCheck(password)&&usernameCheck(username))
+        _FBIC.newPlayer(username, password);
+        this.username = _FBIC.getUsername();
+        this.UID = _FBIC.getUID();
+        System.out.println("Could not create user, wrong input");
+            //TODO: her må hele systemet stoppe og ikke gå videre!
+
 
 
         //_FBIC.writeUserDataToDb(this);
@@ -42,12 +42,21 @@ public class Player {
 
 
 
-    //TODO: boolean? error handling in firebaseconnector?
+
     public void signIn(String username, String password){
         this._FBIC= FlowerPowerGame.getFBIC();
         _FBIC.signIn(username, password);
+        if (_FBIC.getExecption()!=null){
+            // TODO: denne må sendes tilbake til bruker
+            this.exception = _FBIC.getExecption();
+            System.out.println(exception);
+        }
 
 
+    }
+
+    public Exception getException(){
+        return this.exception;
     }
 
     /**

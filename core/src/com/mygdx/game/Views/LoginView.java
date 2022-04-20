@@ -30,6 +30,7 @@ public class LoginView extends View {
     private String passwordTyped;
     private Pixmap cursorColor;
     private LoginController LoginController;
+    private Exception exception;
 
     protected LoginView(ViewManager vm) {
         super(vm);
@@ -104,7 +105,15 @@ public class LoginView extends View {
                 //noe form for kontroll på om brukernavn og passord er riktig -> kontrolleren kan gjøre det
                 LoginController = new LoginController(usernameTyped, passwordTyped);
                 //sende videre til MenuView med innlogget bruker
-                vm.set(new MenuView(vm));
+                if(LoginController.checkValid()){
+                    vm.set(new MenuView(vm));
+                }else{
+                    // TODO: en melding må poppe opp at det ikke fungerer
+                    // legger til en midllertidig løsninger her:
+                    this.exception = LoginController.getException();
+                    System.out.println("LOGINVIEW EXCEPTION: " + LoginController.getException());
+                }
+
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
