@@ -167,6 +167,8 @@ public class RegisterView extends View {
                     } catch (Exception e) {
                         //TODO: Check different instances and give feedback accordingly
                         System.out.println("In exception");
+                        System.out.println(e);
+                        System.out.println(e.getMessage());
 
 
                         if (e.toString().equals("Email already in use")){
@@ -174,9 +176,12 @@ public class RegisterView extends View {
                         }
                         else if(e.toString().equals("Invalid user")){
                             validEmail = false;
+                            //I/System.out: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String com.google.firebase.auth.FirebaseUser.getEmail()' on a null object reference
+                            //Attempt to invoke virtual method 'java.lang.String com.google.firebase.auth.FirebaseUser.getEmail()' on a null object reference
                         }
                         else if(e.toString().equals("Weak password")){
                             strongPassword = false;
+                            //I/System.out: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String com.google.firebase.auth.FirebaseUser.getEmail()' on a null object re
                         }
 
 

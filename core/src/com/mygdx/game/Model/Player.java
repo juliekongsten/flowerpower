@@ -28,11 +28,14 @@ public class Player {
     public void registerPlayer(String username, String password) throws Exception {
         this._FBIC= FlowerPowerGame.getFBIC();
         _FBIC.newPlayer(username, password);
+        wait(10);
+        System.out.println("_FBIC.exception: "+_FBIC.getException());
         if (_FBIC.getException() != null){
             System.out.println("Could not create user, wrong input");
             throw _FBIC.getException();
         }
         else {
+            System.out.println("Could create user with username "+_FBIC.getUsername());
             this.username = _FBIC.getUsername();
             this.UID = _FBIC.getUID();
         }
