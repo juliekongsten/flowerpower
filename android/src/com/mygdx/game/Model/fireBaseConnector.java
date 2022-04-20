@@ -1,9 +1,12 @@
-package com.mygdx.game.model;
+package com.mygdx.game.Model;
 
 import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.mygdx.game.FireBaseInterface;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +33,8 @@ public class fireBaseConnector implements FireBaseInterface {
      private FirebaseDatabase database;
      private DatabaseReference myRef;
      private FirebaseAuth mAuth;
-     private Exception execption = null;
+     private Exception exception = null;
+
 
     /**
      * Constructor that gets an instance of the database and authorization
@@ -92,6 +96,7 @@ public class fireBaseConnector implements FireBaseInterface {
      * @param password password for the user
      */
     public void newPlayer(String username, String password) {
+        this.exception = null;
         mAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 // Sign in success, the user is now both registered and signed in
@@ -105,12 +110,24 @@ public class fireBaseConnector implements FireBaseInterface {
                 userData.put("Mail", user.getEmail());
                 usersRef.setValue(userData);
 
-            } else {
+            }
+            else if (task.getException() instanceof FirebaseAuthUserCollisionException)
+            {
+                //If email already registered.
+                this.exception = new CustomException("Email already in use");
+
+            }else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                //If email are in incorret  format
+                this.exception = new CustomException("Invalid email");
+
+            }else if (task.getException() instanceof FirebaseAuthWeakPasswordException) {
+                //if password not 'stronger'
+                this.exception = new CustomException("Weak password");
+            }
+            else {
                 // Sign in failed
                 //TODO: send message back to register class for error handling
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                this.execption = task.getException();
-
 
             }
         });
@@ -133,7 +150,7 @@ public class fireBaseConnector implements FireBaseInterface {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());}
-                        this.execption = task.getException();
+                        this.exception = task.getException();
 
                 });
 
@@ -154,7 +171,7 @@ public class fireBaseConnector implements FireBaseInterface {
         return user.getUid();
     }
     public Exception getExecption(){
-        return this.execption;
+        return this.exception;
     }
 
     //TODO: hvordan fikse dette?

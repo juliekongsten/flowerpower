@@ -122,9 +122,22 @@ public class RegisterView extends View {
                 passwordCheckTyped = passwordCheck.getText();
                 System.out.println("Password check typed: \n" + passwordCheckTyped);
                 // Sjekke at passordene stemmer overens og hvis de gjør det, send videre til Registercontroller og player
+                try{
                 if (checkPassword(passwordTyped, passwordCheckTyped)){
                     registerController = new RegisterController(usernameTyped, passwordTyped);
+                }}
+                catch  (Exception e) {
+                    if (e.toString().equals("Email already in use")){
+
+                    }
+                    else if(e.toString().equals("Invalid email")){
+
+                    }
+                    else if(e.toString().equals("Weak password")){
+
+                    }
                 }
+
                 // Sende videre til MenuView med innlogget bruker
                 // sendes videre for å sjekke med db
 

@@ -3,7 +3,6 @@ package com.mygdx.game.Model;
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
 
-import java.util.ArrayList;
 
 public class Player {
 
@@ -13,37 +12,40 @@ public class Player {
     private Exception exception = null;
 
     /**
-     * Creates a new player for the game
+     * empty constructor used by LoginController and RegisterController
      */
-
-    //oppretter nå en ny spiller i konstruktøren
-    //TODO: what are we going to put here thooo
     public Player(){
 
     }
 
-
-    public void registerPlayer(String username, String password){
+    /**
+     * Method used by RegisterController to register a new user.
+     * Throws exception if something goes wrong, the exception is handled by the view
+     * @param username
+     * @param password
+     * @throws Exception
+     */
+    public void registerPlayer(String username, String password) throws Exception {
         this._FBIC= FlowerPowerGame.getFBIC();
-        //check username first
-        // if(passwordCheck(password)&&usernameCheck(username))
         _FBIC.newPlayer(username, password);
-        this.username = _FBIC.getUsername();
-        this.UID = _FBIC.getUID();
-        System.out.println("Could not create user, wrong input");
-            //TODO: her må hele systemet stoppe og ikke gå videre!
+        if (_FBIC.getExecption() != null){
+            System.out.println("Could not create user, wrong input");
+            throw _FBIC.getExecption();
+        }
+        else {
+            this.username = _FBIC.getUsername();
+            this.UID = _FBIC.getUID();
+        }
 
-
-
-        //_FBIC.writeUserDataToDb(this);
     }
 
 
-
-
-
-
-    public void signIn(String username, String password){
+    /**
+     * Method to sign an existing player
+     * @param username
+     * @param password
+     */
+    public void signIn(String username, String password) throws Exception{
         this._FBIC= FlowerPowerGame.getFBIC();
         _FBIC.signIn(username, password);
         if (_FBIC.getExecption()!=null){
