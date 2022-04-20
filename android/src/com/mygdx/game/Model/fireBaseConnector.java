@@ -3,8 +3,10 @@ package com.mygdx.game.Model;
 import androidx.annotation.NonNull;
 import android.util.Log;
 
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
@@ -139,6 +141,7 @@ public class fireBaseConnector implements FireBaseInterface {
      * @param password
      */
     public void signIn(String username, String password){
+        this.exception = null;
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -147,10 +150,21 @@ public class fireBaseConnector implements FireBaseInterface {
                         FirebaseUser user = mAuth.getCurrentUser();
                         Log.d(TAG, user.getEmail());
 
-                    } else {
+                    }
+                    else if (task.getException() instanceof FirebaseAuthInvalidUserException)
+                    {
+                        //user does not exist
+                        this.exception = new CustomException("Invalid user");
+
+                    }
+                    else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                        //password is invalid
+                        this.exception = new CustomException("Invalid password");
+
+                    }
+                    else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());}
-                        this.exception = task.getException();
 
                 });
 
@@ -170,16 +184,9 @@ public class fireBaseConnector implements FireBaseInterface {
         FirebaseUser user = mAuth.getCurrentUser();
         return user.getUid();
     }
-    public Exception getExecption(){
+    public Exception getException(){
         return this.exception;
     }
-
-    //TODO: hvordan fikse dette?
-    /*public boolean emailAlreadyInUse(String email){
-        UserRecord userRecord = mAuth.getUserByEmail(email);
-    }*/
-
-
 
 
 }

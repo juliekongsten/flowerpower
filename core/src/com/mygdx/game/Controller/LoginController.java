@@ -13,20 +13,11 @@ public class LoginController {
      * @param password password for the user
      * Controller that handles the log in for the user
      */
-    public LoginController(String username, String password){
+    public LoginController(String username, String password) throws Exception {
         player = new Player();
         player.signIn(username, password);
     }
 
-    public boolean checkValid(){
-        if(player.getException()!=null){
-            this.exception = player.getException();
-            return false;
-        }
-        return true;
-    }
-    public Exception getException(){
-        return this.exception;
-    }
+
 
 }

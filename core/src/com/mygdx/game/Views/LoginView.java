@@ -102,16 +102,16 @@ public class LoginView extends View {
                 passwordTyped = password.getText();
                 System.out.println("Password typed:");
                 System.out.println(passwordTyped);
-                //noe form for kontroll på om brukernavn og passord er riktig -> kontrolleren kan gjøre det
-                LoginController = new LoginController(usernameTyped, passwordTyped);
-                //sende videre til MenuView med innlogget bruker
-                if(LoginController.checkValid()){
-                    vm.set(new MenuView(vm));
-                }else{
-                    // TODO: en melding må poppe opp at det ikke fungerer
-                    // legger til en midllertidig løsninger her:
-                    this.exception = LoginController.getException();
-                    System.out.println("LOGINVIEW EXCEPTION: " + LoginController.getException());
+
+                try {
+                    LoginController = new LoginController(usernameTyped, passwordTyped);
+                }
+                catch (Exception e) {
+                    if (e.toString().equals("Invalid user")){
+
+                    }
+                    else if(e.toString().equals("Invalid password")){
+
                 }
 
             }
@@ -125,7 +125,7 @@ public class LoginView extends View {
             }
         }
 
-    }
+    }}
 
     @Override
     public void update(float dt) {

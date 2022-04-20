@@ -9,7 +9,7 @@ public class Player {
     private String username;
     private String UID;
     private FireBaseInterface _FBIC;
-    private Exception exception = null;
+
 
     /**
      * empty constructor used by LoginController and RegisterController
@@ -28,9 +28,9 @@ public class Player {
     public void registerPlayer(String username, String password) throws Exception {
         this._FBIC= FlowerPowerGame.getFBIC();
         _FBIC.newPlayer(username, password);
-        if (_FBIC.getExecption() != null){
+        if (_FBIC.getException() != null){
             System.out.println("Could not create user, wrong input");
-            throw _FBIC.getExecption();
+            throw _FBIC.getException();
         }
         else {
             this.username = _FBIC.getUsername();
@@ -48,49 +48,11 @@ public class Player {
     public void signIn(String username, String password) throws Exception{
         this._FBIC= FlowerPowerGame.getFBIC();
         _FBIC.signIn(username, password);
-        if (_FBIC.getExecption()!=null){
-            // TODO: denne må sendes tilbake til bruker
-            this.exception = _FBIC.getExecption();
-            System.out.println(exception);
+        if (_FBIC.getException()!=null){
+            throw _FBIC.getException();
         }
 
 
-    }
-
-    public Exception getException(){
-        return this.exception;
-    }
-
-    /**
-     * Check for password
-     * @param password given
-     * @return boolean value
-     */
-
-    public boolean passwordCheck(String password){
-        if (password.length()<6){
-            System.out.println("Password too short!");
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Checkf ro username must be email
-     * @param username written
-     * @return boolean value
-     */
-
-    public boolean usernameCheck(String username){
-        if(!username.contains("@")){
-            System.out.println("Username must contain @!");
-            return false;
-        }
-        if(!username.contains(".com") || !username.contains(".no")){
-            System.out.println("Username must contain .no or .com");
-            return false;
-        }
-        return true;
     }
 
 
@@ -103,14 +65,7 @@ public class Player {
         return _FBIC.getUsername();
     }
 
-    /**
-     * checks if the username is valid and not already in use
-     * @param username
-     * @return
-     */
-    /*private boolean validUsername(String username){
 
-    }*/
 
 
 

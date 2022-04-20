@@ -14,7 +14,8 @@ public interface FireBaseInterface {
     String getUsername();
 
     String getUID();
-    Exception getExecption();
+
+    Exception getException();
 
     //void writeUserDataToDb(Player player);
 }

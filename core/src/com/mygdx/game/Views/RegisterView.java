@@ -130,7 +130,7 @@ public class RegisterView extends View {
                     if (e.toString().equals("Email already in use")){
 
                     }
-                    else if(e.toString().equals("Invalid email")){
+                    else if(e.toString().equals("Invalid user")){
 
                     }
                     else if(e.toString().equals("Weak password")){
