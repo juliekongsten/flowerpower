@@ -1,4 +1,4 @@
-package com.mygdx.game.View;
+package com.mygdx.game.Views;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -23,9 +23,6 @@ public class RegisterView extends View {
     private final Texture register;
     private final Texture playbook;
     private final Texture settings;
-    private final Texture enter_username;
-    private final Texture enter_password;
-    private final Texture password_again;
     private Stage stage;
     private TextField username;
     private TextField password;
@@ -34,21 +31,18 @@ public class RegisterView extends View {
     private String passwordTyped;
     private String passwordCheckTyped;
     private Pixmap cursorColor;
-    private RegisterController registerController; //not needed as field
-    private GameController gameController; //not used
+    private RegisterController registerController;
+    private GameController gameController;
 
 
 
     public RegisterView(ViewManager vm) {
         super(vm);
-        gameController = new GameController(); //never used
+        gameController = new GameController();
         logo = new Texture("logo.png");
         register = new Texture("register.png");
         playbook = new Texture("playbook.png");
         settings = new Texture("settings.png");
-        enter_username = new Texture("enter_username.png");
-        enter_password = new Texture("enter_password.png");
-        password_again = new Texture("password_again.png");
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -177,9 +171,13 @@ public class RegisterView extends View {
         sb.draw(settings, settings_x, 15);
         // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
         // ikke helt skjønt hvorfor enda
-        sb.draw(enter_username,60,325);
-        sb.draw(enter_password,60,255);
-        sb.draw(password_again,60,185);
+        BitmapFont font = new BitmapFont();
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
+        font.getData().setScale((float) 1.2);
+        font.setColor(Color.BLACK);
+        font.draw(sb, "Enter username",80,340);
+        font.draw(sb,"Enter password",80,270);
+        font.draw(sb,"Enter password again",80,200);
         sb.end();
         stage.draw();
         stage.act();
