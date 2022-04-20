@@ -17,7 +17,8 @@ public class FlowerPowerGame extends ApplicationAdapter {
 	public static final int HEIGHT = 667;
 	private SpriteBatch batch;
 	private ViewManager vm;
-	FireBaseInterface _FBIC;
+	public static FireBaseInterface _FBIC = null;
+
 
 	/**
 	 * Constructor that creates instance of FireBaseInterface
@@ -28,15 +29,25 @@ public class FlowerPowerGame extends ApplicationAdapter {
 
 	}
 
+	public static FireBaseInterface getFBIC(){
+		return _FBIC; 
+	}
+
+
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		vm = ViewManager.getViewManager();
 		vm.push(new StartView(vm));
+
 		//calls methods in fireBaseConnector to test them out
-		_FBIC.writeToDb("message","tir!");
+		//TODO: remove
+		_FBIC.writeToDb("message","jasså!");
 		_FBIC.readFromDb();
+		//_FBIC.signIn("testuser2@gmail.com", "123456");
 	}
+
 
 	@Override
 	public void render () {
