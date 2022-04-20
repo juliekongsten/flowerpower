@@ -183,7 +183,13 @@ public class fireBaseConnector implements FireBaseInterface {
         // TODO: kan fjerne int GID ettersom den blir sendt som parameter?
         //int GID = game.getGID();
         DatabaseReference playerRef = gameRef.child(GID+"/Players");
-        playerRef.push().setValue("player1");
+        Map userData = new HashMap();
+        userData.put("Username", "player1");
+        playerRef.setValue(userData);
+        Map readyData = new HashMap();
+        readyData.put("player1",false);
+        DatabaseReference readyRef = gameRef.child(GID+"/ready");
+        readyRef.setValue(readyData);
     }
 
 
@@ -191,10 +197,23 @@ public class fireBaseConnector implements FireBaseInterface {
     //TODO: bli med i spill
     public void joinGame(int gameID){
         DatabaseReference gameRef = database.getReference().child("/Games");
+        String key = database.getReference().child(gameID+"/Players").push().getKey();
         DatabaseReference playerRef = gameRef.child(gameID+"/Players");
-        playerRef.push().setValue("player2");
+        Map userData = new HashMap();
+        userData.put("Username2", "player2");
+        playerRef.updateChildren(userData);
+        Map readyData = new HashMap();
+        readyData.put("player2",false);
+        DatabaseReference readyRef = gameRef.child(gameID+"/ready");
+        readyRef.updateChildren(readyData);
         //check user logged in - getID
         //check gamepin - if the same, get user into the game
+    }
+
+    public void ready(int gameID){
+        //når brukeren har trykket bli klar skal
+        DatabaseReference gameRef = database.getReference().child("/Games"+gameID+"/ready");
+
     }
 
     public FirebaseDatabase getDatabase(){
