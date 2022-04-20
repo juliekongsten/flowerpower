@@ -155,20 +155,24 @@ public class RegisterView extends View {
 
                 if (checkPassword(passwordTyped, passwordCheckTyped)){
 
+
                     // Sende videre til MenuView med innlogget bruker
                     // sendes videre for å sjekke med db
                     try {
                         //call registercontroller and try to make user
-                        new RegisterController(usernameTyped, passwordTyped);
+                        System.out.println("Making controller");
+                        RegisterController controller = new RegisterController(usernameTyped, passwordTyped);
+                        vm.set(new MenuView(vm));
 
                     } catch (Exception e) {
                         //TODO: Check different instances and give feedback accordingly
                         newEmail = false;
+                        System.out.println("In exception");
                     }
 
                     passwordMatch = true;
 
-                    vm.set(new MenuView(vm));
+
                 } else {
                     //Give feedback to user that password doesnt match
                     passwordMatch = false;
