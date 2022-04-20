@@ -26,6 +26,7 @@ public class RegisterView extends View {
     private final Texture enter_username;
     private final Texture enter_password;
     private final Texture password_again;
+    private final Texture passwordMessage;
     private Stage stage;
     private TextField username;
     private TextField password;
@@ -34,8 +35,8 @@ public class RegisterView extends View {
     private String passwordTyped;
     private String passwordCheckTyped;
     private Pixmap cursorColor;
-    private RegisterController registerController; //not needed as field
-    private GameController gameController; //not used
+    //private RegisterController registerController; //not needed as field
+    //private GameController gameController; //not used
 
 
 
@@ -45,7 +46,7 @@ public class RegisterView extends View {
 
     public RegisterView(ViewManager vm) {
         super(vm);
-        gameController = new GameController(); //never used
+        //gameController = new GameController(); //never used
         logo = new Texture("logo.png");
         register = new Texture("register.png");
         playbook = new Texture("playbook.png");
@@ -53,6 +54,7 @@ public class RegisterView extends View {
         enter_username = new Texture("enter_username.png");
         enter_password = new Texture("enter_password.png");
         password_again = new Texture("password_again.png");
+        passwordMessage = new Texture("passwordMatch.png");
 
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
@@ -83,7 +85,7 @@ public class RegisterView extends View {
         username = new TextField("", ts);
         username.setWidth(FlowerPowerGame.WIDTH-80);
         username.setHeight(37);
-        username.setPosition((float) (FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 280);
+        username.setPosition((float) (FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 300);
     }
 
     private void setPasswordField(TextField.TextFieldStyle ts) {
@@ -92,7 +94,7 @@ public class RegisterView extends View {
         password.setPasswordCharacter('*');
         password.setWidth(FlowerPowerGame.WIDTH-80);
         password.setHeight(37);
-        password.setPosition((float) (FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 210);
+        password.setPosition((float) (FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 230);
     }
 
     private void setPasswordCheckField(TextField.TextFieldStyle ts) {
@@ -101,7 +103,7 @@ public class RegisterView extends View {
         passwordCheck.setPasswordCharacter('*');
         passwordCheck.setWidth(FlowerPowerGame.WIDTH-80);
         passwordCheck.setHeight(37);
-        passwordCheck.setPosition((float) (FlowerPowerGame.WIDTH/2)-(passwordCheck.getWidth()/2), 140);
+        passwordCheck.setPosition((float) (FlowerPowerGame.WIDTH/2)-(passwordCheck.getWidth()/2), 160);
     }
 
     private void setCursor(Label.LabelStyle ls) {
@@ -139,7 +141,7 @@ public class RegisterView extends View {
 
 
                 if (checkPassword(passwordTyped, passwordCheckTyped)){
-                    registerController = new RegisterController(usernameTyped, passwordTyped);
+                    new RegisterController(usernameTyped, passwordTyped);
                     // Sende videre til MenuView med innlogget bruker
                     // sendes videre for å sjekke med db
                     try {
@@ -195,18 +197,18 @@ public class RegisterView extends View {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
-        sb.draw(logo,36,375);
+        sb.draw(logo,36,395);
         sb.draw(register,100,50);
         sb.draw(playbook, 10, 15);
         float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
         sb.draw(settings, settings_x, 15);
         // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
         // ikke helt skjønt hvorfor enda
-        sb.draw(enter_username,60,325);
-        sb.draw(enter_password,60,255);
-        sb.draw(password_again,60,185);
+        sb.draw(enter_username,60,345);
+        sb.draw(enter_password,60,275);
+        sb.draw(password_again,60,200);
         if (!passwordMatch){
-
+            sb.draw(passwordMessage, 60,130);
         }
 
         sb.end();
