@@ -175,19 +175,16 @@ public class fireBaseConnector implements FireBaseInterface {
 
     //TODO: opprette et game - tenker egt at man skal ta inn player som er current user her
     public void createGame(int GID){
-        //oppretter et nytt spill inni games
-        // TODO: kan fjerne game?
-        // Game game = new Game();
+
         DatabaseReference gameRef = database.getReference().child("/Games");
-        //gameRef.setValue(game.getGID());
-        // TODO: kan fjerne int GID ettersom den blir sendt som parameter?
-        //int GID = game.getGID();
-        DatabaseReference playerRef = gameRef.child(GID+"/Players");
-        Map userData = new HashMap();
-        userData.put("Username", "player1");
-        playerRef.setValue(userData);
+        DatabaseReference playerRef = gameRef.child(GID+"/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        Map uidData = new HashMap();
+        uidData.put("Username", this.getUsername());
+        userRef.setValue(uidData);
         Map readyData = new HashMap();
-        readyData.put("player1",false);
+        String displayName[] = this.getUsername().split("@");
+        readyData.put(displayName[0],false);
         DatabaseReference readyRef = gameRef.child(GID+"/ready");
         readyRef.setValue(readyData);
     }
