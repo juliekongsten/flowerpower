@@ -20,7 +20,6 @@ import com.mygdx.game.Model.Player;
 import static android.content.ContentValues.TAG;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -183,14 +182,17 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     //NOTE: alle stedene det står "player1" skal det heller være en reell bruker
     public void createGame(int GID){
+
         DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(GID+"/Players");
-        Map userData = new HashMap();
-        userData.put("Username", "player1");
-        playerRef.setValue(userData);
+        DatabaseReference playerRef = gameRef.child(GID+"/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        Map uidData = new HashMap();
+        uidData.put("Username", this.getUsername());
+        userRef.setValue(uidData);
         Map readyData = new HashMap();
-        readyData.put("player1",false);
-        DatabaseReference readyRef = gameRef.child(GID+"/Ready");
+        String displayName[] = this.getUsername().split("@");
+        readyData.put(displayName[0],false);
+        DatabaseReference readyRef = gameRef.child(GID+"/ready");
         readyRef.setValue(readyData);
         //TODO: fikse så denne ikke overskriver alle de andre
         /*Map turnData = new HashMap();
@@ -207,15 +209,19 @@ public class fireBaseConnector implements FireBaseInterface {
      * @param gameID - same gamePIN as a created game you want to join
      */
     //TODO: sjekke at spillet man blir med i eksisterer, og ikke har mer enn to brukere
+
+    //TODO: redudant kode
     public void joinGame(int gameID){
         DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(gameID+"/Players");
-        Map userData = new HashMap();
-        userData.put("Username2", "player2");
-        playerRef.updateChildren(userData);
+        DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        Map uidData = new HashMap();
+        uidData.put("Username", this.getUsername());
+        userRef.setValue(uidData);
         Map readyData = new HashMap();
-        readyData.put("player2",false);
-        DatabaseReference readyRef = gameRef.child(gameID+"/Ready");
+        String displayName[] = this.getUsername().split("@");
+        readyData.put(displayName[0],false);
+        DatabaseReference readyRef = gameRef.child(gameID+"/ready");
         readyRef.updateChildren(readyData);
         //check user logged in - getID
         //check gamepin - if the same, get user into the game
