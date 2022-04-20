@@ -1,4 +1,4 @@
-package com.mygdx.game.Views;
+package com.mygdx.game.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -11,48 +11,52 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 
-public class MenuView extends View {
+import java.util.Random;
+
+public class CreateView extends View {
 
     private final Texture logo;
     private final Texture playbook;
     private final Texture settings;
-    private final Texture join;
-    private final Texture create;
+    private final Texture pinText;
+    private final Texture waitText;
+    private final Texture back;
+    private String gamePin;
     private GameController gameController;
 
 
-
-    protected MenuView(ViewManager vm) {
+    protected CreateView(ViewManager vm, String gamePin) {
         super(vm);
-        this.gameController = new GameController();
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
         settings = new Texture("settings.png");
-        join = new Texture("join.png");
-        create = new Texture("create.png");
+        pinText = new Texture("create_pin.png");
+        waitText = new Texture("create_wait.png");
+        back = new Texture("back.png");
+        this.gamePin = gamePin;
+    }
+
+    private void getGamePin() {
+        // Midlertidlig løsning; skal vel fikses i backend?
+        // det er fikset
+        /*
+        Random rand = new Random();
+        String result = "";
+        for (int i=0; i<=6; i++) {
+            result += rand.nextInt(10);
+        }
+        gamePin = result;
+        */
     }
 
     @Override
     protected void handleInput() {
-        if (Gdx.input.justTouched()) {
+        if(Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            float settings_x = FlowerPowerGame.WIDTH-playbook.getWidth()-10;
+            float settings_x = FlowerPowerGame.WIDTH - playbook.getWidth() - 10;
             Rectangle playbookBounds = new Rectangle(10, 15, playbook.getWidth(), playbook.getHeight());
             Rectangle settingsBounds = new Rectangle(settings_x, 15, settings.getWidth(), settings.getHeight());
-            Rectangle joinBounds = new Rectangle((int) ((FlowerPowerGame.WIDTH/2)-(join.getWidth()/2)), 240,
-                    join.getWidth(), join.getHeight());
-            Rectangle createBounds = new Rectangle((int) ((FlowerPowerGame.WIDTH/2)-(join.getWidth()/2)), 130,
-                    create.getWidth(), create.getHeight());
-            if (joinBounds.contains(pos.x, pos.y)) {
-                System.out.println("JOIN GAME PRESSED!");
-                vm.set(new JoinView(vm));
-            }
-            if (createBounds.contains(pos.x, pos.y)) {
-                System.out.println("CREATE GAME PRESSED!");
-                gameController.createGame();
-                String gamePin = Integer.toString(gameController.getGID());
-                vm.set(new CreateView(vm, gamePin));
-            }
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
                 System.out.println("Playbook pressed");
@@ -60,6 +64,9 @@ public class MenuView extends View {
             if (settingsBounds.contains(pos.x, pos.y)) {
                 //vm.set(new SettingsView(vm));
                 System.out.println("Settings pressed");
+            }
+            if (backBounds.contains(pos.x, pos.y)) {
+                vm.set(new MenuView(vm));
             }
         }
     }
@@ -75,11 +82,19 @@ public class MenuView extends View {
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
         sb.draw(logo,36,375);
-        sb.draw(join, (float) ((FlowerPowerGame.WIDTH/2)-(join.getWidth()/2)),240);
-        sb.draw(create, (float) ((FlowerPowerGame.WIDTH/2)-(join.getWidth()/2)), 130);
         sb.draw(playbook, 10, 15);
+        sb.draw(pinText, (float) (FlowerPowerGame.WIDTH/2-pinText.getWidth()/2), 300);
+        sb.draw(waitText, (float) (FlowerPowerGame.WIDTH/2-waitText.getWidth()/2), 200);
         float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
         sb.draw(settings, settings_x, 15);
+        sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
+        BitmapFont font = new BitmapFont();
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
+        font.getData().setScale((float) 1.3);
+        font.setColor(Color.BLACK);
+
+        font.draw(sb, gamePin, (float) FlowerPowerGame.WIDTH/2-40, 280);
+
         sb.end();
     }
 }

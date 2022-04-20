@@ -93,8 +93,8 @@ public class fireBaseConnector implements FireBaseInterface {
 
     /**
      * This method adds a user to the database with email and password authentication
-     * @param username
-     * @param password
+     * @param username mail for the user
+     * @param password password for the user
      */
     public void newPlayer(String username, String password) {
         mAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(task -> {
@@ -103,14 +103,12 @@ public class fireBaseConnector implements FireBaseInterface {
                 Log.d(TAG, "createUserWithEmail:success");
                 //TODO: maybe send the user back to the player class to get id? otherwise remove
                 FirebaseUser user = mAuth.getCurrentUser();
-                DatabaseReference usersRef = database.getReference().child("/users");
+                DatabaseReference usersRef = database.getReference().child("users").child(user.getUid());
                 //TODO: put in whole object simultaneously
-                // database.getReference().child("/users/"+ "UID").setValue(user.getUid());
-                //DatabaseReference uidRef = usersRef.child("/UID");
-                usersRef.setValue(user.getUid());
-                DatabaseReference mailRef = usersRef.child(getUID()+"/Mail");
-                mailRef.setValue(user.getEmail());
-                //database.getReference().child("/users/" + user.getUid()).child("/Mail").setValue(user.getEmail());
+                // Her kan mer data puttes når vi ønsker å lagre highscore osv.
+                Map<String, String> userData = new HashMap<String, String>();
+                userData.put("Mail", user.getEmail());
+                usersRef.setValue(userData);
 
 
             } else {
@@ -144,10 +142,6 @@ public class fireBaseConnector implements FireBaseInterface {
 
     }
 
-    /**public void writeUserDataToDb(Player player){
-        DatabaseReference usersRef = database.getReference().child("users");
-        usersRef.setValue(player);
-    }**/
 
     /**
      * returns current users username

@@ -9,6 +9,9 @@ public class Player {
     private String UID;
     private FireBaseInterface _FBIC;
 
+    /**
+     * Creates a new player for the game
+     */
 
     //oppretter nå en ny spiller i konstruktøren
     //TODO: what are we going to put here thooo
@@ -44,6 +47,7 @@ public class Player {
      * gets username of player
      * @return username of current logged in player
      */
+    // TODO: kunne ikke denne vært den lokale variabelen vi har så slipper vi kall på db
     public String getUsername() {
         return _FBIC.getUsername();
     }

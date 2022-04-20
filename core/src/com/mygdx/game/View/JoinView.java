@@ -1,4 +1,4 @@
-package com.mygdx.game.Views;
+package com.mygdx.game.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -14,29 +14,30 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.game.Controller.LoginController;
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 
-public class LoginView extends View {
-
+public class JoinView extends View {
     private final Texture logo;
-    private final Texture login;
-    private Stage stage;
-    private TextField username;
-    private TextField password;
     private final Texture playbook;
     private final Texture settings;
-    private String usernameTyped;
-    private String passwordTyped;
+    private final Texture pinText;
+    private final Texture join;
+    private final Texture back;
+    private final Stage stage;
     private Pixmap cursorColor;
-    private LoginController LoginController;
+    private TextField gamePin;
+    private GameController gameController;
 
-    protected LoginView(ViewManager vm) {
+    protected JoinView(ViewManager vm) {
         super(vm);
+        gameController= new GameController();
         logo = new Texture("logo.png");
-        login = new Texture("login.png");
         playbook = new Texture("playbook.png");
         settings = new Texture("settings.png");
+        pinText = new Texture("join_pin.png");
+        join = new Texture("join.png");
+        back = new Texture("back.png");
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -52,28 +53,15 @@ public class LoginView extends View {
         setCursor(labelStyle);
         textFieldStyle.cursor = new Image(new Texture(cursorColor)).getDrawable();
 
-        setUsernameField(textFieldStyle);
-        stage.addActor(username);
-
-        setPasswordField(textFieldStyle);
-        stage.addActor(password);
+        setPinField(textFieldStyle);
+        stage.addActor(gamePin);
     }
 
-
-    private void setUsernameField(TextField.TextFieldStyle ts) {
-        username = new TextField("", ts);
-        username.setWidth(FlowerPowerGame.WIDTH-80);
-        username.setHeight(37);
-        username.setPosition((float) (FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 240);
-    }
-
-    private void setPasswordField(TextField.TextFieldStyle ts) {
-        password = new TextField("", ts);
-        password.setPasswordMode(true);
-        password.setPasswordCharacter('*');
-        password.setWidth(FlowerPowerGame.WIDTH-80);
-        password.setHeight(37);
-        password.setPosition((float) (FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 140);
+    private void setPinField(TextField.TextFieldStyle ts) {
+        gamePin = new TextField("", ts);
+        gamePin.setWidth(FlowerPowerGame.WIDTH-80);
+        gamePin.setHeight(37);
+        gamePin.setPosition((float) (FlowerPowerGame.WIDTH/2)-(gamePin.getWidth()/2), 230);
     }
 
     private void setCursor(Label.LabelStyle ls) {
@@ -86,25 +74,22 @@ public class LoginView extends View {
 
     @Override
     protected void handleInput() {
-        if(Gdx.input.justTouched()) {
+        if (Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            Rectangle loginBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-(login.getWidth()/2)), 40,
-                    login.getWidth(), login.getHeight());
             float settings_x = FlowerPowerGame.WIDTH-playbook.getWidth()-10;
             Rectangle playbookBounds = new Rectangle(10, 15, playbook.getWidth(), playbook.getHeight());
             Rectangle settingsBounds = new Rectangle(settings_x, 15, settings.getWidth(), settings.getHeight());
-            if (loginBounds.contains(pos.x, pos.y)) {
-                usernameTyped = username.getText();
-                System.out.println("Username typed:");
-                System.out.println(usernameTyped);
-                passwordTyped = password.getText();
-                System.out.println("Password typed:");
-                System.out.println(passwordTyped);
-                //noe form for kontroll på om brukernavn og passord er riktig -> kontrolleren kan gjøre det
-                LoginController = new LoginController(usernameTyped, passwordTyped);
-                //sende videre til MenuView med innlogget bruker
-                vm.set(new MenuView(vm));
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
+            Rectangle joinBounds = new Rectangle((FlowerPowerGame.WIDTH/2-join.getWidth()/2), 100, join.getWidth(), join.getHeight());
+
+            if (joinBounds.contains(pos.x, pos.y)) {
+                // Some way to check pin
+                //vm.set(new GameView(vm));
+                //TODO: sjekk at gamePin.getText() er en int
+                gameController.joinGame(Integer.parseInt(gamePin.getText()));
+                vm.set(new PlaceBedsView(vm));
+                System.out.println("JOIN WAS PRESSED!");
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
@@ -114,14 +99,15 @@ public class LoginView extends View {
                 //vm.set(new SettingsView(vm));
                 System.out.println("Settings pressed");
             }
+            if (backBounds.contains(pos.x, pos.y)) {
+                vm.set(new MenuView(vm));
+            }
         }
-
     }
 
     @Override
     public void update(float dt) {
         handleInput();
-
     }
 
     @Override
@@ -130,22 +116,14 @@ public class LoginView extends View {
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
         sb.draw(logo,36,375);
-        sb.draw(login, (float) ((FlowerPowerGame.WIDTH/2)-(login.getWidth()/2)),40);
         sb.draw(playbook, 10, 15);
         float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
         sb.draw(settings, settings_x, 15);
-        // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
-        // ikke helt skjønt hvorfor enda
-        BitmapFont font = new BitmapFont();
-        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
-        font.getData().setScale((float) 1.3);
-        font.setColor(Color.BLACK);
-        font.draw(sb, "Enter username",80,315);
-        font.draw(sb,"Enter password",80,215);
+        sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
+        sb.draw(pinText, (FlowerPowerGame.WIDTH/2-pinText.getWidth()), 290);
+        sb.draw(join, (FlowerPowerGame.WIDTH/2-join.getWidth()/2), 100);
         sb.end();
         stage.draw();
         stage.act();
     }
-
-
 }
