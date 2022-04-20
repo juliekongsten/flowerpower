@@ -166,8 +166,20 @@ public class RegisterView extends View {
 
                     } catch (Exception e) {
                         //TODO: Check different instances and give feedback accordingly
-                        newEmail = false;
                         System.out.println("In exception");
+
+
+                        if (e.toString().equals("Email already in use")){
+                            newEmail = false;
+                        }
+                        else if(e.toString().equals("Invalid user")){
+                            validEmail = false;
+                        }
+                        else if(e.toString().equals("Weak password")){
+                            strongPassword = false;
+                        }
+
+
                     }
 
                     passwordMatch = true;
