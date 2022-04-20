@@ -20,6 +20,7 @@ import com.mygdx.game.Model.Player;
 import static android.content.ContentValues.TAG;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -173,28 +174,39 @@ public class fireBaseConnector implements FireBaseInterface {
     TODO: Disse burde kanskje være protected?
      */
 
-    //TODO: opprette et game - tenker egt at man skal ta inn player som er current user her
+    /**
+     * createGame gets called when user wants to create a game
+     * The player that created the game, currentUser, gets automatically added
+     * The player is set as ready: false
+     * The player that creates the game gets the first turn
+     * @param GID - get generated in Game in Model, and used as identifier in database
+     */
+    //NOTE: alle stedene det står "player1" skal det heller være en reell bruker
     public void createGame(int GID){
-        //oppretter et nytt spill inni games
-        // TODO: kan fjerne game?
-        // Game game = new Game();
         DatabaseReference gameRef = database.getReference().child("/Games");
-        //gameRef.setValue(game.getGID());
-        // TODO: kan fjerne int GID ettersom den blir sendt som parameter?
-        //int GID = game.getGID();
         DatabaseReference playerRef = gameRef.child(GID+"/Players");
         Map userData = new HashMap();
         userData.put("Username", "player1");
         playerRef.setValue(userData);
         Map readyData = new HashMap();
         readyData.put("player1",false);
-        DatabaseReference readyRef = gameRef.child(GID+"/ready");
+        DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
+        //TODO: fikse så denne ikke overskriver alle de andre
+        /*Map turnData = new HashMap();
+        turnData.put("Turn","player1");
+        DatabaseReference turnRef = gameRef.child(GID+"");
+        turnRef.setValue(turnData);*/
     }
 
 
-    
-    //TODO: bli med i spill
+    /**
+     * joinGame gets called when a player joins a game and writes the gamePIN
+     * The player that joined the game, currentUser, gets automatically added
+     * The player is set as ready: false
+     * @param gameID - same gamePIN as a created game you want to join
+     */
+    //TODO: sjekke at spillet man blir med i eksisterer, og ikke har mer enn to brukere
     public void joinGame(int gameID){
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Players");
@@ -203,24 +215,103 @@ public class fireBaseConnector implements FireBaseInterface {
         playerRef.updateChildren(userData);
         Map readyData = new HashMap();
         readyData.put("player2",false);
-        DatabaseReference readyRef = gameRef.child(gameID+"/ready");
+        DatabaseReference readyRef = gameRef.child(gameID+"/Ready");
         readyRef.updateChildren(readyData);
         //check user logged in - getID
         //check gamepin - if the same, get user into the game
         ready(gameID, "player2");
     }
 
+    /**
+     * Når en bruker har forlatt spillet, ved å trykke exit f.eks, må leave game
+     * @param gamePIN
+     */
+    public void leaveGame(int gamePIN){
+        //må slette spillet fra databasen
+        //må notifisere den andre spilleren før det skjer (skjer ikke her men i en annen klasse)
+
+    }
+
+    /**
+     * ready gets called when a user presses ready to say that the game can start
+     * @param gameID
+     * @param user
+     */
+    //TODO: listen for ready - game starts when both users are ready
+    // om det er stress her kan vi ha en boolean hjelpemetode
+
     public void ready(int gameID, String user){
         //når brukeren har trykket bli klar skal
         //sjekker brukeren (helst current user)
         DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(gameID+"/ready");
+        DatabaseReference playerRef = gameRef.child(gameID+"/Ready");
         Map<String, Object> updates = new HashMap<>();
         updates.put(user, true);
         playerRef.updateChildren(updates);
     }
-    public void turn(int gameID){
+
+
+    /**
+     * When a player makes a move, it updates so its the other players turn
+     * @param gameID
+     */
+    //TODO: listen for turn - kan kun gå videre dersom det er din tur
+    // om det er stress her kan vi ha en boolean hjelpemetode - se under
+    public void setTurnToOtherPlayer(int gameID){
+
+        //bytter verdi til den andre spilleren i turn
+        //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
     }
+
+    /**
+     * Checks if its your turn
+     * Kan evt være en listener som sjekker når turn parameteret blir forandret
+     * @param gameID
+     * @return
+     */
+    public boolean yourTurn(int gameID){
+        //du kan kun gjøre et move dersom det er din tur
+        return false;
+
+    }
+
+    //TODO: spillhåndtering - se forslag til database metoder videre
+    //Disse skal bli brukt for å hente og sette data, all logikk knyttet til de skjer i andre klasser
+    //Tanken er når man prøver å gjøre et move tar man getPlacement fra den andre spilleren og sjekker om det overlapper
+    //sjekker dine egne moves om du har trykket der før, hva det er ved siden av ect.
+
+    /**
+     * Når en spiller gjør et move må det legges inn under spilleren i databasen, under moves
+     * @param gamePIN
+     */
+    public void setMove(int gamePIN){
+
+    }
+
+    /**
+     * Man må kunne hente alle movsene til den andre spilleren
+     * @param gamePIN
+     * @return List (forslag)
+     */
+    public void getMoves(int gamePIN){
+    }
+
+    /**
+     * Man må kunne sette (i en liste feks) hvor man har plassert blomsterbedene
+     * @param gamePIN
+     */
+    public void setPlacements(int gamePIN){
+
+    }
+    /**
+     * Man må kunne hente den andre spilleren sin liste med hvor man har plassert blomsterbedene
+     * @param gamePIN
+     * @return List (forslag)
+     */
+    public void getPlacements(int gamePIN){
+
+    }
+
 
     public FirebaseDatabase getDatabase(){
         return this.database;
