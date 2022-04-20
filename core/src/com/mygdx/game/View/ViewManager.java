@@ -1,11 +1,13 @@
-package com.mygdx.game.Views;
+package com.mygdx.game.View;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Controller.GameController;
 
 import java.util.Stack;
 
 public class ViewManager {
     private Stack<View> views;
+    private GameController controller;
 
     private static final ViewManager viewmanager = new ViewManager();
 
@@ -38,4 +40,15 @@ public class ViewManager {
         views.peek().render(sb);
     }
 
+    /**
+     * Methods for assuring the same controller used in PlaceBedsView and GameView
+     * @param controller
+     */
+    public void setController(GameController controller) {
+        this.controller = controller;
+    }
+
+    public GameController getController(){
+        return this.controller;
+    }
 }
