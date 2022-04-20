@@ -23,7 +23,7 @@ public class JoinView extends View {
     private final Texture pinText;
     private final Texture join;
     private final Texture back;
-    private Stage stage;
+    private final Stage stage;
     private Pixmap cursorColor;
     private TextField gamePin;
 
@@ -83,6 +83,7 @@ public class JoinView extends View {
             if (joinBounds.contains(pos.x, pos.y)) {
                 // Some way to check pin
                 //vm.set(new GameView(vm));
+                vm.set(new PlaceBedsView(vm));
                 System.out.println("JOIN WAS PRESSED!");
             }
             if (playbookBounds.contains(pos.x, pos.y)) {

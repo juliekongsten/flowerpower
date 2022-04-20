@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Views.GameView;
 import com.mygdx.game.Views.StartView;
 import com.mygdx.game.Views.ViewManager;
 
@@ -50,10 +51,6 @@ public class FlowerPowerGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		/*ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();*/
 		vm.render(batch);
 		vm.update(Gdx.graphics.getDeltaTime());
 	}
