@@ -32,7 +32,9 @@ public class LoginView extends View {
     private String passwordTyped;
     private Pixmap cursorColor;
     private LoginController LoginController;
-    private Exception exception;
+
+    boolean validEmail = true;
+    boolean validPassword = true;
 
     protected LoginView(ViewManager vm) {
         super(vm);
@@ -92,6 +94,8 @@ public class LoginView extends View {
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
+            validEmail=true;
+            validPassword=true;
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
             Rectangle loginBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-(login.getWidth()/2)), 40,
@@ -112,9 +116,11 @@ public class LoginView extends View {
                 }
                 catch (Exception e) {
                     if (e.toString().equals("Invalid user")){
+                        validEmail=false;
 
                     }
                     else if(e.toString().equals("Invalid password")){
+                        validPassword=false;
 
                 }
 
@@ -151,6 +157,12 @@ public class LoginView extends View {
         // ikke helt skjønt hvorfor enda
         sb.draw(enter_username, 60,290);
         sb.draw(enter_password,60,190);
+        if (!validEmail){
+            //TODO: Draw invalid email text
+        } else if (!validPassword){
+            //TODO: draw invalid password text
+        }
+
         sb.end();
         stage.draw();
         stage.act();
