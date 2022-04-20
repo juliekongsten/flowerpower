@@ -197,7 +197,6 @@ public class fireBaseConnector implements FireBaseInterface {
     //TODO: bli med i spill
     public void joinGame(int gameID){
         DatabaseReference gameRef = database.getReference().child("/Games");
-        String key = database.getReference().child(gameID+"/Players").push().getKey();
         DatabaseReference playerRef = gameRef.child(gameID+"/Players");
         Map userData = new HashMap();
         userData.put("Username2", "player2");
@@ -208,12 +207,19 @@ public class fireBaseConnector implements FireBaseInterface {
         readyRef.updateChildren(readyData);
         //check user logged in - getID
         //check gamepin - if the same, get user into the game
+        ready(gameID, "player2");
     }
 
-    public void ready(int gameID){
+    public void ready(int gameID, String user){
         //når brukeren har trykket bli klar skal
-        DatabaseReference gameRef = database.getReference().child("/Games"+gameID+"/ready");
-
+        //sjekker brukeren (helst current user)
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gameID+"/ready");
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(user, true);
+        playerRef.updateChildren(updates);
+    }
+    public void turn(int gameID){
     }
 
     public FirebaseDatabase getDatabase(){
