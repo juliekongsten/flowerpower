@@ -225,7 +225,7 @@ public class fireBaseConnector implements FireBaseInterface {
         readyRef.updateChildren(readyData);
         //check user logged in - getID
         //check gamepin - if the same, get user into the game
-        ready(gameID, "player2");
+        //ready(gameID,displayName[0]);
     }
 
     /**
@@ -234,6 +234,7 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     public void leaveGame(int gamePIN){
         //må slette spillet fra databasen
+
         //må notifisere den andre spilleren før det skjer (skjer ikke her men i en annen klasse)
 
     }
