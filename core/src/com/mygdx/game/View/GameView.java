@@ -11,6 +11,7 @@ import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Square;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameView extends View{
@@ -61,6 +62,7 @@ public class GameView extends View{
     private List<Square> myBoard;
     private List<Bed> myBeds;
     private List<Bed> opBeds;
+    private List<Square> already_pressed;
 
 
 
@@ -76,6 +78,7 @@ public class GameView extends View{
         controller.receiveOpBeds();
         opBeds = controller.getOpBeds();
         opBoard = controller.getOpBoard();
+        already_pressed = new ArrayList<>();
 
     }
 
@@ -115,10 +118,10 @@ public class GameView extends View{
             //squares and act accordingly
             if (!waiting){
                 for (Square square : opBoard){
-                    if (square.getBounds().contains(pos.x,pos.y)){
+                    if (square.getBounds().contains(pos.x,pos.y) && !already_pressed.contains(square)){
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
-
                         boolean flower = controller.hitSquare(square);
+                        already_pressed.add(square);
                         if (flower){
                             hit = true;
                             miss = false;
@@ -134,6 +137,7 @@ public class GameView extends View{
                         }
                         //TODO: Give feedback to controller so that the other player also is notified (or implement squarelistener in some way)
                     }
+
                 }
 
             }
