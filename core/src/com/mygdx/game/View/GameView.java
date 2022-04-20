@@ -1,4 +1,4 @@
-package com.mygdx.game.Views;
+package com.mygdx.game.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,10 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.Controllers.GameController;
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
-import com.mygdx.game.Models.Bed;
-import com.mygdx.game.Models.Square;
+import com.mygdx.game.Model.Bed;
+import com.mygdx.game.Model.Square;
 
 import java.util.List;
 

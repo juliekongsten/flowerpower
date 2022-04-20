@@ -1,7 +1,7 @@
-package com.mygdx.game.Views;
+package com.mygdx.game.View;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.Controllers.GameController;
+import com.mygdx.game.Controller.GameController;
 
 import java.util.Stack;
 
