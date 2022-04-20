@@ -27,6 +27,9 @@ public class RegisterView extends View {
     private final Texture enter_password;
     private final Texture password_again;
     private final Texture passwordMessage;
+    private final Texture weakPasswordMessage;
+    private final Texture invalidEmailMessage;
+    private final Texture usernameTakenMessage;
     private Stage stage;
     private TextField username;
     private TextField password;
@@ -41,6 +44,9 @@ public class RegisterView extends View {
 
 
     private boolean passwordMatch = true;
+    private boolean strongPassword = true;
+    private boolean validEmail = true;
+    private boolean newEmail = true;
 
 
 
@@ -55,6 +61,9 @@ public class RegisterView extends View {
         enter_password = new Texture("enter_password.png");
         password_again = new Texture("password_again.png");
         passwordMessage = new Texture("passwordMatch.png");
+        weakPasswordMessage = new Texture("weakPassword.png");
+        invalidEmailMessage = new Texture("invalidEmail.png");
+        usernameTakenMessage = new Texture("usernameTaken.png");
 
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
@@ -126,6 +135,10 @@ public class RegisterView extends View {
             Rectangle settingsBounds = new Rectangle(settings_x, 15, settings.getWidth(), settings.getHeight());
             if (registerBounds.contains(pos.x, pos.y)) {
                 // Sende inn til databasen ny bruker
+                passwordMatch=true;
+                validEmail=true;
+                strongPassword=true;
+                newEmail=true;
 
                 usernameTyped = username.getText();
                 System.out.println("Username typed:");
@@ -141,14 +154,16 @@ public class RegisterView extends View {
 
 
                 if (checkPassword(passwordTyped, passwordCheckTyped)){
-                    new RegisterController(usernameTyped, passwordTyped);
+
                     // Sende videre til MenuView med innlogget bruker
                     // sendes videre for å sjekke med db
                     try {
                         //call registercontroller and try to make user
+                        new RegisterController(usernameTyped, passwordTyped);
 
                     } catch (Exception e) {
                         //TODO: Check different instances and give feedback accordingly
+                        newEmail = false;
                     }
 
                     passwordMatch = true;
@@ -175,7 +190,6 @@ public class RegisterView extends View {
         }
         }
 
-        //TODO: ha med noen beskjed at de ikke matcher
     public boolean checkPassword(String password, String passwordCheckTyped){
 
         if (password.equals(passwordCheckTyped)){
@@ -209,6 +223,12 @@ public class RegisterView extends View {
         sb.draw(password_again,60,200);
         if (!passwordMatch){
             sb.draw(passwordMessage, 60,130);
+        } else if (!newEmail) {
+            sb.draw(usernameTakenMessage, 60,130);
+        } else if (!validEmail){
+            sb.draw(invalidEmailMessage, 60, 130);
+        } else if (!strongPassword){
+            sb.draw(weakPasswordMessage, 40,130);
         }
 
         sb.end();
