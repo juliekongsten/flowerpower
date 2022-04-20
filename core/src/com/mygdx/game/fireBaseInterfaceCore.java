@@ -38,6 +38,10 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     @Override
     public Exception getException() { return null; }
 
+    @Override
+    public boolean getReady() {
+        return false;
+    }
 
 
     /**@Override

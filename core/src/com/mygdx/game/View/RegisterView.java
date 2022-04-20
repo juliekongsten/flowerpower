@@ -47,6 +47,7 @@ public class RegisterView extends View {
     private boolean strongPassword = true;
     private boolean validEmail = true;
     private boolean newEmail = true;
+    private boolean otherMistake = false;
 
 
 
@@ -139,6 +140,7 @@ public class RegisterView extends View {
                 validEmail=true;
                 strongPassword=true;
                 newEmail=true;
+                otherMistake=false;
 
                 usernameTyped = username.getText();
                 System.out.println("Username typed:");
@@ -160,31 +162,23 @@ public class RegisterView extends View {
                     // sendes videre for å sjekke med db
                     try {
                         //call registercontroller and try to make user
-                        System.out.println("Making controller");
                         RegisterController controller = new RegisterController(usernameTyped, passwordTyped);
                         vm.set(new MenuView(vm));
 
                     } catch (Exception e) {
-                        //TODO: Check different instances and give feedback accordingly
-                        System.out.println("In exception");
-                        System.out.println(e);
-                        System.out.println(e.getMessage());
-
 
                         if (e.toString().equals("Email already in use")){
                             newEmail = false;
                         }
-                        else if(e.toString().equals("Invalid user")){
+                        else if(e.toString().equals("Invalid email")){
                             validEmail = false;
-                            //I/System.out: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String com.google.firebase.auth.FirebaseUser.getEmail()' on a null object reference
-                            //Attempt to invoke virtual method 'java.lang.String com.google.firebase.auth.FirebaseUser.getEmail()' on a null object reference
                         }
                         else if(e.toString().equals("Weak password")){
                             strongPassword = false;
-                            //I/System.out: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String com.google.firebase.auth.FirebaseUser.getEmail()' on a null object re
                         }
-
-
+                        else {
+                            otherMistake=true;
+                        }
                     }
 
                     passwordMatch = true;
@@ -243,13 +237,16 @@ public class RegisterView extends View {
         sb.draw(enter_password,60,275);
         sb.draw(password_again,60,200);
         if (!passwordMatch){
-            sb.draw(passwordMessage, 60,130);
+            sb.draw(passwordMessage, FlowerPowerGame.WIDTH/2-passwordMessage.getWidth()/2,130);
         } else if (!newEmail) {
-            sb.draw(usernameTakenMessage, 60,130);
+            sb.draw(usernameTakenMessage, FlowerPowerGame.WIDTH/2-usernameTakenMessage.getWidth()/2,130);
         } else if (!validEmail){
-            sb.draw(invalidEmailMessage, 60, 130);
+            sb.draw(invalidEmailMessage, FlowerPowerGame.WIDTH/2-invalidEmailMessage.getWidth()/2, 130);
         } else if (!strongPassword){
-            sb.draw(weakPasswordMessage, 40,130);
+            sb.draw(weakPasswordMessage, FlowerPowerGame.WIDTH/2-weakPasswordMessage.getWidth()/2,130);
+        } else if (otherMistake){
+            //Draw message
+            //TODO: draw message
         }
 
         sb.end();

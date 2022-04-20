@@ -17,5 +17,7 @@ public interface FireBaseInterface {
 
     Exception getException();
 
+    boolean getReady();
+
     //void writeUserDataToDb(Player player);
 }

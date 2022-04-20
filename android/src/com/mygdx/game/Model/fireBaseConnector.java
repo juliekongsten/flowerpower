@@ -39,6 +39,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private DatabaseReference myRef;
      private FirebaseAuth mAuth;
      private Exception exception = null;
+     private boolean ready = false;
 
 
     /**
@@ -102,11 +103,10 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     public void newPlayer(String username, String password) {
         this.exception = null;
-
+        ready = false;
 
         mAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                System.out.println("Inside task.isSuccessfull");
                 // Sign in success, the user is now both registered and signed in
                 Log.d(TAG, "createUserWithEmail:success");
                 //TODO: maybe send the user back to the player class to get id? otherwise remove
@@ -122,19 +122,16 @@ public class fireBaseConnector implements FireBaseInterface {
             else if (task.getException() instanceof FirebaseAuthUserCollisionException)
             {
                 //If email already registered.
-                System.out.println("in fbic: Email in use");
                 this.exception = new CustomException("Email already in use");
-
-            }else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                //If email are in incorret  format
-                this.exception = new CustomException("Invalid email");
-                System.out.println("in fbic: Invalid");
 
             }else if (task.getException() instanceof FirebaseAuthWeakPasswordException) {
                 //if password not 'stronger'
                 this.exception = new CustomException("Weak password");
-                this.exception = new Exception("Weak password");
-                System.out.println("in fbic: Email in use");
+            }
+            else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                //If email are in incorret  format
+                this.exception = new CustomException("Invalid email");
+
             }
             else {
                 // Sign in failed
@@ -142,9 +139,10 @@ public class fireBaseConnector implements FireBaseInterface {
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
 
             }
+            ready = true;
+
         });
-        System.out.println("Finished new player in fbic");
-        System.out.println("Exception: "+exception);
+
     }
 
     /**
@@ -198,6 +196,10 @@ public class fireBaseConnector implements FireBaseInterface {
     }
     public Exception getException(){
         return this.exception;
+    }
+
+    public boolean getReady(){
+        return this.ready;
     }
 
 

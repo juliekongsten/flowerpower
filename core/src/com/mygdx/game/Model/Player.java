@@ -28,8 +28,14 @@ public class Player {
     public void registerPlayer(String username, String password) throws Exception {
         this._FBIC= FlowerPowerGame.getFBIC();
         _FBIC.newPlayer(username, password);
-        wait(10);
-        System.out.println("_FBIC.exception: "+_FBIC.getException());
+        boolean ready = this._FBIC.getReady();
+        /*Waiting for newplayer-task in firebaseconnector to be completed as we
+        are interested in the outcome there before moving on
+         */
+        while (!ready){
+            ready = this._FBIC.getReady();
+        }
+
         if (_FBIC.getException() != null){
             System.out.println("Could not create user, wrong input");
             throw _FBIC.getException();

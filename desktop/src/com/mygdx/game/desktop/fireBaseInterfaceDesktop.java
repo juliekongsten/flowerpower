@@ -34,7 +34,15 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
         return null;
     }
 
+    @Override
+    public Exception getException() {
+        return null;
+    }
 
+    @Override
+    public boolean getReady() {
+        return false;
+    }
 
 
 }
