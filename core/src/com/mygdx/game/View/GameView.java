@@ -125,14 +125,14 @@ public class GameView extends View{
                         if (flower){
                             hit = true;
                             miss = false;
-                            hit_x = pos.x;
-                            hit_y = pos.y;
+                            hit_x = square.getBounds().x + 30;
+                            hit_y = square.getBounds().y;
 
                         } else {
                             hit = false;
                             miss = true;
-                            miss_x = pos.x;
-                            miss_y = pos.y;
+                            miss_x = square.getBounds().x + 30;
+                            miss_y = square.getBounds().y;
 
                         }
                         //TODO: Give feedback to controller so that the other player also is notified (or implement squarelistener in some way)
