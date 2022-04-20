@@ -189,17 +189,18 @@ public class fireBaseConnector implements FireBaseInterface {
         readyRef.setValue(readyData);
     }
 
-
     
-    //TODO: bli med i spill
+    //TODO: redudant kode
     public void joinGame(int gameID){
         DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(gameID+"/Players");
-        Map userData = new HashMap();
-        userData.put("Username2", "player2");
-        playerRef.updateChildren(userData);
+        DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        Map uidData = new HashMap();
+        uidData.put("Username", this.getUsername());
+        userRef.setValue(uidData);
         Map readyData = new HashMap();
-        readyData.put("player2",false);
+        String displayName[] = this.getUsername().split("@");
+        readyData.put(displayName[0],false);
         DatabaseReference readyRef = gameRef.child(gameID+"/ready");
         readyRef.updateChildren(readyData);
         //check user logged in - getID
@@ -218,6 +219,7 @@ public class fireBaseConnector implements FireBaseInterface {
     }
     public void turn(int gameID){
     }
+
 
     public FirebaseDatabase getDatabase(){
         return this.database;
