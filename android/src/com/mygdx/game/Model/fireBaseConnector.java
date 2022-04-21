@@ -40,8 +40,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private DatabaseReference myRef;
      private FirebaseAuth mAuth;
      private Exception exception = null;
-     private boolean isDone = false;
-
+     private boolean isDone = false;//If the connector is done with task and ready for other code to continue
 
     /**
      * Constructor that gets an instance of the database and authorization
@@ -154,7 +153,7 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     public void signIn(String username, String password){
         this.exception = null;
-        this.ready = false;
+        this.isDone = false;
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -174,7 +173,7 @@ public class fireBaseConnector implements FireBaseInterface {
                     else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());}
-                    ready = true;
+                    isDone = true;
                 });
 
     }
@@ -206,9 +205,7 @@ public class fireBaseConnector implements FireBaseInterface {
     public boolean getIsDone(){
         return this.isDone;
     }
-    /*
-    TODO: Disse burde kanskje være protected?
-     */
+
 
     /**
      * createGame gets called when user wants to create a game
