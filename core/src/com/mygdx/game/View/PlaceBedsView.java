@@ -30,6 +30,7 @@ public class PlaceBedsView extends View{
     private final Texture overlapping_text;
     private final Texture replace;
     private final Texture beds_outside_board;
+    private final Texture back;
 
     private GameController controller;
 
@@ -64,6 +65,7 @@ public class PlaceBedsView extends View{
         overlapping_text = new Texture("overlapping_text.png");
         replace = new Texture("replace.png");
         beds_outside_board = new Texture("beds_outside_board.png");
+        back = new Texture("back.png");
 
 
         findStaticCoordinates();
@@ -122,6 +124,10 @@ public class PlaceBedsView extends View{
                 System.out.println("REPLACE TOUCHED");
                 overlappingBeds = false;
                 bedsOutsideBoard = false;
+            }
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
+            if (backBounds.contains(pos.x, pos.y)) {
+                vm.set(new StartView(vm));
             }
         }
 
@@ -248,9 +254,9 @@ public class PlaceBedsView extends View{
         //Draw text "Your beds:"
         sb.draw(your_beds,pool_x+10,pool_y+pool.getHeight()-20);
 
-
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
+        sb.draw(back,10,FlowerPowerGame.HEIGHT-20);
 
         //Draw the squares
         drawSquares(sb);
