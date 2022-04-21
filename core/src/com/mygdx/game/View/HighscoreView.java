@@ -14,17 +14,22 @@ import com.mygdx.game.Model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class HighscoreView extends View{
 
     private final Texture logo;
     private final Texture back;
     private final Texture highscore;
+    private final Texture email;
+    private final Texture score;
 
     protected HighscoreView(ViewManager vm) {
         super(vm);
         logo = new Texture("logo.png");
         back = new Texture("back.png");
         highscore = new Texture("Highscorelist.png");
+        email = new Texture("Email.png");
+        score = new Texture("Score.png");
     }
 
     @Override
@@ -57,9 +62,9 @@ public class HighscoreView extends View{
 
         BitmapFont font = new BitmapFont();
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
-        font.getData().setScale((float) 1.3);
+        font.getData().setScale((float) 1.25);
         font.setColor(Color.BLACK);
-        float y = 270;
+        float y = 255;
         for (Player player: players) {
             float username_x = FlowerPowerGame.WIDTH/2-highscore.getWidth()/2-40 ;
             float score_x = FlowerPowerGame.WIDTH/2+50;
@@ -79,6 +84,8 @@ public class HighscoreView extends View{
         sb.draw(logo,36,405);
         sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
         sb.draw(highscore,FlowerPowerGame.WIDTH/2-highscore.getWidth()/2,345);
+        sb.draw(email, FlowerPowerGame.WIDTH/2-highscore.getWidth()/2-40,315);
+        sb.draw(score,FlowerPowerGame.WIDTH/2+50,315);
         printHighscoreList(sb);
         sb.end();
 
