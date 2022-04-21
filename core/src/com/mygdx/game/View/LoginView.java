@@ -34,6 +34,9 @@ public class LoginView extends View {
     private Pixmap cursorColor;
     private LoginController LoginController;
 
+    boolean validEmail = true;
+    boolean validPassword = true;
+
     protected LoginView(ViewManager vm) {
         super(vm);
         logo = new Texture("logo.png");
@@ -93,6 +96,8 @@ public class LoginView extends View {
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
+            validEmail=true;
+            validPassword=true;
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
             Rectangle loginBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-(login.getWidth()/2)), 40,
@@ -107,10 +112,22 @@ public class LoginView extends View {
                 passwordTyped = password.getText();
                 System.out.println("Password typed:");
                 System.out.println(passwordTyped);
-                //noe form for kontroll på om brukernavn og passord er riktig -> kontrolleren kan gjøre det
-                LoginController = new LoginController(usernameTyped, passwordTyped);
-                //sende videre til MenuView med innlogget bruker
-                vm.set(new MenuView(vm));
+
+                try {
+                    LoginController = new LoginController(usernameTyped, passwordTyped);
+                    vm.set(new MenuView(vm));
+                }
+                catch (Exception e) {
+                    //TODO: Write feedback to user
+                    if (e.toString().equals("Invalid user")){
+                        validEmail=false;
+
+                    }
+                    else if(e.toString().equals("Invalid password")){
+                        validPassword=false;
+
+                }
+
             }
             Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
             if (backBounds.contains(pos.x, pos.y)) {
@@ -126,7 +143,7 @@ public class LoginView extends View {
             }
         }
 
-    }
+    }}
 
     @Override
     public void update(float dt) {
@@ -148,6 +165,13 @@ public class LoginView extends View {
         // ikke helt skjønt hvorfor enda
         sb.draw(enter_username, 60,290);
         sb.draw(enter_password,60,190);
+        if (!validEmail){
+            //TODO: Draw invalid email text
+        } else if (!validPassword){
+            //TODO: draw invalid password text
+        }
+
+
         sb.draw(back,10,FlowerPowerGame.HEIGHT-20);
         sb.end();
         stage.draw();

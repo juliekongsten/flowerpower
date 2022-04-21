@@ -35,6 +35,23 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
         return null;
     }
 
+    @Override
+    public Exception getException() { return null; }
+
+    @Override
+    public boolean getIsDone() {
+        return false;
+    }
+    @Override
+    public void setPlayerReady(int GID){}
+
+
+    @Override
+    public void createGame(int GID){}
+
+    @Override
+    public void joinGame(int GID){}
+
     /**@Override
     public void writeUserDataToDb(Player player) {
 
