@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class MenuView extends View {
@@ -15,9 +16,13 @@ public class MenuView extends View {
     private final Texture settings;
     private final Texture join;
     private final Texture create;
+    private GameController gameController;
+
+
 
     protected MenuView(ViewManager vm) {
         super(vm);
+        this.gameController = new GameController();
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
         settings = new Texture("settings.png");
@@ -38,11 +43,13 @@ public class MenuView extends View {
                     create.getWidth(), create.getHeight());
             if (joinBounds.contains(pos.x, pos.y)) {
                 System.out.println("JOIN GAME PRESSED!");
-                vm.set(new JoinView(vm));
+                vm.set(new JoinView(vm, gameController));
             }
             if (createBounds.contains(pos.x, pos.y)) {
                 System.out.println("CREATE GAME PRESSED!");
-                vm.set(new CreateView(vm));
+                gameController.createGame();
+                String gamePin = Integer.toString(gameController.getGID());
+                vm.set(new CreateView(vm, gamePin, gameController));
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));

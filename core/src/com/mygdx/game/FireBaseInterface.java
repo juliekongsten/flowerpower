@@ -15,5 +15,13 @@ public interface FireBaseInterface {
 
     String getUID();
 
+    Exception getException();
+
+    boolean getIsDone();
+    void setPlayerReady(int GID);
+
     //void writeUserDataToDb(Player player);
+    void createGame(int GID);
+    void joinGame(int GID);
+
 }

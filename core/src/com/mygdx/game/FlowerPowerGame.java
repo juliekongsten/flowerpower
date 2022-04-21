@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Model.Player;
 import com.mygdx.game.View.StartView;
 import com.mygdx.game.View.ViewManager;
 
@@ -45,6 +46,8 @@ public class FlowerPowerGame extends ApplicationAdapter {
 		_FBIC.writeToDb("message","jasså!");
 		_FBIC.readFromDb();
 		//_FBIC.signIn("testuser2@gmail.com", "123456");
+		//_FBIC.createGame(8888);
+		//_FBIC.joinGame(7245);
 	}
 
 
