@@ -348,7 +348,8 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     //TODO: legge inn før join game så man sjekker at listen er allerede full
     public List<String> getPlayers(int gameID){
-        List<String> players = new ArrayList<String>();
+        isDone=false;
+        players = new ArrayList<>();
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
         playerRef.addValueEventListener(new ValueEventListener() {
@@ -358,15 +359,20 @@ public class fireBaseConnector implements FireBaseInterface {
                 System.out.println(map);
                 players.addAll(map.keySet());
                 System.out.println("key: " + players);
+                isDone=true;
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
             }
         });
         //mDatabase.child("users").child(userId).get();
         //bytter verdi til den andre spilleren i turn
         //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
+        while(!isDone){
+            //waiting
+        }
         return players;
     }
     public void setTurnToOtherPlayer(int gameID){

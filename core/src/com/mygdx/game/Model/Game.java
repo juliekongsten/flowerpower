@@ -37,7 +37,7 @@ public class Game {
         System.out.println(existingGID);
         System.out.println(gameIDs.contains(i));
         boolean existing = false;
-        for (Integer id : gameIDs){
+        /*for (Integer id : gameIDs){
             if (id==existingGID){
                 List<String> players =_FBIC.getPlayers(existingGID);
                 existing = true;
@@ -53,19 +53,22 @@ public class Game {
         }
         if (!existing){
             throw new IllegalArgumentException("GameID does not exsist");
-        }
-        /*if (gameIDs.contains(i)){
+        }*/
+        if (gameIDs.contains(i)){
             List<String> players =_FBIC.getPlayers(existingGID);
             if (players.size()>2){
                 throw new IllegalArgumentException("Too many players in game");
             }
+            else if (players.contains(_FBIC.getUID())){
+                throw new IllegalArgumentException("Girly u already in");
+            }
             else{
                 _FBIC.joinGame(GID);
             }
-        }*/
-        /*else{
+        }
+        else{
             throw new IllegalArgumentException("GameID does not exsist");
-        }*/
+        }
         // Default constructor required for calls to DataSnapshot.getValue(Game.class)
     }
 
@@ -95,6 +98,7 @@ public class Game {
             return generateGameID();
         }
     }
+
     public int getGID(){
         return this.GID;
     }
