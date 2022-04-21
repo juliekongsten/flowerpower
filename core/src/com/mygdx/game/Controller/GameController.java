@@ -219,6 +219,22 @@ public class GameController {
         return gameOver;
     }
 
+    /**
+     * Returns if the opponent has exited, (pressed on "go back to menu") in placebedsview,
+     * before the game has started
+     * @return
+     */
+    public boolean getOpExited() {
+        //TODO get this information from DB
+        return false;
+    }
 
-
+    /**
+     * Returns if the opponent has forfeitet, (pressed on "go back to menu") in GameView
+     * @return
+     */
+    public boolean getOpForfeitet() {
+        //TODO get this information from DB
+        return false;
+    }
 }

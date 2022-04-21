@@ -28,6 +28,7 @@ public class LoginView extends View {
     private final Texture settings;
     private final Texture enter_username;
     private final Texture enter_password;
+    private final Texture back;
     private String usernameTyped;
     private String passwordTyped;
     private Pixmap cursorColor;
@@ -41,6 +42,7 @@ public class LoginView extends View {
         settings = new Texture("settings.png");
         enter_username = new Texture("enter_username.png");
         enter_password = new Texture("enter_password.png");
+        back = new Texture("back.png");
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -110,6 +112,10 @@ public class LoginView extends View {
                 //sende videre til MenuView med innlogget bruker
                 vm.set(new MenuView(vm));
             }
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
+            if (backBounds.contains(pos.x, pos.y)) {
+                vm.set(new StartView(vm));
+            }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
                 System.out.println("Playbook pressed");
@@ -142,6 +148,7 @@ public class LoginView extends View {
         // ikke helt skjønt hvorfor enda
         sb.draw(enter_username, 60,290);
         sb.draw(enter_password,60,190);
+        sb.draw(back,10,FlowerPowerGame.HEIGHT-20);
         sb.end();
         stage.draw();
         stage.act();
