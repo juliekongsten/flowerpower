@@ -31,7 +31,7 @@ public class PlaceBedsView extends View{
     private final Texture replace;
     private final Texture beds_outside_board;
 
-    private GameController controller;
+    private GameController gameController;
 
     private float ready_x;
     private final float ready_y = -10;
@@ -47,9 +47,9 @@ public class PlaceBedsView extends View{
     private boolean bedsOutsideBoard = false;
 
 
-    public PlaceBedsView(ViewManager vm){
+    public PlaceBedsView(ViewManager vm, GameController gameController){
         super(vm);
-        controller = new GameController();
+        this.gameController = gameController;
         //Prepares textures for parts of the view
         pool = new Texture("bedpool.png");
         ready = new Texture("Button.png");
@@ -67,9 +67,9 @@ public class PlaceBedsView extends View{
 
 
         findStaticCoordinates();
-        opBoard = controller.getOpBoard();
-        myBoard = controller.getMyBoard();
-        beds = controller.getMyBeds();
+        opBoard = gameController.getOpBoard();
+        myBoard = gameController.getMyBoard();
+        beds = gameController.getMyBeds();
 
     }
 
@@ -108,13 +108,12 @@ public class PlaceBedsView extends View{
                     }
                 }
 
-                controller.setMyBeds(beds);
-
+                gameController.setMyBeds(beds);
                 overlappingBeds = checkOverlappingBeds();
                 if(!overlappingBeds & !bedsOutsideBoard){
                     //Set isReady to true so render will act accordingly
                     isReady = true;
-                    controller.setMyReady();
+                    gameController.setPlayerReady();
                 }}
             //Checks if replace-button is pressed
             Rectangle replaceBounds = new Rectangle(FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150,replace.getWidth(),replace.getHeight());
@@ -215,12 +214,12 @@ public class PlaceBedsView extends View{
      * @param sb
      */
     private void checkOtherPlayer(SpriteBatch sb){
-        boolean opReady = controller.getOpReady();
+        boolean opReady = gameController.getOpReady();
 
         if (opReady){
-            controller.sendMyBeds(beds);
-            vm.setController(controller);
-            vm.set(new GameView(vm));
+            gameController.sendMyBeds(beds);
+            vm.setController(gameController);
+            vm.set(new GameView(vm, gameController));
         } else{
             //Draw waiting-graphics
             sb.draw(waiting_black,0,0);

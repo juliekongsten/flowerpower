@@ -297,6 +297,20 @@ public class fireBaseConnector implements FireBaseInterface {
         playerRef.updateChildren(updates);
     }
 
+    @Override
+    public void setPlayerReady(int GID){
+        System.out.println("Kommer hit");
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(GID+"/Ready");
+        Map<String, Object> updates = new HashMap<>();
+        String[] displayName = this.getUsername().split("@");
+        updates.put(displayName[0], true);
+        playerRef.updateChildren(updates);
+
+
+
+    }
+
 
     /**
      * When a player makes a move, it updates so its the other players turn
