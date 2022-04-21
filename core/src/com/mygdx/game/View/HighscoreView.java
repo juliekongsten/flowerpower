@@ -12,11 +12,13 @@ public class HighscoreView extends View{
 
     private final Texture logo;
     private final Texture back;
+    private final Texture highscore;
 
     protected HighscoreView(ViewManager vm) {
         super(vm);
         logo = new Texture("logo.png");
         back = new Texture("back.png");
+        highscore = new Texture("Highscorelist.png");
     }
 
     @Override
@@ -41,8 +43,9 @@ public class HighscoreView extends View{
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
-        sb.draw(logo,36,375);
+        sb.draw(logo,36,405);
         sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
+        sb.draw(highscore,FlowerPowerGame.WIDTH/2-highscore.getWidth()/2,345);
         sb.end();
 
     }
