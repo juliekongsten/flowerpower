@@ -21,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import static android.content.ContentValues.TAG;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -215,24 +217,34 @@ public class fireBaseConnector implements FireBaseInterface {
     public void storeBeds(List<Bed> beds, int GID) {
         System.out.println("gets called");
         DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(GID+"/Players/");
+        DatabaseReference playerRef = gameRef.child(GID + "/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
         DatabaseReference bedsRef = userRef.child("/Beds");
-
-        for (int i = 0; i<5 ; i++){
-            bedsRef.setValue(beds.get(i));
+        for (int i=0; i<5; i++) {
+            Bed bed = beds.get(i);
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("pos_x", bed.getPos_x());
+            result.put("pos_y", bed.getPos_y());
+            result.put("size", bed.getSize());
+            result.put("horizontal", bed.isHorizontal());
+            result.put("texturePath", bed.getTexturePath());
+            Map<String, Object> postValues = result;
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put("/bed" + (i+1), postValues);
+            bedsRef.updateChildren(childUpdates);
         }
-
 
     }
 
-    /**
-     * createGame gets called when user wants to create a game
-     * The player that created the game, currentUser, gets automatically added
-     * The player is set as ready: false
-     * The player that creates the game gets the first turn
-     * @param GID - get generated in Game in Model, and used as identifier in database
-     */
+
+
+        /**
+         * createGame gets called when user wants to create a game
+         * The player that created the game, currentUser, gets automatically added
+         * The player is set as ready: false
+         * The player that creates the game gets the first turn
+         * @param GID - get generated in Game in Model, and used as identifier in database
+         */
     //NOTE: alle stedene det står "player1" skal det heller være en reell bruker
     public void createGame(int GID){
 
