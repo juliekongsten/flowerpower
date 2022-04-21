@@ -281,21 +281,9 @@ public class fireBaseConnector implements FireBaseInterface {
 
     /**
      * ready gets called when a user presses ready to say that the game can start
-     * @param gameID
-     * @param user
+     * @param GID the gamePin ID
      */
-    //TODO: listen for ready - game starts when both users are ready
-    // om det er stress her kan vi ha en boolean hjelpemetode
 
-    public void ready(int gameID, String user){
-        //når brukeren har trykket bli klar skal
-        //sjekker brukeren (helst current user)
-        DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(gameID+"/Ready");
-        Map<String, Object> updates = new HashMap<>();
-        updates.put(user, true);
-        playerRef.updateChildren(updates);
-    }
 
     @Override
     public void setPlayerReady(int GID){
