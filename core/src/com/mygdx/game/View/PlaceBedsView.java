@@ -31,6 +31,8 @@ public class PlaceBedsView extends View{
     private final Texture replace;
     private final Texture beds_outside_board;
     private final Texture back;
+    private final Texture opponent_exited_text;
+    private final Texture go_to_menu;
 
     private GameController controller;
 
@@ -46,6 +48,7 @@ public class PlaceBedsView extends View{
     private List<Bed> beds;
     private boolean overlappingBeds = false;
     private boolean bedsOutsideBoard = false;
+    private boolean opponent_exited = false; //If the opponent exited the game before it started.
 
 
     public PlaceBedsView(ViewManager vm){
@@ -66,6 +69,8 @@ public class PlaceBedsView extends View{
         replace = new Texture("replace.png");
         beds_outside_board = new Texture("beds_outside_board.png");
         back = new Texture("back.png");
+        opponent_exited_text = new Texture("opponent_exited.png");
+        go_to_menu = new Texture("go_to_menu.png");
 
 
         findStaticCoordinates();
@@ -127,7 +132,12 @@ public class PlaceBedsView extends View{
             }
             Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
             if (backBounds.contains(pos.x, pos.y)) {
-                vm.set(new StartView(vm));
+                //TODO Update that the player exited the game DB
+                vm.set(new MenuView(vm));
+            }
+            Rectangle go_to_menuBounds = new Rectangle(FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2,FlowerPowerGame.HEIGHT/2-120,go_to_menu.getWidth(),go_to_menu.getHeight());
+            if (go_to_menuBounds.contains(pos.x,pos.y)){
+                vm.set(new MenuView(vm));
             }
         }
 
@@ -274,6 +284,13 @@ public class PlaceBedsView extends View{
             sb.draw(waiting_black,0,0);
             sb.draw(overlapping_text,FlowerPowerGame.WIDTH/2-overlapping_text.getWidth()/2,FlowerPowerGame.HEIGHT-50);
             sb.draw(replace,FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150);
+        }
+
+        opponent_exited = controller.getOpExited();
+        if(opponent_exited){
+            sb.draw(waiting_black,0,0);
+            sb.draw(opponent_exited_text,FlowerPowerGame.WIDTH/2-opponent_exited_text.getWidth()/2,FlowerPowerGame.HEIGHT); //vil ikke tegnes
+            sb.draw(go_to_menu,FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2,FlowerPowerGame.HEIGHT/2-120);
         }
 
         if(isReady){
