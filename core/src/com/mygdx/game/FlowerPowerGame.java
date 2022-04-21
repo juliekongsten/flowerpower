@@ -42,9 +42,10 @@ public class FlowerPowerGame extends ApplicationAdapter {
 
 		//calls methods in fireBaseConnector to test them out
 		//TODO: remove
-		_FBIC.writeToDb("message","jasså!");
-		_FBIC.readFromDb();
-		//_FBIC.signIn("testuser2@gmail.com", "123456");
+		/*_FBIC.writeToDb("message","jasså!");
+		_FBIC.readFromDb();*/
+		//_FBIC.signIn("signout@gmail.com", "test123");
+		//_FBIC.signOut();
 	}
 
 

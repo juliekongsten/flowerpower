@@ -34,7 +34,10 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
         return null;
     }
 
+    @Override
+    public void signOut() {
 
+    }
 
 
 }

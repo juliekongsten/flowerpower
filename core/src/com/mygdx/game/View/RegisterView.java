@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Controller.GameController;
+import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.Controller.RegisterController;
 import com.mygdx.game.FlowerPowerGame;
 
@@ -36,6 +37,7 @@ public class RegisterView extends View {
     private String passwordCheckTyped;
     private Pixmap cursorColor;
     private RegisterController registerController; //not needed as field
+    private PlayerController playerController;
     private GameController gameController; //not used
 
 
@@ -131,7 +133,8 @@ public class RegisterView extends View {
                 System.out.println("Password check typed: \n" + passwordCheckTyped);
                 // Sjekke at passordene stemmer overens og hvis de gjør det, send videre til Registercontroller og player
                 if (checkPassword(passwordTyped, passwordCheckTyped)){
-                    registerController = new RegisterController(usernameTyped, passwordTyped);
+                    this.playerController = new PlayerController();
+                    playerController.register(usernameTyped, passwordTyped);
                 }
                 // Sende videre til MenuView med innlogget bruker
                 // sendes videre for å sjekke med db

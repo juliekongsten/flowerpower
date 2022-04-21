@@ -14,6 +14,7 @@ public interface FireBaseInterface {
     String getUsername();
 
     String getUID();
+    void signOut();
 
     //void writeUserDataToDb(Player player);
 }

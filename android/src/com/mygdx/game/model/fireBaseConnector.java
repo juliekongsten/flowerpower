@@ -136,6 +136,22 @@ public class fireBaseConnector implements FireBaseInterface {
 
     }
 
+    /**
+     * method that sign out current user
+     */
+
+    public void signOut(){
+        try{
+            mAuth.signOut();
+            Log.d(TAG, "signOut:success");
+        }catch (Exception e){
+            //TODO: fix exception
+            e.printStackTrace();
+
+        }
+
+    }
+
 
     /**
      * returns current users username

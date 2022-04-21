@@ -35,6 +35,10 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
         return null;
     }
 
+    @Override
+    public void signOut() {
+    }
+
     /**@Override
     public void writeUserDataToDb(Player player) {
 

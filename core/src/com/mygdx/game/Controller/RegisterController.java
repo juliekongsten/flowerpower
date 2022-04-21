@@ -6,6 +6,7 @@ public class RegisterController {
 
     private Player player;
 
+
     /**
      *
      * @param username mail for the user
