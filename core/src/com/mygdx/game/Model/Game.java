@@ -2,14 +2,11 @@ package com.mygdx.game.Model;
 
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
-import com.mygdx.game.Model.Player;
 
 import java.util.List;
 
 public class Game {
 
-    private Player player1;
-    private Player player2;
     private int GID;
     private FireBaseInterface _FBIC;
 
@@ -24,14 +21,7 @@ public class Game {
         this.GID= existingGID;
         this._FBIC= FlowerPowerGame.getFBIC();
         List<Integer> gameIDs = _FBIC.getGameIDs();
-        boolean isDone = this._FBIC.getIsDone();
-        System.out.println(isDone);
-        /*Waiting for newplayer-task in firebaseconnector to be completed as we
-        are interested in the outcome there before moving on
-         */
-        while (!isDone){
-            isDone = this._FBIC.getIsDone();
-        }
+
         String i = Integer.toString(existingGID);
         System.out.print(gameIDs);
         System.out.println(existingGID);
@@ -60,7 +50,6 @@ public class Game {
      * Generates new gamepin
      */
     public Game() {
-        //this.player1 = player1;
         this._FBIC= FlowerPowerGame.getFBIC();
         this.GID = generateGameID();
         System.out.println("THIS IS THE GID IN GAME CLASS: " + this.GID);
@@ -74,7 +63,8 @@ public class Game {
     private int generateGameID(){
         List<Integer> gameIDs = _FBIC.getGameIDs();
         this.GID = (int) ((Math.random() * (10000 - 1000)) + 1000);
-        if ((!gameIDs.contains(GID))){
+        String i = Integer.toString(this.GID);
+        if ((!gameIDs.contains(i))){
             return GID;
         }
         else{
@@ -86,10 +76,7 @@ public class Game {
         return this.GID;
     }
 
-    //TODO: fjerne denne, tror ikke vi trenger den mtp konstruktøren gjør det samme
-    public void joinGame(int existingGID){
-        this.GID= existingGID;
-    }
+
 
 
 }
