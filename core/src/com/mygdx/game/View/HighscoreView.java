@@ -83,7 +83,7 @@ public class HighscoreView extends View{
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
         sb.draw(logo,36,405);
         sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
-        sb.draw(highscore,FlowerPowerGame.WIDTH/2-highscore.getWidth()/2,345);
+        sb.draw(highscore,FlowerPowerGame.WIDTH/2-highscore.getWidth()/2,355);
         sb.draw(email, FlowerPowerGame.WIDTH/2-highscore.getWidth()/2-40,315);
         sb.draw(score,FlowerPowerGame.WIDTH/2+50,315);
         printHighscoreList(sb);
