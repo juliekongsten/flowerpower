@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 import com.mygdx.game.Model.Player;
 
+import java.util.List;
+
 /**
  * Interface to enable communication between modules
  * Contains methods implemented by fireBaseConnector to access db
@@ -18,6 +20,9 @@ public interface FireBaseInterface {
     Exception getException();
 
     boolean getIsDone();
+
+    List<String> getPlayers(int GID);
+    List<Integer> getGameIDs();
 
     //void writeUserDataToDb(Player player);
     void createGame(int GID);

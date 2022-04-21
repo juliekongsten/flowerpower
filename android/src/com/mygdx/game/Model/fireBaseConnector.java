@@ -44,6 +44,8 @@ public class fireBaseConnector implements FireBaseInterface {
      private Exception exception = null;
      private boolean isDone = false;
      private String playerTurn;
+     private List<String> players;
+     private List<Integer> gameIDs;
 
 
     /**
@@ -212,6 +214,39 @@ public class fireBaseConnector implements FireBaseInterface {
     public boolean getIsDone(){
         return this.isDone;
     }
+
+    /**
+     *
+     *
+     * @return
+     */
+    public List<Integer> getGameIDs(){
+        isDone=false;
+        gameIDs = new ArrayList<>();
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        gameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<Integer, Object> map = (Map<Integer, Object>) dataSnapshot.getValue();
+                System.out.println(map);
+                gameIDs.addAll(map.keySet());
+                System.out.println("key: " + gameIDs);
+                isDone=true;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
+            }
+        }
+        );
+        while (!isDone){
+            //waiting:)
+        }
+        return this.gameIDs;
+
+    }
+
     /*
     TODO: Disse burde kanskje være protected?
      */
@@ -242,8 +277,10 @@ public class fireBaseConnector implements FireBaseInterface {
         turnData.put("Turn",this.getUID());
         DatabaseReference turnRef = gameRef.child(GID+"/Turn");
         turnRef.setValue(turnData);
-        setTurnToOtherPlayer(GID);
-        getPlayers(GID);
+        //setTurnToOtherPlayer(GID);
+        //getPlayers(GID);
+        //List<Integer> IDs = getGameIDs();
+        //System.out.println(IDs);
     }
 
 
@@ -271,7 +308,7 @@ public class fireBaseConnector implements FireBaseInterface {
         //check user logged in - getID
         //check gamepin - if the same, get user into the game
         //ready(gameID,displayName[0]);
-        setTurnToOtherPlayer(gameID);
+        //setTurnToOtherPlayer(gameID);
     }
 
 
