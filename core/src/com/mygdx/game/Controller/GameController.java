@@ -1,4 +1,6 @@
 package com.mygdx.game.Controller;
+import com.mygdx.game.Model.Player;
+import com.mygdx.game.Model.Game;
 
 import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Square;
@@ -7,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
-
+    private Game game;
+    private int GID;
 
     //har per nå laget kun en liste, kan heller ha liste i liste for å lettere navigere seg opp/ned/sidelengs men har ikke det nå
     private List<Square> opBoard = new ArrayList<>();
@@ -54,6 +57,20 @@ public class GameController {
 
 
 
+    }
+    public void joinGame(int GID){
+        Game game = new Game(GID);
+        this.game = game;
+    }
+
+    public void createGame(){
+        Game game = new Game();
+        this.game = game;
+        this.GID = game.getGID();
+    }
+
+    public int getGID(){
+        return this.GID;
     }
 
     public boolean isSquareInBed(Square square, List<Bed> beds){

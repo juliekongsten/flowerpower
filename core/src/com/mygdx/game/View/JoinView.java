@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class JoinView extends View {
@@ -26,9 +27,11 @@ public class JoinView extends View {
     private final Stage stage;
     private Pixmap cursorColor;
     private TextField gamePin;
+    private GameController gameController;
 
     protected JoinView(ViewManager vm) {
         super(vm);
+        gameController= new GameController();
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
         settings = new Texture("settings.png");
@@ -83,6 +86,8 @@ public class JoinView extends View {
             if (joinBounds.contains(pos.x, pos.y)) {
                 //TODO: Some way to check pin
                 //vm.set(new GameView(vm));
+                //TODO: sjekk at gamePin.getText() er en int
+                gameController.joinGame(Integer.parseInt(gamePin.getText()));
                 vm.set(new PlaceBedsView(vm));
                 System.out.println("JOIN WAS PRESSED!");
             }

@@ -113,8 +113,10 @@ public class LoginView extends View {
 
                 try {
                     LoginController = new LoginController(usernameTyped, passwordTyped);
+                    vm.set(new MenuView(vm));
                 }
                 catch (Exception e) {
+                    //TODO: Write feedback to user
                     if (e.toString().equals("Invalid user")){
                         validEmail=false;
 

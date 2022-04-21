@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 
 import java.util.Random;
@@ -21,8 +22,10 @@ public class CreateView extends View {
     private final Texture waitText;
     private final Texture back;
     private String gamePin;
+    private GameController gameController;
 
-    protected CreateView(ViewManager vm) {
+
+    protected CreateView(ViewManager vm, String gamePin) {
         super(vm);
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
@@ -30,17 +33,20 @@ public class CreateView extends View {
         pinText = new Texture("create_pin.png");
         waitText = new Texture("create_wait.png");
         back = new Texture("back.png");
-        setGamePin();
+        this.gamePin = gamePin;
     }
 
-    private void setGamePin() {
+    private void getGamePin() {
         // Midlertidlig løsning; skal vel fikses i backend?
+        // det er fikset
+        /*
         Random rand = new Random();
         String result = "";
         for (int i=0; i<=6; i++) {
             result += rand.nextInt(10);
         }
         gamePin = result;
+        */
     }
 
     @Override
@@ -86,7 +92,9 @@ public class CreateView extends View {
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         font.getData().setScale((float) 1.3);
         font.setColor(Color.BLACK);
+
         font.draw(sb, gamePin, (float) FlowerPowerGame.WIDTH/2-40, 280);
+
         sb.end();
     }
 }

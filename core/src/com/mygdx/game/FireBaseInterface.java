@@ -17,7 +17,10 @@ public interface FireBaseInterface {
 
     Exception getException();
 
-    boolean getReady();
+    boolean getIsDone();
 
     //void writeUserDataToDb(Player player);
+    void createGame(int GID);
+    void joinGame(int GID);
+
 }

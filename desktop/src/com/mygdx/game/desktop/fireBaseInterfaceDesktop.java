@@ -40,9 +40,19 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     }
 
     @Override
-    public boolean getReady() {
+    public boolean getIsDone() {
         return false;
     }
+    /*@Override
+    public void writeUserDataToDb(Player player) {}*/
+
+    @Override
+    public void createGame(int GID){}
+
+    @Override
+    public void joinGame(int GID){}
+
+
 
 
 }
