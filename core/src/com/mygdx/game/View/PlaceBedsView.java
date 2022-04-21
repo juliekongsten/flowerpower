@@ -289,10 +289,9 @@ public class PlaceBedsView extends View{
         opponent_exited = controller.getOpExited();
         if(opponent_exited){
             sb.draw(waiting_black,0,0);
-            sb.draw(opponent_exited_text,FlowerPowerGame.WIDTH/2-opponent_exited_text.getWidth()/2,FlowerPowerGame.HEIGHT); //vil ikke tegnes
+            sb.draw(opponent_exited_text,FlowerPowerGame.WIDTH/2-opponent_exited_text.getWidth()/2,FlowerPowerGame.HEIGHT/2); //vil ikke tegnes
             sb.draw(go_to_menu,FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2,FlowerPowerGame.HEIGHT/2-120);
         }
-
         if(isReady){
             checkOtherPlayer(sb);
         }
