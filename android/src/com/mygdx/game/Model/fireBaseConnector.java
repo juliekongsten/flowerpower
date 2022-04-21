@@ -154,6 +154,7 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     public void signIn(String username, String password){
         this.exception = null;
+        this.ready = false;
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -163,21 +164,17 @@ public class fireBaseConnector implements FireBaseInterface {
                         Log.d(TAG, user.getEmail());
 
                     }
-                    else if (task.getException() instanceof FirebaseAuthInvalidUserException)
-                    {
-                        //user does not exist
-                        this.exception = new CustomException("Invalid user");
-
-                    }
                     else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                        //password is invalid
-                        this.exception = new CustomException("Invalid password");
+                        //Thrown when one or more of the credentials passed to a method fail to
+                        // identify and/or authenticate the user subject of that operation.
+                        //--> email OR password wrong
+                        this.exception = new CustomException("Invalid email/password");
 
                     }
                     else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());}
-
+                    ready = true;
                 });
 
     }
