@@ -138,6 +138,7 @@ public class fireBaseConnector implements FireBaseInterface {
                 // Sign in failed
                 //TODO: send message back to register class for error handling
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                this.exception = new CustomException("Unknown exception");
 
             }
             isDone = true;
@@ -163,6 +164,9 @@ public class fireBaseConnector implements FireBaseInterface {
                         Log.d(TAG, user.getEmail());
 
                     }
+                    else if (task.getException() instanceof FirebaseAuthInvalidUserException){
+                        this.exception = new CustomException("Invalid email/password");
+                    }
                     else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                         //Thrown when one or more of the credentials passed to a method fail to
                         // identify and/or authenticate the user subject of that operation.
@@ -172,7 +176,10 @@ public class fireBaseConnector implements FireBaseInterface {
                     }
                     else {
                         // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());}
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        this.exception = new CustomException("Unknown exception");
+
+                    }
                     isDone = true;
                 });
 
