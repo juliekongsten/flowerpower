@@ -36,6 +36,7 @@ public class PlaceBedsView extends View{
     private final Texture sure;
     private final Texture no;
     private final Texture yes;
+    private final Texture pop_up;
 
     private GameController controller;
 
@@ -78,6 +79,7 @@ public class PlaceBedsView extends View{
         sure = new Texture("sure.png");
         no = new Texture("no.png");
         yes = new Texture("yes.png");
+        pop_up = new Texture("POP-UP.png");
 
 
         findStaticCoordinates();
@@ -277,6 +279,7 @@ public class PlaceBedsView extends View{
         sb.draw(op_board, board_x, op_board_y);
         drawSquares(sb);
         drawBeds(sb);
+        sb.draw(pop_up,pool_x+150,pool_y+pool.getHeight()-20);
 
         //Draws message and replace button if there are overlapping beds or beds outside board
         if (bedsOutsideBoard){
