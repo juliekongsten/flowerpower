@@ -7,6 +7,7 @@ public class Player {
 
     private String username;
     private String UID;
+    private CharSequence score;
     private FireBaseInterface _FBIC;
 
     /**
@@ -46,6 +47,19 @@ public class Player {
     // TODO: kunne ikke denne vært den lokale variabelen vi har så slipper vi kall på db
     public String getUsername() {
         return _FBIC.getUsername();
+    }
+
+    public void update_dummyplayer(String username, CharSequence score){
+        this.username = username;
+        this.score = score;
+
+    }
+    public CharSequence getScore() {
+        return score;
+    }
+
+    public String getDummyUsername(){
+        return username;
     }
 
     /**

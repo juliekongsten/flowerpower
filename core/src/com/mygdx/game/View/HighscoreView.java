@@ -1,12 +1,18 @@
 package com.mygdx.game.View;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.FlowerPowerGame;
+import com.mygdx.game.Model.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HighscoreView extends View{
 
@@ -38,6 +44,32 @@ public class HighscoreView extends View{
         handleInput();
     }
 
+    private void printHighscoreList(SpriteBatch sb){
+        //TODO get list of top 10 best players, with score (DB), where nr1 in the list is the best
+        List<Player> players = new ArrayList<>();
+        Player pl1 = new Player();
+        Player pl2 = new Player();
+        pl1.update_dummyplayer("natalia@gmail.com","100");
+        pl2.update_dummyplayer("sandra@gmail.com","80");
+        players.add(pl1);
+        players.add(pl2);
+
+        BitmapFont font = new BitmapFont();
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
+        font.getData().setScale((float) 1.0);
+        font.setColor(Color.BLACK);
+        float y = 280;
+        for (Player player: players) {
+            float username_x = 30;
+            float score_x = FlowerPowerGame.WIDTH/2+40;
+            font.draw(sb, player.getDummyUsername(),username_x,y);
+            font.draw(sb,player.getScore(),score_x,y);
+            y-=-40;
+
+        }
+
+    }
+
     @Override
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
@@ -46,6 +78,7 @@ public class HighscoreView extends View{
         sb.draw(logo,36,405);
         sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
         sb.draw(highscore,FlowerPowerGame.WIDTH/2-highscore.getWidth()/2,345);
+        printHighscoreList(sb);
         sb.end();
 
     }
