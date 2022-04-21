@@ -11,6 +11,7 @@ import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Square;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameView extends View{
@@ -27,15 +28,24 @@ public class GameView extends View{
     private Texture opGrass;
     private Texture opFrame; //midlertidig? er fordi opGrass bare er grønt og uten svart ramme
     private Texture flower;
-    private Texture miss;
+    private Texture miss_texture;
     private Texture back;
     private Texture waiting_black;
     private Texture sure;
     private Texture no;
     private Texture yes;
+    private Texture hit_text;
+    private Texture miss_text;
 
     private boolean goBack = false;
     private boolean gameOver = false;
+    private boolean hit = false;
+    private boolean miss = false;
+
+    private float hit_x;
+    private float hit_y;
+    private float miss_x;
+    private float miss_y;
 
     private GameController controller;
 
@@ -52,6 +62,7 @@ public class GameView extends View{
     private List<Square> myBoard;
     private List<Bed> myBeds;
     private List<Bed> opBeds;
+    private List<Square> already_pressed;
 
 
 
@@ -67,6 +78,7 @@ public class GameView extends View{
         controller.receiveOpBeds();
         opBeds = controller.getOpBeds();
         opBoard = controller.getOpBoard();
+        already_pressed = new ArrayList<>();
 
     }
 
@@ -83,12 +95,14 @@ public class GameView extends View{
         opGrass = new Texture("opsquare.png");
         opFrame = new Texture("opframe.png");
         flower = new Texture("flower.png");
-        miss = new Texture("miss.png");
+        miss_texture = new Texture("miss.png");
         back = new Texture("back.png");
         waiting_black = new Texture("waiting_black.png");
         sure = new Texture("sure.png");
         no = new Texture("no.png");
         yes = new Texture("yes.png");
+        hit_text = new Texture("hit!.png");
+        miss_text = new Texture("miss!.png");
     }
 
     /**
@@ -104,19 +118,26 @@ public class GameView extends View{
             //squares and act accordingly
             if (!waiting){
                 for (Square square : opBoard){
-                    if (square.getBounds().contains(pos.x,pos.y)){
+                    if (square.getBounds().contains(pos.x,pos.y) && !already_pressed.contains(square)){
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
-                        //Gives feedback to user if this was hit/miss
-
                         boolean flower = controller.hitSquare(square);
-                        //TODO: (low priority) give visual feedback ("Hit!"/"Miss")
+                        already_pressed.add(square);
                         if (flower){
-                            System.out.println("Hit!");
+                            hit = true;
+                            miss = false;
+                            hit_x = square.getBounds().x + 30;
+                            hit_y = square.getBounds().y;
+
                         } else {
-                            System.out.println("Miss!");
+                            hit = false;
+                            miss = true;
+                            miss_x = square.getBounds().x + 30;
+                            miss_y = square.getBounds().y;
+
                         }
                         //TODO: Give feedback to controller so that the other player also is notified (or implement squarelistener in some way)
                     }
+
                 }
 
             }
@@ -208,7 +229,7 @@ public class GameView extends View{
                 if (square.hasFlower()) {
                     sb.draw(flower, x, y);
                 } else {
-                    sb.draw(miss, x, y);
+                    sb.draw(miss_texture, x, y);
                 }
             }
         }
@@ -220,7 +241,7 @@ public class GameView extends View{
                 if (square.hasFlower()) {
                     sb.draw(flower, x, y);
                 } else {
-                    sb.draw(miss, x, y);
+                    sb.draw(miss_texture, x, y);
                 }
             }
         }
@@ -287,6 +308,14 @@ public class GameView extends View{
         drawSquares(sb);
         drawBeds(sb);
         drawHits(sb);
+
+        //draw hit or miss!
+        if(hit){
+            sb.draw(hit_text,hit_x,hit_y);
+        }
+        if(miss){ //skal det heller være else? nei da printes det en miss ved starten
+            sb.draw(miss_text,miss_x,miss_y);
+        }
 
         //draws Back button, if it isnt touched
         if(!goBack){

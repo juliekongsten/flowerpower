@@ -105,8 +105,8 @@ public class PlaceBedsView extends View{
                     List<Square> squares = bed.getSquares(myBoard);
                     if (squares.size() < bed.getSize()){ //means that some part of the bed is outside the board
                         bedsOutsideBoard = true;
-                        }
                     }
+                }
 
                 controller.setMyBeds(beds);
 
@@ -247,7 +247,7 @@ public class PlaceBedsView extends View{
 
         //Draw text "Your beds:"
         sb.draw(your_beds,pool_x+10,pool_y+pool.getHeight()-20);
-        
+
 
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);

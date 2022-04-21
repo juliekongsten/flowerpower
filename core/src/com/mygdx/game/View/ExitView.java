@@ -82,7 +82,7 @@ public class ExitView extends View{
             sb.draw(fish, FlowerPowerGame.WIDTH/2-fish.getWidth()/2,180);
         }
         else{
-           sb.draw(lost_text,FlowerPowerGame.WIDTH/2-lost_text.getWidth()/2,220);
+            sb.draw(lost_text,FlowerPowerGame.WIDTH/2-lost_text.getWidth()/2,220);
         }
         sb.end();
 
