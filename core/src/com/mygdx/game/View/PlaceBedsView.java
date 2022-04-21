@@ -33,6 +33,9 @@ public class PlaceBedsView extends View{
     private final Texture back;
     private final Texture opponent_exited_text;
     private final Texture go_to_menu;
+    private final Texture sure;
+    private final Texture no;
+    private final Texture yes;
 
     private GameController controller;
 
@@ -48,6 +51,7 @@ public class PlaceBedsView extends View{
     private List<Bed> beds;
     private boolean overlappingBeds = false;
     private boolean bedsOutsideBoard = false;
+    private boolean goBack;
     private boolean opponent_exited = false; //If the opponent exited the game before it started.
 
 
@@ -71,6 +75,9 @@ public class PlaceBedsView extends View{
         back = new Texture("back.png");
         opponent_exited_text = new Texture("opponent_exited.png");
         go_to_menu = new Texture("go_to_menu.png");
+        sure = new Texture("sure.png");
+        no = new Texture("no.png");
+        yes = new Texture("yes.png");
 
 
         findStaticCoordinates();
@@ -132,8 +139,18 @@ public class PlaceBedsView extends View{
             }
             Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
             if (backBounds.contains(pos.x, pos.y)) {
-                //TODO Update that the player exited the game DB
-                vm.set(new MenuView(vm));
+                goBack = true;
+            }
+            Rectangle noBounds = new Rectangle(FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100,no.getWidth(),no.getHeight());
+            Rectangle yesBounds = new Rectangle(FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100,yes.getWidth(),yes.getHeight());
+            if(goBack){
+                if(noBounds.contains(pos.x,pos.y)){
+                    goBack = false;
+                }
+                if(yesBounds.contains(pos.x,pos.y)){
+                    //TODO update that the user has pressed "go back" and yes, and exited the game DB
+                    vm.set(new MenuView(vm));
+                }
             }
             Rectangle go_to_menuBounds = new Rectangle(FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2,FlowerPowerGame.HEIGHT/2+120,go_to_menu.getWidth(),go_to_menu.getHeight());
             if (go_to_menuBounds.contains(pos.x,pos.y)){
@@ -252,26 +269,13 @@ public class PlaceBedsView extends View{
         sb.begin();
         ScreenUtils.clear((float)254/255,(float)144/255,(float) 182/255,1);
 
-        //Draws ready button
+        //Draws the textures
         sb.draw(ready,ready_x, ready_y);
-
-        //Draws the background of "my board"
         sb.draw(my_board, board_x,my_board_y );
-
-        //Draws the pool in the middle
         sb.draw(pool, pool_x ,pool_y);
-
-        //Draw text "Your beds:"
         sb.draw(your_beds,pool_x+10,pool_y+pool.getHeight()-20);
-
-        //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
-        sb.draw(back,10,FlowerPowerGame.HEIGHT-20);
-
-        //Draw the squares
         drawSquares(sb);
-
-        //Draw the beds
         drawBeds(sb);
 
         //Draws message and replace button if there are overlapping beds or beds outside board
@@ -286,6 +290,16 @@ public class PlaceBedsView extends View{
             sb.draw(replace,FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150);
         }
 
+        if(!goBack){
+            sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
+        }
+        else{
+            sb.draw(waiting_black,0,0);
+            sb.draw(sure,FlowerPowerGame.WIDTH/2-sure.getWidth()/2,FlowerPowerGame.HEIGHT/2);
+            sb.draw(no, FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100);
+            sb.draw(yes,FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100);
+        }
+        //Checks if the opponent exited the game
         opponent_exited = controller.getOpExited();
         if(opponent_exited){
             sb.draw(waiting_black,0,0);
@@ -295,7 +309,6 @@ public class PlaceBedsView extends View{
         if(isReady){
             checkOtherPlayer(sb);
         }
-
         sb.end();
 
 

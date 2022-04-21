@@ -234,6 +234,7 @@ public class GameController {
      * @return
      */
     public boolean getOpForfeitet() {
-        return true;
+        //TODO get this information from DB
+        return false;
     }
 }
