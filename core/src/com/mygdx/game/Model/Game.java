@@ -36,27 +36,10 @@ public class Game {
         System.out.print(gameIDs);
         System.out.println(existingGID);
         System.out.println(gameIDs.contains(i));
-        boolean existing = false;
-        /*for (Integer id : gameIDs){
-            if (id==existingGID){
-                List<String> players =_FBIC.getPlayers(existingGID);
-                existing = true;
-                if (players.size()>2){
-                    throw new IllegalArgumentException("Too many players in game");
-                }
-                else{
-                    _FBIC.joinGame(GID);
-                }
 
-            }
-
-        }
-        if (!existing){
-            throw new IllegalArgumentException("GameID does not exsist");
-        }*/
         if (gameIDs.contains(i)){
             List<String> players =_FBIC.getPlayers(existingGID);
-            if (players.size()>2){
+            if (players.size()>=2){
                 throw new IllegalArgumentException("Too many players in game");
             }
             else if (players.contains(_FBIC.getUID())){
