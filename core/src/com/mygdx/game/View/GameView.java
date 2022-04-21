@@ -47,7 +47,7 @@ public class GameView extends View{
     private float miss_x;
     private float miss_y;
 
-    private GameController controller;
+    private GameController gameController;
 
     private float board_x;
     private float my_board_y;
@@ -67,17 +67,17 @@ public class GameView extends View{
 
 
 
-    public GameView(ViewManager vm) {
+    public GameView(ViewManager vm, GameController gameController) {
         super(vm);
-        controller = vm.getController();
+        this.gameController = gameController;
         pool = new Texture("pool.png");
         createTextures();
         findStaticCoordinates();
-        myBeds = controller.getMyBeds();
-        myBoard = controller.getMyBoard();
-        controller.receiveOpBeds();
-        opBeds = controller.getOpBeds();
-        opBoard = controller.getOpBoard();
+        myBeds = gameController.getMyBeds();
+        myBoard = gameController.getMyBoard();
+        gameController.receiveOpBeds();
+        opBeds = gameController.getOpBeds();
+        opBoard = gameController.getOpBoard();
         already_pressed = new ArrayList<>();
 
     }
@@ -120,7 +120,7 @@ public class GameView extends View{
                 for (Square square : opBoard){
                     if (square.getBounds().contains(pos.x,pos.y) && !already_pressed.contains(square)){
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
-                        boolean flower = controller.hitSquare(square);
+                        boolean flower = gameController.hitSquare(square);
                         already_pressed.add(square);
                         if (flower){
                             hit = true;
@@ -153,10 +153,9 @@ public class GameView extends View{
                     goBack = false;
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
-                    vm.set(new ExitView(vm, false));
+                    vm.set(new ExitView(vm, false, this.gameController));
                 }
             }
-
         }
     }
 
@@ -178,8 +177,9 @@ public class GameView extends View{
 
         //Checks if the game is over and takes player to ExitView
         if (gameOver){
-            boolean won = controller.getWinner();
-            vm.set(new ExitView(vm, won));
+            boolean won = gameController.getWinner();
+            //TODO: mulig ikke denne controlelren
+            vm.set(new ExitView(vm, won, this.gameController));
         }
         //If waiting we check if the opponent has made a move so we can give give feedback
         if (waiting){
@@ -327,7 +327,7 @@ public class GameView extends View{
             sb.draw(no, FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100);
             sb.draw(yes,FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100);
         }
-        gameOver = controller.getGameOver();
+        gameOver = gameController.getGameOver();
 
         sb.end();
 
