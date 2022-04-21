@@ -18,5 +18,4 @@ public interface FireBaseInterface {
     void createGame(int GID);
     void joinGame(int GID);
 
-    //void writeUserDataToDb(Player player);
 }

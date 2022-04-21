@@ -3,8 +3,7 @@ package com.mygdx.game.model;
 import androidx.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mygdx.game.FireBaseInterface;
@@ -13,16 +12,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mygdx.game.Model.Game;
-import com.mygdx.game.Model.Player;
+
 
 
 import static android.content.ContentValues.TAG;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 /**
  * fireBaseConnector connects the application to the Firebase Realtime Database and implements the
@@ -101,13 +98,13 @@ public class fireBaseConnector implements FireBaseInterface {
             if (task.isSuccessful()) {
                 // Sign in success, the user is now both registered and signed in
                 Log.d(TAG, "createUserWithEmail:success");
-                //TODO: maybe send the user back to the player class to get id? otherwise remove
+
                 FirebaseUser user = mAuth.getCurrentUser();
                 DatabaseReference usersRef = database.getReference().child("users").child(user.getUid());
-                //TODO: put in whole object simultaneously
-                // Her kan mer data puttes når vi ønsker å lagre highscore osv.
-                Map<String, String> userData = new HashMap<String, String>();
+
+                Map userData = new HashMap();
                 userData.put("Mail", user.getEmail());
+                // TODO: legge inn score
                 usersRef.setValue(userData);
 
 
@@ -186,7 +183,7 @@ public class fireBaseConnector implements FireBaseInterface {
         Map readyData = new HashMap();
         String displayName[] = this.getUsername().split("@");
         readyData.put(displayName[0],false);
-        DatabaseReference readyRef = gameRef.child(GID+"/ready");
+        DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
         //TODO: fikse så denne ikke overskriver alle de andre
         /*Map turnData = new HashMap();
@@ -215,7 +212,7 @@ public class fireBaseConnector implements FireBaseInterface {
         Map readyData = new HashMap();
         String displayName[] = this.getUsername().split("@");
         readyData.put(displayName[0],false);
-        DatabaseReference readyRef = gameRef.child(gameID+"/ready");
+        DatabaseReference readyRef = gameRef.child(gameID+"/Ready");
         readyRef.updateChildren(readyData);
         //check user logged in - getID
         //check gamepin - if the same, get user into the game
