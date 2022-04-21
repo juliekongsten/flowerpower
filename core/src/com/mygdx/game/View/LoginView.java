@@ -122,8 +122,7 @@ public class LoginView extends View {
                 System.out.println("Playbook pressed");
             }
             if (highscoreBounds.contains(pos.x, pos.y)) {
-                //vm.set(new SettingsView(vm));
-                System.out.println("Highscore pressed");
+                vm.set(new HighscoreView(vm));
             }
         }
 
