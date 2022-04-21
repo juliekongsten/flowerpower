@@ -226,6 +226,14 @@ public class GameController {
      */
     public boolean getOpExited() {
         //TODO get this information from DB
+        return false;
+    }
+
+    /**
+     * Returns if the opponent has forfeitet, (pressed on "go back to menu") in GameView
+     * @return
+     */
+    public boolean getOpForfeitet() {
         return true;
     }
 }

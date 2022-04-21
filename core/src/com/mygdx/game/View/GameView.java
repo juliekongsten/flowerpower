@@ -18,7 +18,7 @@ public class GameView extends View{
 
     private boolean waiting = false;
 
-    private final Texture pool;
+    private Texture pool;
     private Texture ready;
     private Texture op_board;
     private Texture my_board;
@@ -36,11 +36,14 @@ public class GameView extends View{
     private Texture yes;
     private Texture hit_text;
     private Texture miss_text;
+    private Texture forfeitet_text;
+    private Texture exit_game;
 
     private boolean goBack = false;
     private boolean gameOver = false;
     private boolean hit = false;
     private boolean miss = false;
+    private boolean opForfeitet = false;
 
     private float hit_x;
     private float hit_y;
@@ -70,7 +73,6 @@ public class GameView extends View{
     public GameView(ViewManager vm) {
         super(vm);
         controller = vm.getController();
-        pool = new Texture("pool.png");
         createTextures();
         findStaticCoordinates();
         myBeds = controller.getMyBeds();
@@ -86,6 +88,7 @@ public class GameView extends View{
      * Prepares textures for parts of the view
      */
     private void createTextures(){
+        pool = new Texture("pool.png");
         ready = new Texture("Button.png");
         op_board = new Texture("board.png");
         my_board = new Texture("board.png");
@@ -103,6 +106,8 @@ public class GameView extends View{
         yes = new Texture("yes.png");
         hit_text = new Texture("hit!.png");
         miss_text = new Texture("miss!.png");
+        forfeitet_text = new Texture("forfeitet_text.png");
+        exit_game = new Texture("exit_game.png");
     }
 
     /**
@@ -147,16 +152,19 @@ public class GameView extends View{
             if (backBounds.contains(pos.x, pos.y)) {
                 goBack = true;
             }
-
             if(goBack){
                 if(noBounds.contains(pos.x,pos.y)){
                     goBack = false;
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
+                    //TODO update that the user has pressed "go back" and yes, and forfeitet the game DB
                     vm.set(new ExitView(vm, false));
                 }
             }
-
+            Rectangle exit_gameBounds = new Rectangle(FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2,FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
+            if(exit_gameBounds.contains(pos.x,pos.y)){
+                vm.set(new ExitView(vm,true));
+            }
         }
     }
 
@@ -326,6 +334,12 @@ public class GameView extends View{
             sb.draw(sure,FlowerPowerGame.WIDTH/2-sure.getWidth()/2,FlowerPowerGame.HEIGHT/2);
             sb.draw(no, FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100);
             sb.draw(yes,FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100);
+        }
+        opForfeitet = controller.getOpForfeitet();
+        if(opForfeitet){
+            sb.draw(waiting_black,0,0);
+            sb.draw(forfeitet_text,FlowerPowerGame.WIDTH/2-forfeitet_text.getWidth()/2,FlowerPowerGame.HEIGHT/2);
+            sb.draw(exit_game,FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2,FlowerPowerGame.HEIGHT/2-100);
         }
         gameOver = controller.getGameOver();
 
