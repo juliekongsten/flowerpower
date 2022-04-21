@@ -28,6 +28,8 @@ public class LoginView extends View {
     private final Texture settings;
     private final Texture enter_username;
     private final Texture enter_password;
+    private final Texture invalidEmail;
+    private final Texture invalidPassword;
     private String usernameTyped;
     private String passwordTyped;
     private Pixmap cursorColor;
@@ -35,6 +37,8 @@ public class LoginView extends View {
 
     boolean validEmail = true;
     boolean validPassword = true;
+
+
 
     protected LoginView(ViewManager vm) {
         super(vm);
@@ -44,6 +48,8 @@ public class LoginView extends View {
         settings = new Texture("settings.png");
         enter_username = new Texture("enter_username.png");
         enter_password = new Texture("enter_password.png");
+        invalidEmail = new Texture("invalidEmail.png");
+        invalidPassword = new Texture("invalidPassword.png");
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -71,7 +77,7 @@ public class LoginView extends View {
         username = new TextField("", ts);
         username.setWidth(FlowerPowerGame.WIDTH-80);
         username.setHeight(37);
-        username.setPosition((float) (FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 240);
+        username.setPosition((float) (FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 260);
     }
 
     private void setPasswordField(TextField.TextFieldStyle ts) {
@@ -80,7 +86,7 @@ public class LoginView extends View {
         password.setPasswordCharacter('*');
         password.setWidth(FlowerPowerGame.WIDTH-80);
         password.setHeight(37);
-        password.setPosition((float) (FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 140);
+        password.setPosition((float) (FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 160);
     }
 
     private void setCursor(Label.LabelStyle ls) {
@@ -148,20 +154,19 @@ public class LoginView extends View {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
-        sb.draw(logo,36,375);
+        sb.draw(logo,36,395);
         sb.draw(login, (float) ((FlowerPowerGame.WIDTH/2)-(login.getWidth()/2)),40);
         sb.draw(playbook, 10, 15);
         float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
         sb.draw(settings, settings_x, 15);
         // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
         // ikke helt skjønt hvorfor enda
-        sb.draw(enter_username, 60,290);
-        sb.draw(enter_password,60,190);
+        sb.draw(enter_username, 60,310);
+        sb.draw(enter_password,60,210);
         if (!validEmail){
-            //TODO: Draw invalid email text
+            sb.draw(invalidEmail, FlowerPowerGame.WIDTH/2-invalidEmail.getWidth()/2,120);
         } else if (!validPassword){
-            //TODO: draw invalid password text
-        }
+            sb.draw(invalidPassword, FlowerPowerGame.WIDTH/2-invalidPassword.getWidth()/2,120);        }
 
         sb.end();
         stage.draw();

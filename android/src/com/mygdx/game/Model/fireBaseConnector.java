@@ -152,6 +152,7 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     public void signIn(String username, String password){
         this.exception = null;
+        this.ready = false;
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -175,7 +176,7 @@ public class fireBaseConnector implements FireBaseInterface {
                     else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());}
-
+                    ready = true;
                 });
 
     }
