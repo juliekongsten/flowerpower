@@ -217,9 +217,13 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
-        Map storedBeds = new HashMap();
-        storedBeds.put("Beds", beds);
-        userRef.updateChildren(storedBeds);
+        DatabaseReference bedsRef = userRef.child("/Beds");
+
+        for (int i = 0; i<5 ; i++){
+            bedsRef.setValue(beds.get(i));
+        }
+
+
     }
 
     /**
@@ -235,6 +239,7 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
+
         Map uidData = new HashMap();
         uidData.put("Username", this.getUsername());
         userRef.setValue(uidData);
