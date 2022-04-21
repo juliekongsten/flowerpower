@@ -50,6 +50,7 @@ public class Game {
     }
 
     public void storePlacedBeds(List<Bed> beds) {
+        System.out.println("gets in to game");
         _FBIC.storeBeds(beds, GID);
     }
 

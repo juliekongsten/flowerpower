@@ -27,6 +27,8 @@ public class CreateView extends View {
 
     protected CreateView(ViewManager vm, String gamePin) {
         super(vm);
+        gameController = new GameController();
+        vm.setController(gameController);
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
         settings = new Texture("settings.png");

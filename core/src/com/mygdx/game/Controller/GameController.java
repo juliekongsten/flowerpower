@@ -104,19 +104,14 @@ public class GameController {
     }
 
     public void setMyBeds(List<Bed> beds){
+        System.out.println("setmybeds");
         if (beds == null){
             setStartBeds();
         } else {
             myBeds = beds;
             if (gameStarted) {
-                Bed bed1 = new Bed(1,true,"flowerbed_1.png");
-                Bed bed2 = new Bed(2, false, "flowerbed_1.png");
-                Bed bed3 = new Bed(3, true, "flowerbed_1.png");
-                List<Bed> testBeds = new ArrayList<>();
-                testBeds.add(bed1);
-                testBeds.add(bed2);
-                testBeds.add(bed3);
-                //game.storePlacedBeds(beds);
+                System.out.println("gets in game controller");
+                game.storePlacedBeds(myBeds);
             }
             for (Square mySquare : myBoard){
                 if (isSquareInBed(mySquare,myBeds)){

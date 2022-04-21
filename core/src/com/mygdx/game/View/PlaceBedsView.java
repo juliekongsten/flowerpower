@@ -49,7 +49,7 @@ public class PlaceBedsView extends View{
 
     public PlaceBedsView(ViewManager vm){
         super(vm);
-        controller = new GameController();
+        controller = vm.getController();
         //Prepares textures for parts of the view
         pool = new Texture("bedpool.png");
         ready = new Texture("Button.png");
@@ -107,7 +107,7 @@ public class PlaceBedsView extends View{
                         bedsOutsideBoard = true;
                     }
                 }
-
+                System.out.println("in placebeds");
                 controller.setMyBeds(beds);
 
                 overlappingBeds = checkOverlappingBeds();
@@ -219,7 +219,6 @@ public class PlaceBedsView extends View{
 
         if (opReady){
             controller.sendMyBeds(beds);
-            vm.setController(controller);
             vm.set(new GameView(vm));
         } else{
             //Draw waiting-graphics
