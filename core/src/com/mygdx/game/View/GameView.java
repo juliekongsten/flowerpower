@@ -161,11 +161,12 @@ public class GameView extends View{
                     vm.set(new ExitView(vm, false));
                 }
             }
-            Rectangle exit_gameBounds = new Rectangle(FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2,FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
-            if(exit_gameBounds.contains(pos.x,pos.y)){
-                vm.set(new ExitView(vm,true));
-            }
-        }
+            else{
+                Rectangle exit_gameBounds = new Rectangle(FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2,FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
+                if(exit_gameBounds.contains(pos.x,pos.y)){
+                    vm.set(new ExitView(vm,true));
+                }
+        }}
     }
 
     /**
