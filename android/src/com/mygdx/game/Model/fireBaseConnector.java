@@ -26,7 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import static android.content.ContentValues.TAG;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,6 +43,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private FirebaseAuth mAuth;
      private Exception exception = null;
      private boolean isDone = false;
+     private String playerTurn;
 
 
     /**
@@ -235,10 +238,12 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
         //TODO: fikse så denne ikke overskriver alle de andre
-        /*Map turnData = new HashMap();
-        turnData.put("Turn","player1");
-        DatabaseReference turnRef = gameRef.child(GID+"");
-        turnRef.setValue(turnData);*/
+        Map turnData = new HashMap();
+        turnData.put("Turn",this.getUID());
+        DatabaseReference turnRef = gameRef.child(GID+"/Turn");
+        turnRef.setValue(turnData);
+        setTurnToOtherPlayer(GID);
+        getPlayers(GID);
     }
 
 
@@ -266,7 +271,10 @@ public class fireBaseConnector implements FireBaseInterface {
         //check user logged in - getID
         //check gamepin - if the same, get user into the game
         //ready(gameID,displayName[0]);
+        setTurnToOtherPlayer(gameID);
     }
+
+
 
     /**
      * Når en bruker har forlatt spillet, ved å trykke exit f.eks, må leave game
@@ -296,30 +304,79 @@ public class fireBaseConnector implements FireBaseInterface {
         updates.put(user, true);
         playerRef.updateChildren(updates);
     }
-
-
     /**
-     * When a player makes a move, it updates so its the other players turn
+     * getPlayers gets all the in the game with this gameID
      * @param gameID
+     * @return List<String> for player UID
      */
-    //TODO: listen for turn - kan kun gå videre dersom det er din tur
-    // om det er stress her kan vi ha en boolean hjelpemetode - se under
-    public void setTurnToOtherPlayer(int gameID){
-
+    //TODO: legge inn før join game så man sjekker at listen er allerede full
+    public List<String> getPlayers(int gameID){
+        List<String> players = new ArrayList<String>();
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
+        playerRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                System.out.println(map);
+                players.addAll(map.keySet());
+                System.out.println("key: " + players);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+        //mDatabase.child("users").child(userId).get();
         //bytter verdi til den andre spilleren i turn
         //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
+        return players;
+    }
+    public void setTurnToOtherPlayer(int gameID){
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        List<String> players = getPlayers(gameID);
+        //har en liste med players
+        //sjekker hvem som allerede har turn
+        for (String name : players){
+            if (name != getTurn(gameID)){
+                Map turnData = new HashMap();
+                turnData.put("Turn", name);
+                DatabaseReference turnRef = gameRef.child(gameID+"/Turn");
+                turnRef.setValue(turnData);
+                return;
+            }
+        }
+    }
+
+    private void setPlayer(String name){
+        this.playerTurn = name;
     }
 
     /**
-     * Checks if its your turn
-     * Kan evt være en listener som sjekker når turn parameteret blir forandret
+     * getTurn checks which players turn it is right now
      * @param gameID
-     * @return
+     * @return String UID of player that
      */
-    public boolean yourTurn(int gameID){
-        //du kan kun gjøre et move dersom det er din tur
-        return false;
+    public String getTurn(int gameID){
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gameID+"/Turn");
+        playerRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                System.out.println(map);
 
+                for (String name : map.keySet()) {
+                    System.out.println("turn: " + name);
+                    setPlayer(name);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+        return this.playerTurn;
     }
 
     //TODO: spillhåndtering - se forslag til database metoder videre
@@ -366,7 +423,5 @@ public class fireBaseConnector implements FireBaseInterface {
     public FirebaseAuth getAuth(){
         return this.mAuth;
     }
-
-
 
 }
