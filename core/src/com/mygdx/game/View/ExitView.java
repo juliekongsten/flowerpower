@@ -18,7 +18,7 @@ public class ExitView extends View{
     private Texture you;
     private Texture fish;
     private Texture lost_text;
-    private Texture exit;
+    private Texture log_out;
 
     private boolean winner;
 
@@ -33,7 +33,7 @@ public class ExitView extends View{
         this.you = new Texture("you.png");
         this.fish = new Texture("fish.png");
         this.lost_text = new Texture("lost_text.png");
-        this.exit = new Texture("exit.png");
+        this.log_out = new Texture("log_out.png");
 
         this.winner = won;
     }
@@ -44,15 +44,15 @@ public class ExitView extends View{
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             Rectangle replayBounds = new Rectangle(FlowerPowerGame.WIDTH/2-replay.getWidth()-10,80,replay.getWidth(),replay.getHeight());
             Rectangle to_startBounds = new Rectangle(FlowerPowerGame.WIDTH/2+to_start.getWidth()/10,80,to_start.getWidth(),to_start.getHeight());
-            Rectangle exitBounds = new Rectangle(FlowerPowerGame.WIDTH-exit.getWidth()-5,5, exit.getWidth(),exit.getHeight());
+            Rectangle log_outBounds = new Rectangle(FlowerPowerGame.WIDTH-log_out.getWidth()-5,5, log_out.getWidth(),log_out.getHeight());
             if(replayBounds.contains(pos.x, pos.y)){
                 vm.set(new PlaceBedsView(vm)); //assuming that replay means forwarding to new PlaceBedsView
             }
             if(to_startBounds.contains(pos.x,pos.y)){
                 vm.set(new MenuView(vm));
             }
-            if(exitBounds.contains(pos.x, pos.y)){
-                //TODO terminate/exit the application
+            if(log_outBounds.contains(pos.x, pos.y)){
+                //TODO log out and exit the application
             }
         }
 
@@ -74,7 +74,7 @@ public class ExitView extends View{
         sb.draw(gameOver,FlowerPowerGame.WIDTH/2-gameOver.getWidth()/2,400);
         sb.draw(replay,FlowerPowerGame.WIDTH/2-replay.getWidth()-10,80);
         sb.draw(to_start,FlowerPowerGame.WIDTH/2+to_start.getWidth()/10,80);
-        sb.draw(exit,FlowerPowerGame.WIDTH-exit.getWidth()-5,5);
+        sb.draw(log_out,FlowerPowerGame.WIDTH-log_out.getWidth()-5,5);
 
         if(winner){
             sb.draw(winner_text,FlowerPowerGame.WIDTH/2-winner_text.getWidth()/2,350);
