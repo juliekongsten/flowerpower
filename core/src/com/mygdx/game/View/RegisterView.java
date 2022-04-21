@@ -31,6 +31,7 @@ public class RegisterView extends View {
     private final Texture invalidEmailMessage;
     private final Texture usernameTakenMessage;
     private final Texture otherMistakeMessage;
+    private final Texture back;
     private Stage stage;
     private TextField username;
     private TextField password;
@@ -65,6 +66,9 @@ public class RegisterView extends View {
         invalidEmailMessage = new Texture("invalidEmail.png");
         usernameTakenMessage = new Texture("usernameTaken.png");
         otherMistakeMessage = new Texture("wentWrong.png");
+
+
+        back = new Texture("back.png");
 
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
@@ -155,6 +159,7 @@ public class RegisterView extends View {
 
                 if (passwordTyped.equals(passwordCheckTyped)){
 
+
                     // Sende videre til MenuView med innlogget bruker
                     // sendes videre for å sjekke med db
                     try {
@@ -189,9 +194,10 @@ public class RegisterView extends View {
 
                 }
 
-
-
-
+            }
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
+            if (backBounds.contains(pos.x, pos.y)) {
+                vm.set(new StartView(vm));
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
@@ -237,6 +243,7 @@ public class RegisterView extends View {
             sb.draw(otherMistakeMessage,FlowerPowerGame.WIDTH/2-otherMistakeMessage.getWidth()/2,130);
         }
 
+        sb.draw(back,10,FlowerPowerGame.HEIGHT-20);
         sb.end();
         stage.draw();
         stage.act();

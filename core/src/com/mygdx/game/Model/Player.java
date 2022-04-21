@@ -3,17 +3,18 @@ package com.mygdx.game.Model;
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
 
-
 public class Player {
 
     private String username;
     private String UID;
     private FireBaseInterface _FBIC;
 
-
     /**
-     * empty constructor used by LoginController and RegisterController
+     * Creates a new player for the game
      */
+
+    //oppretter nå en ny spiller i konstruktøren
+    //TODO: what are we going to put here thooo
     public Player(){
 
     }
@@ -27,13 +28,14 @@ public class Player {
      */
     public void registerPlayer(String username, String password) throws Exception {
         this._FBIC= FlowerPowerGame.getFBIC();
+        //check username first
         _FBIC.newPlayer(username, password);
-        boolean ready = this._FBIC.getReady();
+        boolean isDone = this._FBIC.getIsDone();
         /*Waiting for newplayer-task in firebaseconnector to be completed as we
         are interested in the outcome there before moving on
          */
-        while (!ready){
-            ready = this._FBIC.getReady();
+        while (!isDone){
+            isDone = this._FBIC.getIsDone();
         }
 
         if (_FBIC.getException() != null){

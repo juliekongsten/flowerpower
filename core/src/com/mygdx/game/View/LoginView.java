@@ -30,6 +30,7 @@ public class LoginView extends View {
     private final Texture enter_password;
     private final Texture invalidCredentials;
     private final Texture otherMistakeMessage;
+    private final Texture back;
     private String usernameTyped;
     private String passwordTyped;
     private Pixmap cursorColor;
@@ -50,6 +51,7 @@ public class LoginView extends View {
         enter_password = new Texture("enter_password.png");
         invalidCredentials = new Texture("invalidCredential.png");
         otherMistakeMessage = new Texture("wentWrong.png");
+        back = new Texture("back.png");
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
@@ -122,6 +124,7 @@ public class LoginView extends View {
                     try {
                         LoginController = new LoginController(usernameTyped, passwordTyped);
                         vm.set(new MenuView(vm));
+
                     }
                     catch (Exception e) {
                         if (e.toString().equals("Invalid email/password")) {
@@ -133,6 +136,10 @@ public class LoginView extends View {
                     }
 
                 }}
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
+            if (backBounds.contains(pos.x, pos.y)) {
+                vm.set(new StartView(vm));
+            }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
                 System.out.println("Playbook pressed");
@@ -170,6 +177,8 @@ public class LoginView extends View {
         } else if (otherMistake){
             sb.draw(otherMistakeMessage, FlowerPowerGame.WIDTH/2-otherMistakeMessage.getWidth()/2, 120);
         }
+
+        sb.draw(back,10,FlowerPowerGame.HEIGHT-20);
         sb.end();
         stage.draw();
         stage.act();
