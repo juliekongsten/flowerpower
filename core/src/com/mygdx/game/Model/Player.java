@@ -49,6 +49,7 @@ public class Player {
         return _FBIC.getUsername();
     }
 
+    //TODO delete this after HighscoreView is connected to DB and working
     public void update_dummyplayer(String username, CharSequence score){
         this.username = username;
         this.score = score;
@@ -57,7 +58,7 @@ public class Player {
     public CharSequence getScore() {
         return score;
     }
-
+    //TODO delete this after HighscoreView is connected to DB and working
     public String getDummyUsername(){
         return username;
     }

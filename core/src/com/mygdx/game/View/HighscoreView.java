@@ -35,6 +35,7 @@ public class HighscoreView extends View{
             if (backBounds.contains(pos.x, pos.y)) {
                 vm.set(new MenuView(vm));
             }
+
         }
 
     }
@@ -51,18 +52,18 @@ public class HighscoreView extends View{
         Player pl2 = new Player();
         pl1.update_dummyplayer("natalia@gmail.com","100");
         pl2.update_dummyplayer("sandra@gmail.com","80");
-        players.add(pl1);
         players.add(pl2);
+        players.add(pl1);
 
         BitmapFont font = new BitmapFont();
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
-        font.getData().setScale((float) 1.0);
+        font.getData().setScale((float) 1.3);
         font.setColor(Color.BLACK);
-        float y = 280;
+        float y = 270;
         for (Player player: players) {
-            float username_x = 30;
-            float score_x = FlowerPowerGame.WIDTH/2+40;
-            font.draw(sb, player.getDummyUsername(),username_x,y);
+            float username_x = FlowerPowerGame.WIDTH/2-highscore.getWidth()/2-40 ;
+            float score_x = FlowerPowerGame.WIDTH/2+50;
+            font.draw(sb, player.getDummyUsername(),username_x,y); //TODO update the right getters here
             font.draw(sb,player.getScore(),score_x,y);
             y-=-40;
 
