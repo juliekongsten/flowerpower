@@ -4,6 +4,9 @@ import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Game {
 
     private Player player1;
@@ -46,5 +49,8 @@ public class Game {
         this.GID= existingGID;
     }
 
+    public void storePlacedBeds(List<Bed> beds) {
+        _FBIC.storeBeds(beds, GID);
+    }
 
 }

@@ -1,7 +1,10 @@
 package com.mygdx.game;
 
 
+import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
+
+import java.util.List;
 
 /**
  * Currently not used but required for communication between modules
@@ -49,6 +52,11 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     @Override
     public void joinGame(int GID){}
+
+    @Override
+    public void storeBeds(List<Bed> beds, int GID) {
+
+    }
 
     /**@Override
     public void writeUserDataToDb(Player player) {

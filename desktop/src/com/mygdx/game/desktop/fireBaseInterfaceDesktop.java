@@ -1,7 +1,10 @@
 package com.mygdx.game.desktop;
 
 import com.mygdx.game.FireBaseInterface;
+import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
+
+import java.util.List;
 
 /**
  * Currently not used but required for communication between modules
@@ -52,6 +55,8 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     @Override
     public void joinGame(int GID){}
 
+    @Override
+    public void storeBeds(List<Bed> beds, int GID){}
 
 
 

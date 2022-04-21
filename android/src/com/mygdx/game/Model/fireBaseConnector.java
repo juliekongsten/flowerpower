@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import static android.content.ContentValues.TAG;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,11 +66,6 @@ public class fireBaseConnector implements FireBaseInterface {
 
     }
 
-    public void storeBeds(List<Bed> beds){
-
-
-
-    }
 
     /**
      * readFromDb creates a listener that listens to the location of myRef and logs the value on that reference
@@ -220,6 +216,16 @@ public class fireBaseConnector implements FireBaseInterface {
     TODO: Disse burde kanskje være protected?
      */
 
+    @Override
+    public void storeBeds(List<Bed> beds, int GID) {
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(GID+"/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        Map storedBeds = new HashMap();
+        storedBeds.put("Beds", beds);
+        userRef.updateChildren(storedBeds);
+    }
+
     /**
      * createGame gets called when user wants to create a game
      * The player that created the game, currentUser, gets automatically added
@@ -239,11 +245,16 @@ public class fireBaseConnector implements FireBaseInterface {
         Map readyData = new HashMap();
         String displayName[] = this.getUsername().split("@");
         readyData.put(displayName[0],false);
-        Map beds = new HashMap();
-        beds.put(beds, "");
-        userRef.setValue(beds);
         DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
+        Bed bed1 = new Bed(1,true,"flowerbed_1.png");
+        Bed bed2 = new Bed(2, false, "flowerbed_1.png");
+        Bed bed3 = new Bed(3, true, "flowerbed_1.png");
+        List<Bed> testBeds = new ArrayList<>();
+        testBeds.add(bed1);
+        testBeds.add(bed2);
+        testBeds.add(bed3);
+        storeBeds(testBeds, GID);
         //TODO: fikse så denne ikke overskriver alle de andre
         /*Map turnData = new HashMap();
         turnData.put("Turn","player1");

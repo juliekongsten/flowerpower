@@ -11,6 +11,7 @@ import java.util.List;
 public class GameController {
     private Game game;
     private int GID;
+    private boolean gameStarted;
 
     //har per nå laget kun en liste, kan heller ha liste i liste for å lettere navigere seg opp/ned/sidelengs men har ikke det nå
     private List<Square> opBoard = new ArrayList<>();
@@ -33,6 +34,7 @@ public class GameController {
         squaresize = 32;
         numberSquaresHeight = 6;
         numberSquaresWidth = 9;
+        gameStarted = false;
 
         //TODO: (Low priority) Get x- and y-values without hardkoding :D
         //må hente x og y-verdier fra view heller sånn at vi får riktige :D
@@ -61,12 +63,14 @@ public class GameController {
     public void joinGame(int GID){
         Game game = new Game(GID);
         this.game = game;
+        gameStarted = true;
     }
 
     public void createGame(){
         Game game = new Game();
         this.game = game;
         this.GID = game.getGID();
+        gameStarted = true;
     }
 
     public int getGID(){
@@ -104,6 +108,16 @@ public class GameController {
             setStartBeds();
         } else {
             myBeds = beds;
+            if (gameStarted) {
+                Bed bed1 = new Bed(1,true,"flowerbed_1.png");
+                Bed bed2 = new Bed(2, false, "flowerbed_1.png");
+                Bed bed3 = new Bed(3, true, "flowerbed_1.png");
+                List<Bed> testBeds = new ArrayList<>();
+                testBeds.add(bed1);
+                testBeds.add(bed2);
+                testBeds.add(bed3);
+                //game.storePlacedBeds(beds);
+            }
             for (Square mySquare : myBoard){
                 if (isSquareInBed(mySquare,myBeds)){
                     mySquare.setHasFlower(true);
