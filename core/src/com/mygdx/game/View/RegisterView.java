@@ -16,7 +16,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.Controller.PlayerController;
-import com.mygdx.game.Controller.RegisterController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class RegisterView extends View {
@@ -36,7 +35,6 @@ public class RegisterView extends View {
     private String passwordTyped;
     private String passwordCheckTyped;
     private Pixmap cursorColor;
-    private RegisterController registerController; //not needed as field
     private PlayerController playerController;
     private GameController gameController; //not used
 
