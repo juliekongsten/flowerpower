@@ -29,9 +29,9 @@ public class JoinView extends View {
     private TextField gamePin;
     private GameController gameController;
 
-    protected JoinView(ViewManager vm) {
+    protected JoinView(ViewManager vm, GameController gameController) {
         super(vm);
-        gameController= new GameController();
+        this.gameController= gameController;
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
         settings = new Texture("settings.png");
@@ -88,7 +88,7 @@ public class JoinView extends View {
                 //vm.set(new GameView(vm));
                 //TODO: sjekk at gamePin.getText() er en int
                 gameController.joinGame(Integer.parseInt(gamePin.getText()));
-                vm.set(new PlaceBedsView(vm));
+                vm.set(new PlaceBedsView(vm, this.gameController));
                 System.out.println("JOIN WAS PRESSED!");
             }
             if (playbookBounds.contains(pos.x, pos.y)) {

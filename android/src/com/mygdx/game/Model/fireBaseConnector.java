@@ -137,6 +137,7 @@ public class fireBaseConnector implements FireBaseInterface {
                 // Sign in failed
                 //TODO: send message back to register class for error handling
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                this.exception = new CustomException("Unknown exception");
 
             }
             isDone = true;
@@ -152,6 +153,7 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     public void signIn(String username, String password){
         this.exception = null;
+        this.isDone = false;
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -161,21 +163,23 @@ public class fireBaseConnector implements FireBaseInterface {
                         Log.d(TAG, user.getEmail());
 
                     }
-                    else if (task.getException() instanceof FirebaseAuthInvalidUserException)
-                    {
-                        //user does not exist
-                        this.exception = new CustomException("Invalid user");
-
+                    else if (task.getException() instanceof FirebaseAuthInvalidUserException){
+                        this.exception = new CustomException("Invalid email/password");
                     }
                     else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                        //password is invalid
-                        this.exception = new CustomException("Invalid password");
+                        //Thrown when one or more of the credentials passed to a method fail to
+                        // identify and/or authenticate the user subject of that operation.
+                        //--> email OR password wrong
+                        this.exception = new CustomException("Invalid email/password");
 
                     }
                     else {
                         // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());}
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        this.exception = new CustomException("Unknown exception");
 
+                    }
+                    isDone = true;
                 });
 
     }
@@ -207,9 +211,7 @@ public class fireBaseConnector implements FireBaseInterface {
     public boolean getIsDone(){
         return this.isDone;
     }
-    /*
-    TODO: Disse burde kanskje være protected?
-     */
+
 
     /**
      * createGame gets called when user wants to create a game
@@ -283,20 +285,22 @@ public class fireBaseConnector implements FireBaseInterface {
 
     /**
      * ready gets called when a user presses ready to say that the game can start
-     * @param gameID
-     * @param user
+     * @param GID the gamePin ID
      */
-    //TODO: listen for ready - game starts when both users are ready
-    // om det er stress her kan vi ha en boolean hjelpemetode
 
-    public void ready(int gameID, String user){
-        //når brukeren har trykket bli klar skal
-        //sjekker brukeren (helst current user)
+
+    @Override
+    public void setPlayerReady(int GID){
+        System.out.println("Kommer hit");
         DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(gameID+"/Ready");
+        DatabaseReference playerRef = gameRef.child(GID+"/Ready");
         Map<String, Object> updates = new HashMap<>();
-        updates.put(user, true);
+        String[] displayName = this.getUsername().split("@");
+        updates.put(displayName[0], true);
         playerRef.updateChildren(updates);
+
+
+
     }
     /**
      * getPlayers gets all the in the game with this gameID

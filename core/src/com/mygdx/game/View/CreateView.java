@@ -25,8 +25,9 @@ public class CreateView extends View {
     private GameController gameController;
 
 
-    protected CreateView(ViewManager vm, String gamePin) {
+    protected CreateView(ViewManager vm, String gamePin, GameController gameController) {
         super(vm);
+        this.gameController = gameController;
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
         settings = new Texture("settings.png");
@@ -36,18 +37,7 @@ public class CreateView extends View {
         this.gamePin = gamePin;
     }
 
-    private void getGamePin() {
-        // Midlertidlig løsning; skal vel fikses i backend?
-        // det er fikset
-        /*
-        Random rand = new Random();
-        String result = "";
-        for (int i=0; i<=6; i++) {
-            result += rand.nextInt(10);
-        }
-        gamePin = result;
-        */
-    }
+
 
     @Override
     protected void handleInput() {
