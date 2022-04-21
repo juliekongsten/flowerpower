@@ -26,6 +26,7 @@ public class RegisterView extends View {
     private final Texture enter_username;
     private final Texture enter_password;
     private final Texture password_again;
+    private final Texture back;
     private Stage stage;
     private TextField username;
     private TextField password;
@@ -49,6 +50,7 @@ public class RegisterView extends View {
         enter_username = new Texture("enter_username.png");
         enter_password = new Texture("enter_password.png");
         password_again = new Texture("password_again.png");
+        back = new Texture("back.png");
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -133,9 +135,11 @@ public class RegisterView extends View {
                 }
                 // Sende videre til MenuView med innlogget bruker
                 // sendes videre for å sjekke med db
-
-
                 vm.set(new MenuView(vm));
+            }
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
+            if (backBounds.contains(pos.x, pos.y)) {
+                vm.set(new StartView(vm));
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
@@ -180,6 +184,7 @@ public class RegisterView extends View {
         sb.draw(enter_username,60,325);
         sb.draw(enter_password,60,255);
         sb.draw(password_again,60,185);
+        sb.draw(back,10,FlowerPowerGame.HEIGHT-20);
         sb.end();
         stage.draw();
         stage.act();
