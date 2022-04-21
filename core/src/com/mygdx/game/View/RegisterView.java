@@ -157,11 +157,7 @@ public class RegisterView extends View {
                 // Sjekke at passordene stemmer overens og hvis de gjør det, send videre til Registercontroller og player
 
 
-
-
                 if (checkPassword(passwordTyped, passwordCheckTyped)){
-
-
                     // Sende videre til MenuView med innlogget bruker
                     // sendes videre for å sjekke med db
                     try {
@@ -194,9 +190,6 @@ public class RegisterView extends View {
 
                 }
 
-                // Sende videre til MenuView med innlogget bruker
-                // sendes videre for å sjekke med db
-                vm.set(new MenuView(vm));
             }
             Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
             if (backBounds.contains(pos.x, pos.y)) {
