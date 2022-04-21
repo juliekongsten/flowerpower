@@ -22,7 +22,7 @@ public class RegisterView extends View {
     private final Texture logo;
     private final Texture register;
     private final Texture playbook;
-    private final Texture settings;
+    private final Texture highscore;
     private final Texture enter_username;
     private final Texture enter_password;
     private final Texture password_again;
@@ -37,6 +37,7 @@ public class RegisterView extends View {
     private Pixmap cursorColor;
     private RegisterController registerController; //not needed as field
     private GameController gameController; //not used
+    private float highscore_x;
 
 
 
@@ -46,11 +47,12 @@ public class RegisterView extends View {
         logo = new Texture("logo.png");
         register = new Texture("register.png");
         playbook = new Texture("playbook.png");
-        settings = new Texture("settings.png");
+        highscore = new Texture("highscore.png");
         enter_username = new Texture("enter_username.png");
         enter_password = new Texture("enter_password.png");
         password_again = new Texture("password_again.png");
         back = new Texture("back.png");
+        highscore_x = FlowerPowerGame.WIDTH-highscore.getWidth()-10;
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -116,9 +118,8 @@ public class RegisterView extends View {
 
             Rectangle registerBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-(register.getWidth()/2)),
                     40, register.getWidth(), register.getHeight());
-            float settings_x = FlowerPowerGame.WIDTH-playbook.getWidth()-10;
             Rectangle playbookBounds = new Rectangle(10, 15, playbook.getWidth(), playbook.getHeight());
-            Rectangle settingsBounds = new Rectangle(settings_x, 15, settings.getWidth(), settings.getHeight());
+            Rectangle highscoreBounds = new Rectangle(highscore_x, 15, highscore.getWidth(), highscore.getHeight());
             if (registerBounds.contains(pos.x, pos.y)) {
                 // Sende inn til databasen ny bruker
                 usernameTyped = username.getText();
@@ -145,7 +146,7 @@ public class RegisterView extends View {
                 //vm.set(new PlaybookView(vm));
                 System.out.println("Playbook pressed");
             }
-            if (settingsBounds.contains(pos.x, pos.y)) {
+            if (highscoreBounds.contains(pos.x, pos.y)) {
                 //vm.set(new SettingsView(vm));
                 System.out.println("Settings pressed");
             }
@@ -177,8 +178,7 @@ public class RegisterView extends View {
         sb.draw(logo,36,375);
         sb.draw(register,100,50);
         sb.draw(playbook, 10, 15);
-        float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
-        sb.draw(settings, settings_x, 15);
+        sb.draw(highscore, highscore_x, 15);
         // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
         // ikke helt skjønt hvorfor enda
         sb.draw(enter_username,60,325);
