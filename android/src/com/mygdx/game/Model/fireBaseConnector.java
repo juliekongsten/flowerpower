@@ -3,11 +3,6 @@ package com.mygdx.game.Model;
 import androidx.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseNetworkException;
-import com.google.firebase.auth.AuthResult;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -38,9 +33,9 @@ import java.util.Map;
  */
 
 public class fireBaseConnector implements FireBaseInterface {
-     private FirebaseDatabase database;
+     private final FirebaseDatabase database;
      private DatabaseReference myRef;
-     private FirebaseAuth mAuth;
+     private final FirebaseAuth mAuth;
      private Exception exception = null;
      private boolean isDone = false;
      private String playerTurn;
@@ -223,7 +218,6 @@ public class fireBaseConnector implements FireBaseInterface {
      * The player that creates the game gets the first turn
      * @param GID - get generated in Game in Model, and used as identifier in database
      */
-    //NOTE: alle stedene det står "player1" skal det heller være en reell bruker
     public void createGame(int GID){
 
         DatabaseReference gameRef = database.getReference().child("/Games");
@@ -348,7 +342,7 @@ public class fireBaseConnector implements FireBaseInterface {
         }
     }
 
-    private void setPlayer(String name){
+    private void setPlayerTurn(String name){
         this.playerTurn = name;
     }
 
@@ -358,6 +352,7 @@ public class fireBaseConnector implements FireBaseInterface {
      * @return String UID of player that
      */
     public String getTurn(int gameID){
+        isDone = false;
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Turn");
         playerRef.addValueEventListener(new ValueEventListener() {
@@ -368,14 +363,19 @@ public class fireBaseConnector implements FireBaseInterface {
 
                 for (String name : map.keySet()) {
                     System.out.println("turn: " + name);
-                    setPlayer(name);
+                    setPlayerTurn(name);
                 }
+                isDone=true;
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
             }
         });
+        while (!isDone){
+            //waiting
+        }
         return this.playerTurn;
     }
 
