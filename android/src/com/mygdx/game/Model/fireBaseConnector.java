@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import static android.content.ContentValues.TAG;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,6 +62,12 @@ public class fireBaseConnector implements FireBaseInterface {
     public void writeToDb(String target, String value){
             myRef = database.getReference(target);
             myRef.setValue(value);
+
+    }
+
+    public void storeBeds(List<Bed> beds){
+
+
 
     }
 
@@ -232,6 +239,9 @@ public class fireBaseConnector implements FireBaseInterface {
         Map readyData = new HashMap();
         String displayName[] = this.getUsername().split("@");
         readyData.put(displayName[0],false);
+        Map beds = new HashMap();
+        beds.put(beds, "");
+        userRef.setValue(beds);
         DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
         //TODO: fikse så denne ikke overskriver alle de andre
