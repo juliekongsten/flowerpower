@@ -28,15 +28,15 @@ public class LoginView extends View {
     private final Texture settings;
     private final Texture enter_username;
     private final Texture enter_password;
-    private final Texture invalidEmail;
-    private final Texture invalidPassword;
+    private final Texture invalidCredentials;
+    private final Texture otherMistakeMessage;
     private String usernameTyped;
     private String passwordTyped;
     private Pixmap cursorColor;
     private LoginController LoginController;
 
-    boolean validEmail = true;
-    boolean validPassword = true;
+    boolean validCredentials = true;
+    boolean otherMistake = false;
 
 
 
@@ -48,9 +48,8 @@ public class LoginView extends View {
         settings = new Texture("settings.png");
         enter_username = new Texture("enter_username.png");
         enter_password = new Texture("enter_password.png");
-        invalidEmail = new Texture("invalidEmail.png");
-        invalidPassword = new Texture("invalidPassword.png");
-
+        invalidCredentials = new Texture("invalidCredential.png");
+        otherMistakeMessage = new Texture("wentWrong.png");
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
@@ -100,8 +99,8 @@ public class LoginView extends View {
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
-            validEmail=true;
-            validPassword=true;
+            validCredentials=true;
+            otherMistake=false;
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
             Rectangle loginBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-(login.getWidth()/2)), 40,
@@ -117,20 +116,23 @@ public class LoginView extends View {
                 System.out.println("Password typed:");
                 System.out.println(passwordTyped);
 
-                try {
-                    LoginController = new LoginController(usernameTyped, passwordTyped);
-                }
-                catch (Exception e) {
-                    if (e.toString().equals("Invalid user")){
-                        validEmail=false;
-
+                if (usernameTyped.isEmpty()||passwordTyped.isEmpty()){
+                    validCredentials = false;
+                } else {
+                    try {
+                        LoginController = new LoginController(usernameTyped, passwordTyped);
+                        vm.set(new MenuView(vm));
                     }
-                    else if(e.toString().equals("Invalid password")){
-                        validPassword=false;
+                    catch (Exception e) {
+                        if (e.toString().equals("Invalid email/password")) {
+                            validCredentials = false;
 
-                }
+                        } else {
+                            otherMistake = true;
+                        }
+                    }
 
-            }
+                }}
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
                 System.out.println("Playbook pressed");
@@ -141,7 +143,7 @@ public class LoginView extends View {
             }
         }
 
-    }}
+    }
 
     @Override
     public void update(float dt) {
@@ -163,11 +165,11 @@ public class LoginView extends View {
         // ikke helt skjønt hvorfor enda
         sb.draw(enter_username, 60,310);
         sb.draw(enter_password,60,210);
-        if (!validEmail){
-            sb.draw(invalidEmail, FlowerPowerGame.WIDTH/2-invalidEmail.getWidth()/2,120);
-        } else if (!validPassword){
-            sb.draw(invalidPassword, FlowerPowerGame.WIDTH/2-invalidPassword.getWidth()/2,120);        }
-
+        if (!validCredentials){
+            sb.draw(invalidCredentials, FlowerPowerGame.WIDTH/2-invalidCredentials.getWidth()/2,120);
+        } else if (otherMistake){
+            sb.draw(otherMistakeMessage, FlowerPowerGame.WIDTH/2-otherMistakeMessage.getWidth()/2, 120);
+        }
         sb.end();
         stage.draw();
         stage.act();

@@ -162,15 +162,11 @@ public class fireBaseConnector implements FireBaseInterface {
                         Log.d(TAG, user.getEmail());
 
                     }
-                    else if (task.getException() instanceof FirebaseAuthInvalidUserException)
-                    {
-                        //user does not exist
-                        this.exception = new CustomException("Invalid user");
-
-                    }
                     else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                        //password is invalid
-                        this.exception = new CustomException("Invalid password");
+                        //Thrown when one or more of the credentials passed to a method fail to
+                        // identify and/or authenticate the user subject of that operation.
+                        //--> email OR password wrong
+                        this.exception = new CustomException("Invalid email/password");
 
                     }
                     else {
