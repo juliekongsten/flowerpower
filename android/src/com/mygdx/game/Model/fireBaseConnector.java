@@ -589,9 +589,9 @@ public class fireBaseConnector implements FireBaseInterface {
         playerRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                Map<String, String> map = (Map<String, String>) dataSnapshot.getValue();
 
-                for (String name : map.keySet()) {
+                for (String name : map.values()) {
                     setPlayerTurn(name);
                 }
                 isDone=true;
@@ -609,10 +609,11 @@ public class fireBaseConnector implements FireBaseInterface {
     }
 
     public boolean isMyTurn(int gameID){
-        String[] displayName = this.getUsername().split("@");
-        String name = displayName[0];
-        System.out.println("Is my turn: "+name.equals(getTurn(gameID)));
-        return name.equals(getTurn(gameID));
+        String turn = getTurn(gameID);
+        String name = getUID();
+
+        //System.out.println("Is my turn: "+name.equals(getTurn(gameID)));
+        return name.equals(turn);
     }
 
     //TODO: spillhåndtering - se forslag til database metoder videre
