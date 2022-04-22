@@ -114,6 +114,10 @@ public class GameController {
         }
     }
 
+    public void retrieveBeds() {
+        game.retrievePlacedBeds();
+    }
+
     private void setStartBeds(){
         //TODO: (Low Priority) Have beds as argument so we can have different beds for different games
         Bed bed1 = new Bed(3, true, "flowerbed_1.png");

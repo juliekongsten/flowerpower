@@ -42,6 +42,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private String playerTurn;
      private List<String> players;
      private List<Integer> gameIDs;
+     private List<String> test;
 
 
     /**
@@ -244,9 +245,9 @@ public class fireBaseConnector implements FireBaseInterface {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<Integer, Object> map = (Map<Integer, Object>) dataSnapshot.getValue();
-                System.out.println(map);
+                //System.out.println(map);
                 gameIDs.addAll(map.keySet());
-                System.out.println("key: " + gameIDs);
+                //System.out.println("key: " + gameIDs);
                 isDone=true;
             }
             @Override
@@ -269,7 +270,6 @@ public class fireBaseConnector implements FireBaseInterface {
 
     @Override
     public void storeBeds(List<Bed> beds, int GID) {
-        System.out.println("gets called");
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID + "/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
@@ -288,6 +288,30 @@ public class fireBaseConnector implements FireBaseInterface {
             bedsRef.updateChildren(childUpdates);
             i++;
         }
+    }
+
+    @Override
+    public void retrieveBeds(int GID) {
+        // Denne henter egne beds! Kan hente OP beds dersom man endrer hvilken ID man henter fra
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(GID + "/Players/");
+        DatabaseReference userRef = playerRef.child(getUID());
+        DatabaseReference bedsRef = userRef.child("/Beds");
+        bedsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                System.out.println("HER ER BEDSENE: "+ map);
+                isDone=true;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
+            }
+        });
+
+
     }
 
 
@@ -379,7 +403,6 @@ public class fireBaseConnector implements FireBaseInterface {
 
     @Override
     public void setPlayerReady(int GID){
-        System.out.println("Kommer hit");
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Ready");
         Map<String, Object> updates = new HashMap<>();
@@ -405,9 +428,9 @@ public class fireBaseConnector implements FireBaseInterface {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                System.out.println(map);
+                //System.out.println(map);
                 players.addAll(map.keySet());
-                System.out.println("key: " + players);
+                //System.out.println("key: " + players);
                 isDone=true;
             }
             @Override
@@ -457,7 +480,7 @@ public class fireBaseConnector implements FireBaseInterface {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                System.out.println(map);
+                //System.out.println(map);
 
                 for (String name : map.keySet()) {
                     System.out.println("turn: " + name);

@@ -56,9 +56,10 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public void joinGame(int GID){}
 
     @Override
-    public void storeBeds(List<Bed> beds, int GID) {
+    public void storeBeds(List<Bed> beds, int GID) {}
 
-    }
+    @Override
+    public void retrieveBeds(int GID) {}
 
     @Override
     public List<String> getPlayers(int gameID){

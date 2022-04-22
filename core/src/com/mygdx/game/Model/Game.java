@@ -93,4 +93,8 @@ public class Game {
         _FBIC.storeBeds(beds, GID);
     }
 
+    public void retrievePlacedBeds() {
+        _FBIC.retrieveBeds(GID);
+    }
+
 }

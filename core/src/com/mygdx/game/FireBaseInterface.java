@@ -31,4 +31,5 @@ public interface FireBaseInterface {
     void createGame(int GID);
     void joinGame(int GID);
     void storeBeds(List<Bed> beds, int GID);
+    void retrieveBeds(int GID);
 }
