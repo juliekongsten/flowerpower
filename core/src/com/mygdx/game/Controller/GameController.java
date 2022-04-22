@@ -187,6 +187,11 @@ public class GameController {
     public ArrayList<Square> getMyMoves(){
         return this.game.getMyMoves();
     }
+    public ArrayList<Square> getOpMoves(){
+        return this.game.getOpMoves();
+    }
+
+
 
     /**
      * Moves Opponents bed to the opponent board as the sent beds have myboard coordinates

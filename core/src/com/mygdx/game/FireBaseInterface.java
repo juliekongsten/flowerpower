@@ -35,4 +35,5 @@ public interface FireBaseInterface {
     void storeBeds(List<Bed> beds, int GID);
     void setMove(Square square, int GID);
     ArrayList<Square> getMoves(int GID);
+    ArrayList<Square> getOpMoves(int GID);
 }

@@ -85,6 +85,8 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     @Override
     public void signOut() {}
+    @Override
+    public ArrayList<Square> getOpMoves(int GID){return null; }
 
     /**@Override
     public void writeUserDataToDb(Player player) {

@@ -81,6 +81,8 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public ArrayList<Square> getMoves(int GID) {
 return null;
     }
+    @Override
+    public ArrayList<Square> getOpMoves(int GID){return null; }
 
     @Override
     public void signOut() {}

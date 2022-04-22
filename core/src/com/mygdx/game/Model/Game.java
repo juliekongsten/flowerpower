@@ -100,6 +100,12 @@ public class Game {
         ArrayList<Square> squareList = _FBIC.getMoves(GID);
         return squareList;
     }
+    public ArrayList<Square> getOpMoves(){
+        System.out.println("Getting opponents moves");
+        ArrayList<Square> squareList = _FBIC.getOpMoves(GID);
+        return squareList;
+    }
+
 
     public void setMove(Square square){
         _FBIC.setMove(square, this.getGID());

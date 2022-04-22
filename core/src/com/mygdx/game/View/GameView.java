@@ -179,7 +179,7 @@ public class GameView extends View{
         //Should only be called when the opponent has made a move
         //TODO: Give feedback to user that your square has been hit/miss
         //Do not draw the flower/miss as this is done in render
-
+        gameController.getOpMoves();
 
     }
 
