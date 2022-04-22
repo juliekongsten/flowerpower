@@ -220,20 +220,20 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference playerRef = gameRef.child(GID + "/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
         DatabaseReference bedsRef = userRef.child("/Beds");
-        for (int i=0; i<5; i++) {
-            Bed bed = beds.get(i);
+        int i = 0;
+        for (Bed bed : beds) {
             HashMap<String, Object> result = new HashMap<>();
             result.put("pos_x", bed.getPos_x());
             result.put("pos_y", bed.getPos_y());
             result.put("size", bed.getSize());
             result.put("horizontal", bed.isHorizontal());
             result.put("texturePath", bed.getTexturePath());
-            Map<String, Object> postValues = result;
+            Map<String, Object> bedValues = result;
             Map<String, Object> childUpdates = new HashMap<>();
-            childUpdates.put("/bed" + (i+1), postValues);
+            childUpdates.put("/bed" + (i+1), bedValues);
             bedsRef.updateChildren(childUpdates);
+            i++;
         }
-
     }
 
 
