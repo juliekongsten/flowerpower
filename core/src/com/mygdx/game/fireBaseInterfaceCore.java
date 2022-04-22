@@ -3,6 +3,8 @@ package com.mygdx.game;
 
 import com.mygdx.game.Model.Player;
 
+import java.util.List;
+
 /**
  * Currently not used but required for communication between modules
  */
@@ -53,6 +55,13 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public void joinGame(int GID){}
 
     @Override
+    public List<String> getPlayers(int gameID){
+        return null;
+    }
+    @Override
+    public List<Integer> getGameIDs(){
+        return null;
+    }
     public void signOut() {
     }
 

@@ -34,12 +34,14 @@ import java.util.Map;
  */
 
 public class fireBaseConnector implements FireBaseInterface {
-    private final FirebaseDatabase database;
-    private DatabaseReference myRef;
-    private final FirebaseAuth mAuth;
-    private Exception exception = null;
-    private boolean isDone = false;
-    private String playerTurn;
+     private final FirebaseDatabase database;
+     private DatabaseReference myRef;
+     private final FirebaseAuth mAuth;
+     private Exception exception = null;
+     private boolean isDone = false;
+     private String playerTurn;
+     private List<String> players;
+     private List<Integer> gameIDs;
 
 
     /**
@@ -228,6 +230,41 @@ public class fireBaseConnector implements FireBaseInterface {
         return this.isDone;
     }
 
+    /**
+     *
+     *
+     * @return
+     */
+    public List<Integer> getGameIDs(){
+        isDone=false;
+        gameIDs = new ArrayList<>();
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        gameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<Integer, Object> map = (Map<Integer, Object>) dataSnapshot.getValue();
+                System.out.println(map);
+                gameIDs.addAll(map.keySet());
+                System.out.println("key: " + gameIDs);
+                isDone=true;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
+            }
+        }
+        );
+        while (!isDone){
+            //waiting:)
+        }
+        return this.gameIDs;
+
+    }
+
+    /*
+    TODO: Disse burde kanskje være protected?
+     */
 
     /**
      * createGame gets called when user wants to create a game
@@ -254,8 +291,10 @@ public class fireBaseConnector implements FireBaseInterface {
         turnData.put("Turn",this.getUID());
         DatabaseReference turnRef = gameRef.child(GID+"/Turn");
         turnRef.setValue(turnData);
-        setTurnToOtherPlayer(GID);
-        getPlayers(GID);
+        //setTurnToOtherPlayer(GID);
+        //getPlayers(GID);
+        //List<Integer> IDs = getGameIDs();
+        //System.out.println(IDs);
     }
 
 
@@ -283,7 +322,7 @@ public class fireBaseConnector implements FireBaseInterface {
         //check user logged in - getID
         //check gamepin - if the same, get user into the game
         //ready(gameID,displayName[0]);
-        setTurnToOtherPlayer(gameID);
+        //setTurnToOtherPlayer(gameID);
     }
 
 
@@ -325,7 +364,8 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     //TODO: legge inn før join game så man sjekker at listen er allerede full
     public List<String> getPlayers(int gameID){
-        List<String> players = new ArrayList<String>();
+        isDone=false;
+        players = new ArrayList<>();
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
         playerRef.addValueEventListener(new ValueEventListener() {
@@ -335,15 +375,20 @@ public class fireBaseConnector implements FireBaseInterface {
                 System.out.println(map);
                 players.addAll(map.keySet());
                 System.out.println("key: " + players);
+                isDone=true;
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
             }
         });
         //mDatabase.child("users").child(userId).get();
         //bytter verdi til den andre spilleren i turn
         //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
+        while(!isDone){
+            //waiting
+        }
         return players;
     }
     public void setTurnToOtherPlayer(int gameID){

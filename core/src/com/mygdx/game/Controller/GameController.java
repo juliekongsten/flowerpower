@@ -59,9 +59,12 @@ public class GameController {
 
 
     }
-    public void joinGame(int GID){
+    public void joinGame(int GID) {
+
         Game game = new Game(GID);
         this.game = game;
+
+
     }
 
     public void createGame(){
