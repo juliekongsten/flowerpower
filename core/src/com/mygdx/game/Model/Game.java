@@ -5,6 +5,9 @@ import com.mygdx.game.FlowerPowerGame;
 
 import java.util.List;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Game {
 
     private int GID;
@@ -85,5 +88,9 @@ public class Game {
         this.GID= existingGID;
     }
 
+    public void storePlacedBeds(List<Bed> beds) {
+        System.out.println("gets in to game");
+        _FBIC.storeBeds(beds, GID);
+    }
 
 }
