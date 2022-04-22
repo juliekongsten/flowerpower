@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Controller.GameController;
+import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class ExitView extends View{
@@ -20,13 +21,16 @@ public class ExitView extends View{
     private Texture fish;
     private Texture lost_text;
     private Texture log_out;
+    private PlayerController playerController;
+    private GameController gameController;
 
     private boolean winner;
-    private GameController gameController;
+
 
 
     protected ExitView(ViewManager vm, boolean won, GameController gameController) {
         super(vm);
+        this.playerController = new PlayerController();
         this.gameController = gameController;
         this.logo = new Texture("small_logo.png");
         this.gameOver = new Texture("game_over.png");
@@ -57,6 +61,8 @@ public class ExitView extends View{
             }
             if(log_outBounds.contains(pos.x, pos.y)){
                 //TODO log out and exit the application
+                playerController.logOut();
+                vm.set(new StartView(vm));
             }
         }
 

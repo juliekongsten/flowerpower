@@ -52,6 +52,10 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     @Override
     public void joinGame(int GID){}
 
+    @Override
+    public void signOut() {
+    }
+
     /**@Override
     public void writeUserDataToDb(Player player) {
 

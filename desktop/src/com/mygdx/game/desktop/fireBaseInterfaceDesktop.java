@@ -55,7 +55,10 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     @Override
     public void joinGame(int GID){}
 
+    @Override
+    public void signOut() {
 
+    }
 
 
 }
