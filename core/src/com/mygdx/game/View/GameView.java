@@ -72,6 +72,7 @@ public class GameView extends View{
 
     public GameView(ViewManager vm, GameController gameController) {
         super(vm);
+        System.out.println("in gameview");
         this.gameController = vm.getController();
         pool = new Texture("pool.png");
         createTextures();
@@ -82,7 +83,7 @@ public class GameView extends View{
         opBeds = gameController.getOpBeds();
         opBoard = gameController.getOpBoard();
         already_pressed = new ArrayList<>();
-        waiting = !gameController.isMyTurn();
+        waiting = !gameController.isMyTurn(); //check, stopper?
 
     }
 
@@ -186,7 +187,7 @@ public class GameView extends View{
     @Override
     public void update(float dt) {
         handleInput();
-        waiting = !gameController.isMyTurn();
+
 
         //Checks if the game is over and takes player to ExitView
         if (gameOver){
@@ -350,7 +351,7 @@ public class GameView extends View{
         }
         gameOver = gameController.getGameOver();
 
-
+        System.out.println("after render gameview");
         sb.end();
 
     }
