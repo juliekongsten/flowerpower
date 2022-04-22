@@ -158,7 +158,10 @@ public class GameController {
     }
 
     public boolean getPlayersReady(){
-        return this.game.getPlayersReady();
+        boolean ready = this.game.getPlayersReady();
+        System.out.println("controller playersready: "+ready);
+
+        return ready;
     }
 
     /**
@@ -185,10 +188,8 @@ public class GameController {
      */
     private void moveOpBeds(List<Bed> receivedOpBeds){
         List<Bed> newBeds = new ArrayList<>();
-        System.out.println("SentOpBeds: "+receivedOpBeds);
 
         for (Bed bed : receivedOpBeds){
-            System.out.println("SentOpBed: "+bed.getPos_x()+","+bed.getPos_y());
             int size = bed.getSize();
             boolean horizontal = bed.isHorizontal();
             String texturePath = bed.getTexturePath();
@@ -196,7 +197,6 @@ public class GameController {
             float y = bed.getPos_y()+distance;
             float x = bed.getPos_x();
             newBed.updatePosition(x, y);
-            System.out.println("Newbed: "+newBed.getPos_x()+","+newBed.getPos_y());
             newBeds.add(newBed);
 
         }

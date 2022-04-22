@@ -82,7 +82,9 @@ public class Game {
 
     public boolean getPlayersReady(){
         //Get opponents ready value from database
-        return this._FBIC.getPlayersReady(this.GID);
+        boolean ready = this._FBIC.getPlayersReady(this.GID);
+        System.out.println("Game getplayersready: "+ready);
+        return ready;
     }
 
     public void storePlacedBeds(List<Bed> beds) {
