@@ -3,6 +3,8 @@ package com.mygdx.game.Model;
 import androidx.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -23,6 +25,7 @@ import com.mygdx.game.Model.CustomException;
 import static android.content.ContentValues.TAG;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +45,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private String playerTurn;
      private List<String> players;
      private List<Integer> gameIDs;
+     private boolean playersReady = true;
 
 
     /**
@@ -246,7 +250,6 @@ public class fireBaseConnector implements FireBaseInterface {
                 Map<Integer, Object> map = (Map<Integer, Object>) dataSnapshot.getValue();
                 System.out.println(map);
                 gameIDs.addAll(map.keySet());
-                System.out.println("key: " + gameIDs);
                 isDone=true;
             }
             @Override
@@ -269,7 +272,6 @@ public class fireBaseConnector implements FireBaseInterface {
 
     @Override
     public void storeBeds(List<Bed> beds, int GID) {
-        System.out.println("gets called");
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID + "/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
@@ -311,7 +313,7 @@ public class fireBaseConnector implements FireBaseInterface {
         userRef.setValue(uidData);
         Map readyData = new HashMap();
         String displayName[] = this.getUsername().split("@");
-        readyData.put(displayName[0],false);
+        readyData.put(displayName[0], false);
         DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
 
@@ -379,7 +381,6 @@ public class fireBaseConnector implements FireBaseInterface {
 
     @Override
     public void setPlayerReady(int GID){
-        System.out.println("Kommer hit");
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Ready");
         Map<String, Object> updates = new HashMap<>();
@@ -387,16 +388,113 @@ public class fireBaseConnector implements FireBaseInterface {
         updates.put(displayName[0], true);
         playerRef.updateChildren(updates);
 
+    }
+
+    private void setPlayersReady(boolean ready){
+        this.playersReady=ready;
+    }
+    public List<String> getPlayers(int gameID){
+        isDone=false;
+        players = new ArrayList<>();
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
+        playerRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                    Map<String, Object> map = (Map<String, Object>) task.getResult().getValue();
+                    System.out.println(map);
+                    players.addAll(map.keySet());
+                    System.out.println("key: " + players);
+                    isDone=true;
+                }
+            }
+
+        });
+    /*playerRef.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+            System.out.println(map);
+            players.addAll(map.keySet());
+            System.out.println("key: " + players);
+            isDone=true;
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            System.out.println("The read failed: " + databaseError.getCode());
+            isDone=true;
+        }
+    });*/
+        //mDatabase.child("users").child(userId).get();
+        //bytter verdi til den andre spilleren i turn
+        //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
+        while(!isDone){
+            //waiting
+        }
+        return players;
+    }
+
+    @Override
+    public boolean getPlayersReady(int GID) {
+        isDone=false;
+        setPlayersReady(true);
+        System.out.println("Ready start FBIC: "+playersReady);
+
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference readyRef = gameRef.child(GID+"/Ready/");
+        readyRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
+                System.out.println(map.containsValue(false));
+
+                if (map.containsValue(false)){
+                    System.out.println("Values:");
+                    Collection<Object> values = map.values();
+                    for (Object value: values){
+                        System.out.println(value);
+                    }
+                    setPlayersReady(false);
+                }
+
+                System.out.println("Ready after ondatachange: "+playersReady);
+                isDone=true;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("The read failed: " + error.getCode());
+                setPlayersReady(false);
+                isDone=true;
+            }
+
+
+        });
+
+        while (!isDone){
+            //waiting
+            System.out.println("waiting");
+        }
+        System.out.println("FBIC playersready: "+this.playersReady);
+        return this.playersReady;
+
 
 
     }
+
+
     /**
      * getPlayers gets all the in the game with this gameID
      * @param gameID
      * @return List<String> for player UID
      */
     //TODO: legge inn før join game så man sjekker at listen er allerede full
-    public List<String> getPlayers(int gameID){
+    /*public List<String> getPlayers(int gameID){
         isDone=false;
         players = new ArrayList<>();
         DatabaseReference gameRef = database.getReference().child("/Games");
@@ -407,7 +505,6 @@ public class fireBaseConnector implements FireBaseInterface {
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
                 System.out.println(map);
                 players.addAll(map.keySet());
-                System.out.println("key: " + players);
                 isDone=true;
             }
             @Override
@@ -423,7 +520,8 @@ public class fireBaseConnector implements FireBaseInterface {
             //waiting
         }
         return players;
-    }
+    }*/
+
     public void setTurnToOtherPlayer(int gameID){
         DatabaseReference gameRef = database.getReference().child("/Games");
         List<String> players = getPlayers(gameID);
@@ -450,6 +548,7 @@ public class fireBaseConnector implements FireBaseInterface {
      * @return String UID of player that
      */
     public String getTurn(int gameID){
+        //TODO: Implement check for if this is yooou
         isDone = false;
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Turn");
@@ -457,10 +556,8 @@ public class fireBaseConnector implements FireBaseInterface {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                System.out.println(map);
 
                 for (String name : map.keySet()) {
-                    System.out.println("turn: " + name);
                     setPlayerTurn(name);
                 }
                 isDone=true;
@@ -475,6 +572,13 @@ public class fireBaseConnector implements FireBaseInterface {
             //waiting
         }
         return this.playerTurn;
+    }
+
+    public boolean isMyTurn(int gameID){
+        String[] displayName = this.getUsername().split("@");
+        String name = displayName[0];
+        System.out.println("Is my turn: "+name.equals(getTurn(gameID)));
+        return name.equals(getTurn(gameID));
     }
 
     //TODO: spillhåndtering - se forslag til database metoder videre
