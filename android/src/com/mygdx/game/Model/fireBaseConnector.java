@@ -497,6 +497,7 @@ public class fireBaseConnector implements FireBaseInterface {
         result.put("pos_x", square.getX());
         result.put("pos_y", square.getY());
         result.put("Flower", square.hasFlower());
+        result.put("Size", square.getSide());
 
         Map<String, Object> moveValues = result;
         Map<String, Object> childUpdates = new HashMap<>();
@@ -528,14 +529,24 @@ public class fireBaseConnector implements FireBaseInterface {
         movesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<Object> list = new ArrayList<>();
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
                 System.out.println("HER ER MOVSENE: "+ map);
-                /*
-                TODO: fikse denne
-                for (String name : map.keySet()) {
-                    System.out.println("turn: " + name);
-                    setPlayerTurn(name);
-                }*/
+                for (String move: map.keySet()){
+                    map.get(move);
+                    System.out.println("Dette er square til MOVESENE " + map.get(move));
+                }
+                //Trenger vel egt å bare sjekke siste verdi lagt til?
+
+                for (Object value : map.values()) {
+                    System.out.println("DETTE ER MOVESENE VERDI: " + value);
+                    // DE BLIR PRINTET SLIK: DETTE ER MOVESENE VERDI: {pos_y=10, Flower=false, pos_x=10}
+                    //TODO: sjekke om det er et bed hos meg
+
+                    list.add(value);
+
+                }
+                System.out.println("MOVSENE SIN LIST: " + list);
                 isDone=true;
             }
             @Override

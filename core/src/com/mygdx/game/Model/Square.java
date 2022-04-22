@@ -11,17 +11,23 @@ public class Square {
     private boolean isHit = false; //if the square is hit
     private int x;
     private int y;
+    private int side;
 
     public Square(int x, int y, int side){
         bounds = new Rectangle(x, y, side, side);
         this.x = x;
         this.y = y;
+        this.side = side;
     }
     public int getX(){
         return this.x;
     }
     public int getY(){
         return this.y;
+    }
+
+    public int getSide(){
+        return this.side;
     }
 
 
