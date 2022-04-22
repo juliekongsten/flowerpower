@@ -100,7 +100,6 @@ public class PlaceBedsView extends View{
             Bed touchedBed = new Bed(0, true, "flowerbed_1.png");
             //Update position to bed touched
             for (Bed bed : beds) {
-                System.out.println(bed.getBounds());
                 if (bed.getBounds().contains(pos.x, pos.y)) {
                     touchedBed = bed;
                 }
