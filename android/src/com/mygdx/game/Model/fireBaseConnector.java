@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mygdx.game.Model.CustomException;
 
 
 
@@ -33,12 +34,12 @@ import java.util.Map;
  */
 
 public class fireBaseConnector implements FireBaseInterface {
-     private final FirebaseDatabase database;
-     private DatabaseReference myRef;
-     private final FirebaseAuth mAuth;
-     private Exception exception = null;
-     private boolean isDone = false;
-     private String playerTurn;
+    private final FirebaseDatabase database;
+    private DatabaseReference myRef;
+    private final FirebaseAuth mAuth;
+    private Exception exception = null;
+    private boolean isDone = false;
+    private String playerTurn;
 
 
     /**
@@ -57,8 +58,8 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     @Override
     public void writeToDb(String target, String value){
-            myRef = database.getReference(target);
-            myRef.setValue(value);
+        myRef = database.getReference(target);
+        myRef.setValue(value);
 
     }
 
@@ -200,6 +201,21 @@ public class fireBaseConnector implements FireBaseInterface {
     }
     public Exception getException(){
         return this.exception;
+    }
+    /**
+     * method that sign out current user
+     */
+
+    public void signOut(){
+        try{
+            mAuth.signOut();
+            Log.d(TAG, "signOut:success");
+        }catch (Exception e){
+            //TODO: fix exception
+            e.printStackTrace();
+
+        }
+
     }
 
 

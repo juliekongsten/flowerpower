@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.game.Controller.LoginController;
+import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class LoginView extends View {
@@ -34,7 +34,7 @@ public class LoginView extends View {
     private String usernameTyped;
     private String passwordTyped;
     private Pixmap cursorColor;
-    private LoginController LoginController;
+    private PlayerController playerController;
 
     boolean validCredentials = true;
     boolean otherMistake = false;
@@ -52,6 +52,7 @@ public class LoginView extends View {
         invalidCredentials = new Texture("invalidCredential.png");
         otherMistakeMessage = new Texture("wentWrong.png");
         back = new Texture("back.png");
+
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
@@ -122,7 +123,8 @@ public class LoginView extends View {
                     validCredentials = false;
                 } else {
                     try {
-                        LoginController = new LoginController(usernameTyped, passwordTyped);
+                        this.playerController = new PlayerController();
+                        playerController.logIn(usernameTyped, passwordTyped);
                         vm.set(new MenuView(vm));
 
                     }

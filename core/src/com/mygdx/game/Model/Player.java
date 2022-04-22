@@ -71,6 +71,11 @@ public class Player {
     }
 
 
+    public void signOut(){
+        this._FBIC = FlowerPowerGame.getFBIC();
+        _FBIC.signOut();
+    }
+
     /**
      * gets username of player
      * @return username of current logged in player

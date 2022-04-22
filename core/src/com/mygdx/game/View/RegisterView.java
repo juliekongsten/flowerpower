@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Controller.GameController;
-import com.mygdx.game.Controller.RegisterController;
+import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class RegisterView extends View {
@@ -48,6 +48,8 @@ public class RegisterView extends View {
     private boolean validEmail = true;
     private boolean newEmail = true;
     private boolean otherMistake = false;
+    private PlayerController playerController;
+    private GameController gameController; //not used
 
 
 
@@ -164,7 +166,8 @@ public class RegisterView extends View {
                     // sendes videre for å sjekke med db
                     try {
                         //call registercontroller and try to make user
-                        RegisterController controller = new RegisterController(usernameTyped, passwordTyped);
+                        this.playerController = new PlayerController();
+                        playerController.register(usernameTyped, passwordTyped);
                         vm.set(new MenuView(vm));
 
                     } catch (Exception e) {
