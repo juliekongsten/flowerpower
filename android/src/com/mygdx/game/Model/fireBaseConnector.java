@@ -307,7 +307,7 @@ public class fireBaseConnector implements FireBaseInterface {
         }
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID + "/Players/");
-        DatabaseReference userRef = playerRef.child(getUID());
+        DatabaseReference userRef = playerRef.child(opUID);
         DatabaseReference bedsRef = userRef.child("/Beds");
         bedsRef.addValueEventListener(new ValueEventListener() {
             @Override

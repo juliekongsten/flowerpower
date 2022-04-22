@@ -101,6 +101,7 @@ public class Game {
     public Map<String, Object> retrievePlacedBeds() {
         System.out.println("Game, retrievePlacedBeds(): " + _FBIC.retrieveBeds(GID));
         return _FBIC.retrieveBeds(GID);
+    }
 
     public boolean isMyTurn(){
         boolean myTurn =this._FBIC.isMyTurn(this.GID);
