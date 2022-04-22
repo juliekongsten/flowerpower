@@ -541,39 +541,6 @@ public class fireBaseConnector implements FireBaseInterface {
     }
 
 
-    /**
-     * getPlayers gets all the in the game with this gameID
-     * @param gameID
-     * @return List<String> for player UID
-     */
-    //TODO: legge inn før join game så man sjekker at listen er allerede full
-    /*public List<String> getPlayers(int gameID){
-        isDone=false;
-        players = new ArrayList<>();
-        DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
-        playerRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                //System.out.println(map);
-                players.addAll(map.keySet());
-                isDone=true;
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-                isDone=true;
-            }
-        });
-        //mDatabase.child("users").child(userId).get();
-        //bytter verdi til den andre spilleren i turn
-        //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
-        while(!isDone){
-            //waiting
-        }
-        return players;
-    }*/
 
     public void setTurnToOtherPlayer(int gameID){
         DatabaseReference gameRef = database.getReference().child("/Games");
@@ -629,9 +596,10 @@ public class fireBaseConnector implements FireBaseInterface {
 
     public boolean isMyTurn(int gameID){
         String turn = getTurn(gameID);
-        String name = getUID();
-
-        //System.out.println("Is my turn: "+name.equals(getTurn(gameID)));
+        String name = getUID(); //returnere
+        System.out.println("Turn: "+turn);
+        System.out.println("Name: "+name);
+        System.out.println("Is my turn: "+name.equals(turn));
         return name.equals(turn);
     }
 

@@ -90,6 +90,7 @@ public class GameController {
         }
         square.setHit(true);
         return square.hasFlower();
+
     }
 
     public void setMyBeds(List<Bed> beds){
@@ -310,6 +311,11 @@ public class GameController {
         System.out.println("Controller is my turn: "+myTurn);
         return myTurn;
     }
+
+    public void setTurnToOtherPlayer(){
+        this.game.setTurnToOtherPlayer();
+    }
+
     public boolean checkForGameStart() {
         boolean start = this.game.checkForGameStart();
         System.out.println("start status: "+start);
