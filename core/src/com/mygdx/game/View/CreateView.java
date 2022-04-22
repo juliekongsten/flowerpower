@@ -1,5 +1,6 @@
 package com.mygdx.game.View;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,12 +25,12 @@ public class CreateView extends View {
     private String gamePin;
     private final float highscore_x;
     private GameController gameController;
+    private boolean start;
 
 
     protected CreateView(ViewManager vm, String gamePin) {
         super(vm);
-        gameController = new GameController();
-        vm.setController(gameController);
+        gameController = vm.getController();
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
         highscore = new Texture("Highscore.png");
@@ -38,6 +39,7 @@ public class CreateView extends View {
         back = new Texture("back.png");
         highscore_x = FlowerPowerGame.WIDTH-highscore.getWidth()-10;
         this.gamePin = gamePin;
+        this.start= gameController.checkForGameStart();
     }
 
 
@@ -64,10 +66,11 @@ public class CreateView extends View {
 
     @Override
     public void update(float dt) {
-        //TODO: Check if player has joined your game
         handleInput();
     }
 
+
+    int test = 0;
     @Override
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
@@ -83,9 +86,14 @@ public class CreateView extends View {
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         font.getData().setScale((float) 1.3);
         font.setColor(Color.BLACK);
-
         font.draw(sb, gamePin, (float) FlowerPowerGame.WIDTH/2-40, 280);
+        this.start= gameController.checkForGameStart();
+        if (start){
+            vm.set(new PlaceBedsView(vm));
+        }
 
         sb.end();
+
+
     }
 }

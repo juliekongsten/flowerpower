@@ -3,6 +3,8 @@ package com.mygdx.game.Model;
 import androidx.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -311,7 +313,7 @@ public class fireBaseConnector implements FireBaseInterface {
         userRef.setValue(uidData);
         Map readyData = new HashMap();
         String displayName[] = this.getUsername().split("@");
-        readyData.put(displayName[0],false);
+        readyData.put(displayName[0], false);
         DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
 
@@ -391,6 +393,51 @@ public class fireBaseConnector implements FireBaseInterface {
     private void setPlayersReady(boolean ready){
         this.playersReady=ready;
     }
+    public List<String> getPlayers(int gameID){
+        isDone=false;
+        players = new ArrayList<>();
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
+        playerRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                    Map<String, Object> map = (Map<String, Object>) task.getResult().getValue();
+                    System.out.println(map);
+                    players.addAll(map.keySet());
+                    System.out.println("key: " + players);
+                    isDone=true;
+                }
+            }
+
+        });
+    /*playerRef.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+            System.out.println(map);
+            players.addAll(map.keySet());
+            System.out.println("key: " + players);
+            isDone=true;
+        }
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            System.out.println("The read failed: " + databaseError.getCode());
+            isDone=true;
+        }
+    });*/
+        //mDatabase.child("users").child(userId).get();
+        //bytter verdi til den andre spilleren i turn
+        //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
+        while(!isDone){
+            //waiting
+        }
+        return players;
+    }
 
     @Override
     public boolean getPlayersReady(int GID) {
@@ -447,7 +494,7 @@ public class fireBaseConnector implements FireBaseInterface {
      * @return List<String> for player UID
      */
     //TODO: legge inn før join game så man sjekker at listen er allerede full
-    public List<String> getPlayers(int gameID){
+    /*public List<String> getPlayers(int gameID){
         isDone=false;
         players = new ArrayList<>();
         DatabaseReference gameRef = database.getReference().child("/Games");
@@ -473,7 +520,8 @@ public class fireBaseConnector implements FireBaseInterface {
             //waiting
         }
         return players;
-    }
+    }*/
+
     public void setTurnToOtherPlayer(int gameID){
         DatabaseReference gameRef = database.getReference().child("/Games");
         List<String> players = getPlayers(gameID);
