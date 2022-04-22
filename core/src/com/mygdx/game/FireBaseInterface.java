@@ -17,10 +17,15 @@ public interface FireBaseInterface {
     String getUsername();
 
     String getUID();
+    void signOut();
 
     Exception getException();
 
     boolean getIsDone();
+    void setPlayerReady(int GID);
+
+    List<String> getPlayers(int GID);
+    List<Integer> getGameIDs();
 
     //void writeUserDataToDb(Player player);
     void createGame(int GID);

@@ -45,6 +45,8 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public boolean getIsDone() {
         return false;
     }
+    @Override
+    public void setPlayerReady(int GID){}
 
 
     @Override
@@ -56,7 +58,17 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     @Override
     public void storeBeds(List<Bed> beds, int GID) {
 
+    public List<String> getPlayers(int gameID){
+        return null;
     }
+
+    @Override
+    public List<Integer> getGameIDs(){
+        return null;
+    }
+
+    @Override
+    public void signOut() {}
 
     /**@Override
     public void writeUserDataToDb(Player player) {

@@ -15,13 +15,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mygdx.game.Model.CustomException;
 
 
 
 
 import static android.content.ContentValues.TAG;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,11 +34,14 @@ import java.util.Map;
  */
 
 public class fireBaseConnector implements FireBaseInterface {
-     private FirebaseDatabase database;
+     private final FirebaseDatabase database;
      private DatabaseReference myRef;
-     private FirebaseAuth mAuth;
+     private final FirebaseAuth mAuth;
      private Exception exception = null;
      private boolean isDone = false;
+     private String playerTurn;
+     private List<String> players;
+     private List<Integer> gameIDs;
 
 
     /**
@@ -58,8 +60,8 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     @Override
     public void writeToDb(String target, String value){
-            myRef = database.getReference(target);
-            myRef.setValue(value);
+        myRef = database.getReference(target);
+        myRef.setValue(value);
 
     }
 
@@ -139,6 +141,7 @@ public class fireBaseConnector implements FireBaseInterface {
                 // Sign in failed
                 //TODO: send message back to register class for error handling
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                this.exception = new CustomException("Unknown exception");
 
             }
             isDone = true;
@@ -154,6 +157,7 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     public void signIn(String username, String password){
         this.exception = null;
+        this.isDone = false;
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -163,21 +167,23 @@ public class fireBaseConnector implements FireBaseInterface {
                         Log.d(TAG, user.getEmail());
 
                     }
-                    else if (task.getException() instanceof FirebaseAuthInvalidUserException)
-                    {
-                        //user does not exist
-                        this.exception = new CustomException("Invalid user");
-
+                    else if (task.getException() instanceof FirebaseAuthInvalidUserException){
+                        this.exception = new CustomException("Invalid email/password");
                     }
                     else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                        //password is invalid
-                        this.exception = new CustomException("Invalid password");
+                        //Thrown when one or more of the credentials passed to a method fail to
+                        // identify and/or authenticate the user subject of that operation.
+                        //--> email OR password wrong
+                        this.exception = new CustomException("Invalid email/password");
 
                     }
                     else {
                         // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());}
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        this.exception = new CustomException("Unknown exception");
 
+                    }
+                    isDone = true;
                 });
 
     }
@@ -199,6 +205,21 @@ public class fireBaseConnector implements FireBaseInterface {
     public Exception getException(){
         return this.exception;
     }
+    /**
+     * method that sign out current user
+     */
+
+    public void signOut(){
+        try{
+            mAuth.signOut();
+            Log.d(TAG, "signOut:success");
+        }catch (Exception e){
+            //TODO: fix exception
+            e.printStackTrace();
+
+        }
+
+    }
 
 
     //TODO: hvordan fikse dette?
@@ -209,6 +230,39 @@ public class fireBaseConnector implements FireBaseInterface {
     public boolean getIsDone(){
         return this.isDone;
     }
+
+    /**
+     *
+     *
+     * @return
+     */
+    public List<Integer> getGameIDs(){
+        isDone=false;
+        gameIDs = new ArrayList<>();
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        gameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<Integer, Object> map = (Map<Integer, Object>) dataSnapshot.getValue();
+                System.out.println(map);
+                gameIDs.addAll(map.keySet());
+                System.out.println("key: " + gameIDs);
+                isDone=true;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
+            }
+        }
+        );
+        while (!isDone){
+            //waiting:)
+        }
+        return this.gameIDs;
+
+    }
+
     /*
     TODO: Disse burde kanskje være protected?
      */
@@ -266,10 +320,14 @@ public class fireBaseConnector implements FireBaseInterface {
 
 
         //TODO: fikse så denne ikke overskriver alle de andre
-        /*Map turnData = new HashMap();
-        turnData.put("Turn","player1");
-        DatabaseReference turnRef = gameRef.child(GID+"");
-        turnRef.setValue(turnData);*/
+        Map turnData = new HashMap();
+        turnData.put("Turn",this.getUID());
+        DatabaseReference turnRef = gameRef.child(GID+"/Turn");
+        turnRef.setValue(turnData);
+        //setTurnToOtherPlayer(GID);
+        //getPlayers(GID);
+        //List<Integer> IDs = getGameIDs();
+        //System.out.println(IDs);
     }
 
 
@@ -297,7 +355,10 @@ public class fireBaseConnector implements FireBaseInterface {
         //check user logged in - getID
         //check gamepin - if the same, get user into the game
         //ready(gameID,displayName[0]);
+        //setTurnToOtherPlayer(gameID);
     }
+
+
 
     /**
      * Når en bruker har forlatt spillet, ved å trykke exit f.eks, må leave game
@@ -312,45 +373,108 @@ public class fireBaseConnector implements FireBaseInterface {
 
     /**
      * ready gets called when a user presses ready to say that the game can start
-     * @param gameID
-     * @param user
+     * @param GID the gamePin ID
      */
-    //TODO: listen for ready - game starts when both users are ready
-    // om det er stress her kan vi ha en boolean hjelpemetode
 
-    public void ready(int gameID, String user){
-        //når brukeren har trykket bli klar skal
-        //sjekker brukeren (helst current user)
+
+    @Override
+    public void setPlayerReady(int GID){
+        System.out.println("Kommer hit");
         DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(gameID+"/Ready");
+        DatabaseReference playerRef = gameRef.child(GID+"/Ready");
         Map<String, Object> updates = new HashMap<>();
-        updates.put(user, true);
+        String[] displayName = this.getUsername().split("@");
+        updates.put(displayName[0], true);
         playerRef.updateChildren(updates);
+
+
+
     }
-
-
     /**
-     * When a player makes a move, it updates so its the other players turn
+     * getPlayers gets all the in the game with this gameID
      * @param gameID
+     * @return List<String> for player UID
      */
-    //TODO: listen for turn - kan kun gå videre dersom det er din tur
-    // om det er stress her kan vi ha en boolean hjelpemetode - se under
-    public void setTurnToOtherPlayer(int gameID){
-
+    //TODO: legge inn før join game så man sjekker at listen er allerede full
+    public List<String> getPlayers(int gameID){
+        isDone=false;
+        players = new ArrayList<>();
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
+        playerRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                System.out.println(map);
+                players.addAll(map.keySet());
+                System.out.println("key: " + players);
+                isDone=true;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
+            }
+        });
+        //mDatabase.child("users").child(userId).get();
         //bytter verdi til den andre spilleren i turn
         //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
+        while(!isDone){
+            //waiting
+        }
+        return players;
+    }
+    public void setTurnToOtherPlayer(int gameID){
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        List<String> players = getPlayers(gameID);
+        //har en liste med players
+        //sjekker hvem som allerede har turn
+        for (String name : players){
+            if (name != getTurn(gameID)){
+                Map turnData = new HashMap();
+                turnData.put("Turn", name);
+                DatabaseReference turnRef = gameRef.child(gameID+"/Turn");
+                turnRef.setValue(turnData);
+                return;
+            }
+        }
+    }
+
+    private void setPlayerTurn(String name){
+        this.playerTurn = name;
     }
 
     /**
-     * Checks if its your turn
-     * Kan evt være en listener som sjekker når turn parameteret blir forandret
+     * getTurn checks which players turn it is right now
      * @param gameID
-     * @return
+     * @return String UID of player that
      */
-    public boolean yourTurn(int gameID){
-        //du kan kun gjøre et move dersom det er din tur
-        return false;
+    public String getTurn(int gameID){
+        isDone = false;
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gameID+"/Turn");
+        playerRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                System.out.println(map);
 
+                for (String name : map.keySet()) {
+                    System.out.println("turn: " + name);
+                    setPlayerTurn(name);
+                }
+                isDone=true;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
+            }
+        });
+        while (!isDone){
+            //waiting
+        }
+        return this.playerTurn;
     }
 
     //TODO: spillhåndtering - se forslag til database metoder videre
@@ -397,7 +521,5 @@ public class fireBaseConnector implements FireBaseInterface {
     public FirebaseAuth getAuth(){
         return this.mAuth;
     }
-
-
 
 }

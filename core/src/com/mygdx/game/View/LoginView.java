@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.game.Controller.LoginController;
+import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class LoginView extends View {
@@ -28,13 +28,18 @@ public class LoginView extends View {
     private final Texture settings;
     private final Texture enter_username;
     private final Texture enter_password;
+    private final Texture invalidCredentials;
+    private final Texture otherMistakeMessage;
+    private final Texture back;
     private String usernameTyped;
     private String passwordTyped;
     private Pixmap cursorColor;
-    private LoginController LoginController;
+    private PlayerController playerController;
 
-    boolean validEmail = true;
-    boolean validPassword = true;
+    boolean validCredentials = true;
+    boolean otherMistake = false;
+
+
 
     protected LoginView(ViewManager vm) {
         super(vm);
@@ -44,6 +49,9 @@ public class LoginView extends View {
         settings = new Texture("settings.png");
         enter_username = new Texture("enter_username.png");
         enter_password = new Texture("enter_password.png");
+        invalidCredentials = new Texture("invalidCredential.png");
+        otherMistakeMessage = new Texture("wentWrong.png");
+        back = new Texture("back.png");
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -71,7 +79,7 @@ public class LoginView extends View {
         username = new TextField("", ts);
         username.setWidth(FlowerPowerGame.WIDTH-80);
         username.setHeight(37);
-        username.setPosition((float) (FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 240);
+        username.setPosition((float) (FlowerPowerGame.WIDTH/2)-(username.getWidth()/2), 260);
     }
 
     private void setPasswordField(TextField.TextFieldStyle ts) {
@@ -80,7 +88,7 @@ public class LoginView extends View {
         password.setPasswordCharacter('*');
         password.setWidth(FlowerPowerGame.WIDTH-80);
         password.setHeight(37);
-        password.setPosition((float) (FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 140);
+        password.setPosition((float) (FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 160);
     }
 
     private void setCursor(Label.LabelStyle ls) {
@@ -94,8 +102,8 @@ public class LoginView extends View {
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
-            validEmail=true;
-            validPassword=true;
+            validCredentials=true;
+            otherMistake=false;
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
 
             Rectangle loginBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-(login.getWidth()/2)), 40,
@@ -111,21 +119,28 @@ public class LoginView extends View {
                 System.out.println("Password typed:");
                 System.out.println(passwordTyped);
 
-                try {
-                    LoginController = new LoginController(usernameTyped, passwordTyped);
-                    vm.set(new MenuView(vm));
-                }
-                catch (Exception e) {
-                    //TODO: Write feedback to user
-                    if (e.toString().equals("Invalid user")){
-                        validEmail=false;
+                if (usernameTyped.isEmpty()||passwordTyped.isEmpty()){
+                    validCredentials = false;
+                } else {
+                    try {
+                        this.playerController = new PlayerController();
+                        playerController.logIn(usernameTyped, passwordTyped);
+                        vm.set(new MenuView(vm));
 
                     }
-                    else if(e.toString().equals("Invalid password")){
-                        validPassword=false;
+                    catch (Exception e) {
+                        if (e.toString().equals("Invalid email/password")) {
+                            validCredentials = false;
 
-                }
+                        } else {
+                            otherMistake = true;
+                        }
+                    }
 
+                }}
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
+            if (backBounds.contains(pos.x, pos.y)) {
+                vm.set(new StartView(vm));
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
@@ -137,7 +152,7 @@ public class LoginView extends View {
             }
         }
 
-    }}
+    }
 
     @Override
     public void update(float dt) {
@@ -150,21 +165,22 @@ public class LoginView extends View {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
-        sb.draw(logo,36,375);
+        sb.draw(logo,36,395);
         sb.draw(login, (float) ((FlowerPowerGame.WIDTH/2)-(login.getWidth()/2)),40);
         sb.draw(playbook, 10, 15);
         float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
         sb.draw(settings, settings_x, 15);
         // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
         // ikke helt skjønt hvorfor enda
-        sb.draw(enter_username, 60,290);
-        sb.draw(enter_password,60,190);
-        if (!validEmail){
-            //TODO: Draw invalid email text
-        } else if (!validPassword){
-            //TODO: draw invalid password text
+        sb.draw(enter_username, 60,310);
+        sb.draw(enter_password,60,210);
+        if (!validCredentials){
+            sb.draw(invalidCredentials, FlowerPowerGame.WIDTH/2-invalidCredentials.getWidth()/2,120);
+        } else if (otherMistake){
+            sb.draw(otherMistakeMessage, FlowerPowerGame.WIDTH/2-otherMistakeMessage.getWidth()/2, 120);
         }
 
+        sb.draw(back,10,FlowerPowerGame.HEIGHT-20);
         sb.end();
         stage.draw();
         stage.act();

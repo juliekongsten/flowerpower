@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Controller.GameController;
-import com.mygdx.game.Controller.RegisterController;
+import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class RegisterView extends View {
@@ -30,6 +30,8 @@ public class RegisterView extends View {
     private final Texture weakPasswordMessage;
     private final Texture invalidEmailMessage;
     private final Texture usernameTakenMessage;
+    private final Texture otherMistakeMessage;
+    private final Texture back;
     private Stage stage;
     private TextField username;
     private TextField password;
@@ -38,8 +40,6 @@ public class RegisterView extends View {
     private String passwordTyped;
     private String passwordCheckTyped;
     private Pixmap cursorColor;
-    //private RegisterController registerController; //not needed as field
-    //private GameController gameController; //not used
 
 
 
@@ -48,6 +48,8 @@ public class RegisterView extends View {
     private boolean validEmail = true;
     private boolean newEmail = true;
     private boolean otherMistake = false;
+    private PlayerController playerController;
+    private GameController gameController; //not used
 
 
 
@@ -65,6 +67,10 @@ public class RegisterView extends View {
         weakPasswordMessage = new Texture("weakPassword.png");
         invalidEmailMessage = new Texture("invalidEmail.png");
         usernameTakenMessage = new Texture("usernameTaken.png");
+        otherMistakeMessage = new Texture("wentWrong.png");
+
+
+        back = new Texture("back.png");
 
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
@@ -153,16 +159,15 @@ public class RegisterView extends View {
                 // Sjekke at passordene stemmer overens og hvis de gjør det, send videre til Registercontroller og player
 
 
-
-
-                if (checkPassword(passwordTyped, passwordCheckTyped)){
+                if (passwordTyped.equals(passwordCheckTyped)){
 
 
                     // Sende videre til MenuView med innlogget bruker
                     // sendes videre for å sjekke med db
                     try {
                         //call registercontroller and try to make user
-                        RegisterController controller = new RegisterController(usernameTyped, passwordTyped);
+                        this.playerController = new PlayerController();
+                        playerController.register(usernameTyped, passwordTyped);
                         vm.set(new MenuView(vm));
 
                     } catch (Exception e) {
@@ -176,23 +181,26 @@ public class RegisterView extends View {
                         else if(e.toString().equals("Weak password")){
                             strongPassword = false;
                         }
+                        else if(usernameTyped.isEmpty()){
+                            validEmail = false;
+                        }
+                        else if (passwordTyped.isEmpty()){
+                            strongPassword = false;
+                        }
                         else {
                             otherMistake=true;
                         }
                     }
 
-                    passwordMatch = true;
-
-
                 } else {
-                    //Give feedback to user that password doesnt match
                     passwordMatch = false;
 
                 }
 
-
-
-
+            }
+            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
+            if (backBounds.contains(pos.x, pos.y)) {
+                vm.set(new StartView(vm));
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
@@ -205,17 +213,7 @@ public class RegisterView extends View {
         }
         }
 
-    public boolean checkPassword(String password, String passwordCheckTyped){
 
-        if (password.equals(passwordCheckTyped)){
-            System.out.println("Passwords match!");
-            return true;
-        } else{
-            System.out.println("Passwords does not match");
-            return false;
-        }
-
-    }
     @Override
     public void update(float dt) {
         handleInput();
@@ -245,10 +243,10 @@ public class RegisterView extends View {
         } else if (!strongPassword){
             sb.draw(weakPasswordMessage, FlowerPowerGame.WIDTH/2-weakPasswordMessage.getWidth()/2,130);
         } else if (otherMistake){
-            //Draw message
-            //TODO: draw message
+            sb.draw(otherMistakeMessage,FlowerPowerGame.WIDTH/2-otherMistakeMessage.getWidth()/2,130);
         }
 
+        sb.draw(back,10,FlowerPowerGame.HEIGHT-20);
         sb.end();
         stage.draw();
         stage.act();

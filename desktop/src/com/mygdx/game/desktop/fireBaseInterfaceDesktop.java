@@ -23,6 +23,15 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     }
 
     @Override
+    public List<String> getPlayers(int gameID){
+        return null;
+    }
+    @Override
+    public List<Integer> getGameIDs(){
+        return null;
+    }
+
+    @Override
     public void signIn(String username, String password) {
 
     }
@@ -53,11 +62,16 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public void createGame(int GID){}
 
     @Override
+    public void setPlayerReady(int GID){}
+
+    @Override
     public void joinGame(int GID){}
 
     @Override
     public void storeBeds(List<Bed> beds, int GID){}
 
+    @Override
+    public void signOut() {}
 
 
 }

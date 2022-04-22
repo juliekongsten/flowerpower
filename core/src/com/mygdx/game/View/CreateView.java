@@ -38,18 +38,7 @@ public class CreateView extends View {
         this.gamePin = gamePin;
     }
 
-    private void getGamePin() {
-        // Midlertidlig løsning; skal vel fikses i backend?
-        // det er fikset
-        /*
-        Random rand = new Random();
-        String result = "";
-        for (int i=0; i<=6; i++) {
-            result += rand.nextInt(10);
-        }
-        gamePin = result;
-        */
-    }
+
 
     @Override
     protected void handleInput() {
