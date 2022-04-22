@@ -16,6 +16,7 @@ public interface FireBaseInterface {
     String getUsername();
 
     String getUID();
+    void signOut();
 
     Exception getException();
 

@@ -62,6 +62,8 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public List<Integer> getGameIDs(){
         return null;
     }
+    public void signOut() {
+    }
 
     /**@Override
     public void writeUserDataToDb(Player player) {
