@@ -101,6 +101,7 @@ public class GameController {
             if (gameStarted) {
                 System.out.println("gets in game controller");
                 game.storePlacedBeds(myBeds);
+                System.out.println("MY BEDS: " + myBeds);
             }
             for (Square mySquare : myBoard){
                 if (isSquareInBed(mySquare,myBeds)){
@@ -238,6 +239,7 @@ public class GameController {
 
             }
         }
+        System.out.println("MOVED BEDS: " + newBeds);
     }
 
     /**
