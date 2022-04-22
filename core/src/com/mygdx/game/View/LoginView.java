@@ -41,7 +41,7 @@ public class LoginView extends View {
         login = new Texture("login.png");
         playbook = new Texture("playbook.png");
         highscore = new Texture("Highscore.png");
-        enter_username = new Texture("enter_username.png");
+        enter_username = new Texture("enter_email.png");
         enter_password = new Texture("enter_password.png");
         back = new Texture("back.png");
         highscore_x = FlowerPowerGame.WIDTH-highscore.getWidth()-10;
