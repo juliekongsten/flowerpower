@@ -83,21 +83,12 @@ public class GameController {
      */
     public boolean hitSquare(Square square){
         //TODO: find logic to update opponent as well
-        /*if (!opBoard.contains(square)){
+        if (!opBoard.contains(square)){
             return false;
         }
         square.setHit(true);
-        return square.hasFlower();*/
-        boolean hasFlower = false;
-        for (Bed bed : opBeds){
-            System.out.println("Bed: "+bed.getBounds());
-            if (bed.getSquares(opBoard).contains(square)){
-                System.out.println("contains square");
-                hasFlower=true;
-            }
-        }
-        square.setHit(true);
-        return hasFlower;
+        return square.hasFlower();
+
     }
 
     public void setMyBeds(List<Bed> beds){

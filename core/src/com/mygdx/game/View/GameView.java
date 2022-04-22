@@ -132,6 +132,7 @@ public class GameView extends View{
                         System.out.println("is pressed");
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
                         boolean flower = gameController.hitSquare(square);
+
                         already_pressed.add(square);
                         if (flower){
                             hit = true;
