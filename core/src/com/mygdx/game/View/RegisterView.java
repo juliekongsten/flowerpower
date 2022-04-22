@@ -60,7 +60,7 @@ public class RegisterView extends View {
         logo = new Texture("logo.png");
         register = new Texture("register.png");
         playbook = new Texture("playbook.png");
-        highscore = new Texture("highscore.png");
+        highscore = new Texture("Highscore.png");
         enter_username = new Texture("enter_email.png");
         enter_password = new Texture("enter_password.png");
         password_again = new Texture("password_again.png");
