@@ -309,7 +309,23 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference playerRef = gameRef.child(GID + "/Players/");
         DatabaseReference userRef = playerRef.child(opUID);
         DatabaseReference bedsRef = userRef.child("/Beds");
-        bedsRef.addValueEventListener(new ValueEventListener() {
+        bedsRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                    isDone=true;
+                }
+                else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                    Map<String, Object> map = (Map<String, Object>) task.getResult().getValue();
+                    beds = map;
+                    isDone=true;
+                }
+            }
+
+        });
+        /*bedsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
@@ -321,7 +337,10 @@ public class fireBaseConnector implements FireBaseInterface {
                 System.out.println("The read failed: " + databaseError.getCode());
                 isDone=true;
             }
-        });
+        });*/
+        while (!isDone){
+            System.out.println("geetn those neds");
+        }
         return beds;
     }
 

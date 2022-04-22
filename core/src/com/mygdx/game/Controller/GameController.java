@@ -173,9 +173,7 @@ public class GameController {
         List<Bed> result = new ArrayList<>();
         Map<String, Object> receivedOpBeds;
         receivedOpBeds = game.retrievePlacedBeds();
-        if (!receivedOpBeds.isEmpty() && receivedOpBeds != null) {
-            bedsList.addAll(receivedOpBeds.values());
-        }
+        bedsList.addAll(receivedOpBeds.values());
         for (int j=0; j<bedsList.size(); j++) {
             String newString = bedsList.get(j).toString();
             String pos_yString;
