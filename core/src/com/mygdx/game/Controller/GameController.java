@@ -261,6 +261,10 @@ public class GameController {
         return gameOver;
     }
 
+
+    public void myExited(Boolean exited){
+        //TODO set that I exited the game before it started, in DB
+    }
     /**
      * Returns if the opponent has exited, (pressed on "go back to menu") in placebedsview,
      * before the game has started
@@ -272,15 +276,16 @@ public class GameController {
         return false;
     }
 
+
+    public void myForfeitet(boolean opForfeited) {
+        //TODO set that I forfeited the game in the DB
+    }
     /**
      * Returns if the opponent has forfeited, (pressed on "go back to menu") in GameView
      * @return
      */
-    public void opForfeitet(boolean opForfeited) {
-        forfeited = opForfeited;
-    }
-
     public boolean getOpForfeited(){
+        //TODO get opforfeited from the Database
         return forfeited;
     }
 
