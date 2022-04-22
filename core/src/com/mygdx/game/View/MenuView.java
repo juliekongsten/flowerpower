@@ -43,13 +43,13 @@ public class MenuView extends View {
                     create.getWidth(), create.getHeight());
             if (joinBounds.contains(pos.x, pos.y)) {
                 System.out.println("JOIN GAME PRESSED!");
-                vm.set(new JoinView(vm, gameController));
+                vm.set(new JoinView(vm));
             }
             if (createBounds.contains(pos.x, pos.y)) {
                 System.out.println("CREATE GAME PRESSED!");
                 gameController.createGame();
                 String gamePin = Integer.toString(gameController.getGID());
-                vm.set(new CreateView(vm, gamePin, gameController));
+                vm.set(new CreateView(vm, gamePin));
             }
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
