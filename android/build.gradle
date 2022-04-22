@@ -47,13 +47,17 @@ android {
 
 dependencies {
 
+
     implementation platform('com.google.firebase:firebase-bom:29.2.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-auth'
     // TODO: Sjekke denne
     implementation 'com.google.firebase:firebase-core:16.0.1'
-    // TODO: ref metode, trengs disse?
+    // firebase-auth fungerte ikke, la til disse to
+    implementation 'com.google.firebase:firebase-auth:18.0.0'
+    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-analytics:17.2.1'
     implementation 'com.google.firebase:firebase-database:19.2.0'
 

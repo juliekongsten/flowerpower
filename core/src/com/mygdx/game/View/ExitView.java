@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Controller.GameController;
+import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.FlowerPowerGame;
 
 public class ExitView extends View{
@@ -19,12 +21,17 @@ public class ExitView extends View{
     private Texture fish;
     private Texture lost_text;
     private Texture log_out;
+    private PlayerController playerController;
+    private GameController gameController;
 
     private boolean winner;
 
 
-    protected ExitView(ViewManager vm, boolean won) {
+
+    protected ExitView(ViewManager vm, boolean won, GameController gameController) {
         super(vm);
+        this.playerController = new PlayerController();
+        this.gameController = gameController;
         this.logo = new Texture("small_logo.png");
         this.gameOver = new Texture("game_over.png");
         this.replay = new Texture("replay.png");
@@ -46,6 +53,8 @@ public class ExitView extends View{
             Rectangle to_startBounds = new Rectangle(FlowerPowerGame.WIDTH/2+to_start.getWidth()/10,80,to_start.getWidth(),to_start.getHeight());
             Rectangle log_outBounds = new Rectangle(FlowerPowerGame.WIDTH-log_out.getWidth()-5,5, log_out.getWidth(),log_out.getHeight());
             if(replayBounds.contains(pos.x, pos.y)){
+                gameController.clear();
+                //TODO: Handle reset of beds?
                 vm.set(new PlaceBedsView(vm)); //assuming that replay means forwarding to new PlaceBedsView
             }
             if(to_startBounds.contains(pos.x,pos.y)){
@@ -53,6 +62,8 @@ public class ExitView extends View{
             }
             if(log_outBounds.contains(pos.x, pos.y)){
                 //TODO log out and exit the application
+                playerController.logOut();
+                vm.set(new StartView(vm));
             }
         }
 

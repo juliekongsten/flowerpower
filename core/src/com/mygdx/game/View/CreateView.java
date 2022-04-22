@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 
 import java.util.Random;
@@ -22,9 +23,13 @@ public class CreateView extends View {
     private final Texture back;
     private String gamePin;
     private final float highscore_x;
+    private GameController gameController;
 
-    protected CreateView(ViewManager vm) {
+
+    protected CreateView(ViewManager vm, String gamePin) {
         super(vm);
+        gameController = new GameController();
+        vm.setController(gameController);
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
         highscore = new Texture("highscore.png");
@@ -33,17 +38,10 @@ public class CreateView extends View {
         back = new Texture("back.png");
         highscore_x = FlowerPowerGame.WIDTH-highscore.getWidth()-10;
         setGamePin();
+        this.gamePin = gamePin;
     }
 
-    private void setGamePin() {
-        // Midlertidlig løsning; skal vel fikses i backend?
-        Random rand = new Random();
-        String result = "";
-        for (int i=0; i<=6; i++) {
-            result += rand.nextInt(10);
-        }
-        gamePin = result;
-    }
+
 
     @Override
     protected void handleInput() {
@@ -67,6 +65,7 @@ public class CreateView extends View {
 
     @Override
     public void update(float dt) {
+        //TODO: Check if player has joined your game
         handleInput();
     }
 
@@ -85,7 +84,9 @@ public class CreateView extends View {
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         font.getData().setScale((float) 1.3);
         font.setColor(Color.BLACK);
+
         font.draw(sb, gamePin, (float) FlowerPowerGame.WIDTH/2-40, 280);
+
         sb.end();
     }
 }

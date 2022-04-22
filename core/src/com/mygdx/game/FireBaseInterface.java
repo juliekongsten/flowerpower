@@ -1,6 +1,9 @@
 package com.mygdx.game;
 
+import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
+
+import java.util.List;
 
 /**
  * Interface to enable communication between modules
@@ -14,6 +17,18 @@ public interface FireBaseInterface {
     String getUsername();
 
     String getUID();
+    void signOut();
+
+    Exception getException();
+
+    boolean getIsDone();
+    void setPlayerReady(int GID);
+
+    List<String> getPlayers(int GID);
+    List<Integer> getGameIDs();
 
     //void writeUserDataToDb(Player player);
+    void createGame(int GID);
+    void joinGame(int GID);
+    void storeBeds(List<Bed> beds, int GID);
 }

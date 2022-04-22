@@ -1,4 +1,6 @@
 package com.mygdx.game.Controller;
+import com.mygdx.game.Model.Player;
+import com.mygdx.game.Model.Game;
 
 import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Square;
@@ -7,7 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
-
+    private Game game;
+    private int GID;
+    private boolean gameStarted;
+    private Player player;
 
     //har per nå laget kun en liste, kan heller ha liste i liste for å lettere navigere seg opp/ned/sidelengs men har ikke det nå
     private List<Square> opBoard = new ArrayList<>();
@@ -30,6 +35,7 @@ public class GameController {
         squaresize = 32;
         numberSquaresHeight = 6;
         numberSquaresWidth = 9;
+        gameStarted = false;
 
         //TODO: (Low priority) Get x- and y-values without hardkoding :D
         //må hente x og y-verdier fra view heller sånn at vi får riktige :D
@@ -54,6 +60,26 @@ public class GameController {
 
 
 
+    }
+    public void joinGame(int GID) {
+
+        Game game = new Game(GID);
+        this.game = game;
+        gameStarted = true;
+
+    }
+
+    public void createGame(){
+        Game game = new Game();
+        this.game = game;
+        this.GID = game.getGID();
+        gameStarted = true;
+    }
+
+
+
+    public int getGID(){
+        return this.GID;
     }
 
     public boolean isSquareInBed(Square square, List<Bed> beds){
@@ -83,10 +109,15 @@ public class GameController {
     }
 
     public void setMyBeds(List<Bed> beds){
+        System.out.println("setmybeds");
         if (beds == null){
             setStartBeds();
         } else {
             myBeds = beds;
+            if (gameStarted) {
+                System.out.println("gets in game controller");
+                game.storePlacedBeds(myBeds);
+            }
             for (Square mySquare : myBoard){
                 if (isSquareInBed(mySquare,myBeds)){
                     mySquare.setHasFlower(true);
@@ -109,11 +140,19 @@ public class GameController {
         myBeds.add(bed5);
     }
 
+    public void clear(){
+        this.opBeds = new ArrayList<>();
+        this.myBeds = new ArrayList<>();
+        this.opBoard = new ArrayList<>();
+        this.myBoard = new ArrayList<>();
+
+    }
+
     /**
      * Set my ready to true in the database
      */
-    public void setMyReady(){
-        //TODO: Logic database
+    public void setPlayerReady(){
+        this.game.setPlayerReady();
     }
 
     public boolean getOpReady(){

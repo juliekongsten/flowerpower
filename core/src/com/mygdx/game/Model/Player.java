@@ -20,24 +20,61 @@ public class Player {
 
     }
 
-
-    public void registerPlayer(String username, String password){
+    /**
+     * Method used by RegisterController to register a new user.
+     * Throws exception if something goes wrong, the exception is handled by the view
+     * @param username
+     * @param password
+     * @throws Exception
+     */
+    public void registerPlayer(String username, String password) throws Exception {
         this._FBIC= FlowerPowerGame.getFBIC();
         //check username first
         _FBIC.newPlayer(username, password);
-        this.username = _FBIC.getUsername();
-        this.UID = _FBIC.getUID();
-        //_FBIC.writeUserDataToDb(this);
+        boolean isDone = this._FBIC.getIsDone();
+        /*Waiting for newplayer-task in firebaseconnector to be completed as we
+        are interested in the outcome there before moving on
+         */
+        while (!isDone){
+            isDone = this._FBIC.getIsDone();
+        }
+
+        if (_FBIC.getException() != null){
+            System.out.println("Could not create user, wrong input");
+            throw _FBIC.getException();
+        }
+        else {
+            System.out.println("Could create user with username "+_FBIC.getUsername());
+            this.username = _FBIC.getUsername();
+            this.UID = _FBIC.getUID();
+        }
+
     }
 
 
-
-
-
-    //TODO: boolean? error handling in firebaseconnector?
-    public void signIn(String username, String password){
+    /**
+     * Method to sign an existing player
+     * @param username
+     * @param password
+     */
+    public void signIn(String username, String password) throws Exception{
         this._FBIC= FlowerPowerGame.getFBIC();
         _FBIC.signIn(username, password);
+        boolean ready = this._FBIC.getIsDone();
+        while (!ready){
+            ready = this._FBIC.getIsDone();
+        }
+        if (_FBIC.getException()!=null){
+            throw _FBIC.getException();
+        }
+
+
+    }
+
+
+    public void signOut(){
+        this._FBIC = FlowerPowerGame.getFBIC();
+        _FBIC.signOut();
     }
 
     /**
@@ -70,7 +107,6 @@ public class Player {
      */
     /*private boolean validUsername(String username){
 
-    }*/
 
 
 
