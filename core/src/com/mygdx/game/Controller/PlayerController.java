@@ -23,7 +23,7 @@ public class PlayerController {
 
     public void logOut(){
         System.out.println("Kommer til logg ut playercontroller");
-        player = new Player();
+        //player = new Player();
         player.signOut();
     }
 }

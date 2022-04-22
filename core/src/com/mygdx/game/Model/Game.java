@@ -1,5 +1,6 @@
 package com.mygdx.game.Model;
 
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
 
@@ -13,13 +14,10 @@ public class Game {
     private int GID;
     private FireBaseInterface _FBIC;
 
-    // TODO: må mer metoder til for å connecte med firebaseconnector
-
     /**
      *  Constructor for joining existing game
      * @param existingGID existing gamepin
      */
-
     public Game(int existingGID) {
         this.GID= existingGID;
         this._FBIC= FlowerPowerGame.getFBIC();
@@ -75,10 +73,17 @@ public class Game {
         }
     }
 
+    /**
+     * returns this games pin
+     * @return GID
+     */
     public int getGID(){
         return this.GID;
     }
 
+    /**
+     * tells the database that the player is ready to start the game
+     */
     public void setPlayerReady(){
         this._FBIC.setPlayerReady(this.GID);
     }
@@ -88,9 +93,21 @@ public class Game {
         this.GID= existingGID;
     }
 
+    /**
+     * tells the db to store the bed objects
+     * @param beds
+     */
     public void storePlacedBeds(List<Bed> beds) {
-        System.out.println("gets in to game");
         _FBIC.storeBeds(beds, GID);
+    }
+
+    /**
+     * if a player forfeits a game, the game should be deleted and the opponent should get notified
+     */
+    public void deleteGame(){
+        //notify the other user too!
+        _FBIC.leaveGame(GID);
+
     }
 
 }

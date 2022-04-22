@@ -28,6 +28,7 @@ public class GameController {
 
     private boolean gameOver = false;
     private boolean won = false;
+    private boolean forfeited = false;
 
     public GameController(){
         //tenker her at vi kan ha satt tall for de forskjellige vanskelighetsgradene
@@ -43,9 +44,6 @@ public class GameController {
 
         setStartBoards();
         setMyBeds(null);
-
-
-
 
 
     }
@@ -270,15 +268,23 @@ public class GameController {
      */
     public boolean getOpExited() {
         //TODO get this information from DB
+        // gjør denne til true senere
         return false;
     }
 
     /**
-     * Returns if the opponent has forfeitet, (pressed on "go back to menu") in GameView
+     * Returns if the opponent has forfeited, (pressed on "go back to menu") in GameView
      * @return
      */
-    public boolean getOpForfeitet() {
-        //TODO get this information from DB
-        return false;
+    public void opForfeitet(boolean opForfeited) {
+        forfeited = opForfeited;
+    }
+
+    public boolean getOpForfeited(){
+        return forfeited;
+    }
+
+    public void deleteGame() {
+        game.deleteGame();
     }
 }

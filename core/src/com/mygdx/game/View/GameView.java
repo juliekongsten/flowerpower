@@ -159,6 +159,8 @@ public class GameView extends View{
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
                     vm.set(new ExitView(vm, false, this.gameController));
+                    //delete game and notify op
+                    gameController.deleteGame();
                 }
             }
                    
@@ -339,7 +341,7 @@ public class GameView extends View{
             sb.draw(yes,FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100);
         }
 
-        opForfeitet = gameController.getOpForfeitet();
+        opForfeitet = gameController.getOpForfeited();
         if(opForfeitet){
             sb.draw(waiting_black,0,0);
             sb.draw(forfeitet_text,FlowerPowerGame.WIDTH/2-forfeitet_text.getWidth()/2,FlowerPowerGame.HEIGHT/2);

@@ -341,6 +341,7 @@ public class fireBaseConnector implements FireBaseInterface {
 
     //TODO: redudant kode
     public void joinGame(int gameID){
+         // TODO  lage disse globale? brukes jo overalt?
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
@@ -361,21 +362,18 @@ public class fireBaseConnector implements FireBaseInterface {
 
 
     /**
-     * Når en bruker har forlatt spillet, ved å trykke exit f.eks, må leave game
+     * Deletes the game when a player exits or quits
      * @param gamePIN
      */
     public void leaveGame(int gamePIN){
-        //må slette spillet fra databasen
-
-        //må notifisere den andre spilleren før det skjer (skjer ikke her men i en annen klasse)
-
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        gameRef.child(String.valueOf(gamePIN)).removeValue();
     }
 
     /**
      * ready gets called when a user presses ready to say that the game can start
      * @param GID the gamePin ID
      */
-
 
     @Override
     public void setPlayerReady(int GID){
@@ -386,9 +384,6 @@ public class fireBaseConnector implements FireBaseInterface {
         String[] displayName = this.getUsername().split("@");
         updates.put(displayName[0], true);
         playerRef.updateChildren(updates);
-
-
-
     }
     /**
      * getPlayers gets all the in the game with this gameID
@@ -396,34 +391,31 @@ public class fireBaseConnector implements FireBaseInterface {
      * @return List<String> for player UID
      */
     //TODO: legge inn før join game så man sjekker at listen er allerede full
-    public List<String> getPlayers(int gameID){
-        isDone=false;
-        players = new ArrayList<>();
-        DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
-        playerRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                System.out.println(map);
-                players.addAll(map.keySet());
-                System.out.println("key: " + players);
-                isDone=true;
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-                isDone=true;
-            }
-        });
-        //mDatabase.child("users").child(userId).get();
-        //bytter verdi til den andre spilleren i turn
-        //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
-        while(!isDone){
-            //waiting
-        }
-        return players;
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public void setTurnToOtherPlayer(int gameID){
         DatabaseReference gameRef = database.getReference().child("/Games");
         List<String> players = getPlayers(gameID);
