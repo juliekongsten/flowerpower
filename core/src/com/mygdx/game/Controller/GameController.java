@@ -6,7 +6,9 @@ import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Square;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameController {
     private Game game;
@@ -91,13 +93,11 @@ public class GameController {
     }
 
     public void setMyBeds(List<Bed> beds){
-        System.out.println("setmybeds");
         if (beds == null){
             setStartBeds();
         } else {
             myBeds = beds;
             if (gameStarted) {
-                System.out.println("gets in game controller");
                 game.storePlacedBeds(myBeds);
             }
             for (Square mySquare : myBoard){
@@ -169,8 +169,35 @@ public class GameController {
      */
     public void receiveOpBeds(){
         //TODO: Logic, database
-        List<Bed> receivedOpBeds = myBeds; //get from database
-        moveOpBeds(receivedOpBeds);
+        List<Object> bedsList = new ArrayList<>();
+        List<Bed> result = new ArrayList<>();
+        Map<String, Object> receivedOpBeds;
+        receivedOpBeds = game.retrievePlacedBeds();
+        bedsList.addAll(receivedOpBeds.values());
+        for (int j=0; j<5; j++) {
+            String newString = bedsList.get(j).toString();
+            String pos_yString;
+            String pos_xString;
+            String horizontalString;
+            String sizeString;
+            String texturePath;
+            String[] parts = newString.split(", ");
+            List<String> valueList = new ArrayList<>();
+            for (String part : parts) {
+                valueList.add(part.split("=")[1]);
+            }
+            pos_yString = valueList.get(0);
+            horizontalString = valueList.get(1);
+            pos_xString = valueList.get(2);
+            sizeString = valueList.get(3);
+            String texturePathString = valueList.get(4);
+            String substring = texturePathString.substring(0, texturePathString.length()-1);
+            texturePath = substring;
+            Bed bed = new Bed(Integer.parseInt(sizeString), Boolean.parseBoolean(horizontalString), texturePath);
+            bed.updatePosition(Integer.parseInt(pos_xString), Integer.parseInt(pos_yString));
+            result.add(bed);
+        }
+        moveOpBeds(result);
     }
 
     /**
@@ -178,7 +205,7 @@ public class GameController {
      * @param beds
      */
     public void sendMyBeds(List<Bed> beds){
-        //TODO: Logic
+
     }
 
     /**
@@ -209,6 +236,7 @@ public class GameController {
 
             }
         }
+        System.out.println("MOVED BEDS: " + newBeds);
     }
 
     /**
