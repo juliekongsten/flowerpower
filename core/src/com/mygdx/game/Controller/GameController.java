@@ -173,8 +173,10 @@ public class GameController {
         List<Bed> result = new ArrayList<>();
         Map<String, Object> receivedOpBeds;
         receivedOpBeds = game.retrievePlacedBeds();
-        bedsList.addAll(receivedOpBeds.values());
-        for (int j=0; j<5; j++) {
+        if (!receivedOpBeds.isEmpty() && receivedOpBeds != null) {
+            bedsList.addAll(receivedOpBeds.values());
+        }
+        for (int j=0; j<bedsList.size(); j++) {
             String newString = bedsList.get(j).toString();
             String pos_yString;
             String pos_xString;
@@ -194,7 +196,7 @@ public class GameController {
             String substring = texturePathString.substring(0, texturePathString.length()-1);
             texturePath = substring;
             Bed bed = new Bed(Integer.parseInt(sizeString), Boolean.parseBoolean(horizontalString), texturePath);
-            bed.updatePosition(Integer.parseInt(pos_xString), Integer.parseInt(pos_yString));
+            bed.updatePosition(Float.parseFloat(pos_xString), Float.parseFloat(pos_yString));
             result.add(bed);
         }
         moveOpBeds(result);
