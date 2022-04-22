@@ -45,6 +45,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private String playerTurn;
      private List<String> players;
      private List<Integer> gameIDs;
+     private Map<String, Object> beds;
      private boolean playersReady = true;
 
 
@@ -248,7 +249,7 @@ public class fireBaseConnector implements FireBaseInterface {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<Integer, Object> map = (Map<Integer, Object>) dataSnapshot.getValue();
-                System.out.println(map);
+                //System.out.println(map);
                 gameIDs.addAll(map.keySet());
                 isDone=true;
             }
@@ -290,6 +291,38 @@ public class fireBaseConnector implements FireBaseInterface {
             bedsRef.updateChildren(childUpdates);
             i++;
         }
+    }
+
+    @Override
+    public Map<String, Object> retrieveBeds(int GID) {
+        // Getting the UID for the opponent
+        isDone = false;
+        beds = new HashMap<>();
+        List<String> players = this.getPlayers(GID);
+        String opUID = "";
+        for (int i =0; i < players.size(); i++){
+            if(!players.get(i).equals(getUID())){
+                opUID = players.get(i);
+            }
+        }
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(GID + "/Players/");
+        DatabaseReference userRef = playerRef.child(getUID());
+        DatabaseReference bedsRef = userRef.child("/Beds");
+        bedsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                beds = map;
+                isDone=true;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
+            }
+        });
+        return beds;
     }
 
 
@@ -504,7 +537,7 @@ public class fireBaseConnector implements FireBaseInterface {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                System.out.println(map);
+                //System.out.println(map);
                 players.addAll(map.keySet());
                 isDone=true;
             }

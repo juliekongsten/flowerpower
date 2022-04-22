@@ -3,7 +3,9 @@ package com.mygdx.game;
 
 import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
+import java.util.Map;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -66,9 +68,10 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public void joinGame(int GID){}
 
     @Override
-    public void storeBeds(List<Bed> beds, int GID) {
+    public void storeBeds(List<Bed> beds, int GID) {}
 
-    }
+    @Override
+    public Map<String, Object> retrieveBeds(int GID) { return null;}
 
     @Override
     public List<String> getPlayers(int gameID){
