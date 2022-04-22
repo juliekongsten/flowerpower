@@ -100,6 +100,7 @@ public class PlaceBedsView extends View{
             Bed touchedBed = new Bed(0, true, "flowerbed_1.png");
             //Update position to bed touched
             for (Bed bed : beds) {
+                System.out.println(bed.getBounds());
                 if (bed.getBounds().contains(pos.x, pos.y)) {
                     touchedBed = bed;
                 }
@@ -225,7 +226,7 @@ public class PlaceBedsView extends View{
      */
     private void drawBeds(SpriteBatch sb){
         //Set the placement to inside pool IF they're not moved yet
-        if (beds.get(0).getPos_x() == 0 && beds.get(0).getPos_y() == 0) {
+        if ((beds.get(0).getPos_x() == 0 && beds.get(0).getPos_y() == 0) || beds.size()==0) {
             float bed1_x = pool.getWidth()/2;
             float bed1_y = pool_y+pool.getHeight()/2-20;
             float bed2_y = bed1_y - beds.get(1).getTexture().getHeight()-8;
