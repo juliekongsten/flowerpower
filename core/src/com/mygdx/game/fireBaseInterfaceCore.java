@@ -3,6 +3,7 @@ package com.mygdx.game;
 
 import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
+import com.mygdx.game.Model.Square;
 
 import java.util.List;
 
@@ -57,6 +58,11 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     @Override
     public void storeBeds(List<Bed> beds, int GID) {
+
+    }
+
+    @Override
+    public void setMove(Square square, int GID) {
 
     }
 

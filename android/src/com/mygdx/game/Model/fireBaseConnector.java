@@ -42,6 +42,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private String playerTurn;
      private List<String> players;
      private List<Integer> gameIDs;
+     private static int moveCount = 0;
 
 
     /**
@@ -484,10 +485,23 @@ public class fireBaseConnector implements FireBaseInterface {
 
     /**
      * Når en spiller gjør et move må det legges inn under spilleren i databasen, under moves
-     * @param gamePIN
+     * @param GID
      */
-    public void setMove(int gamePIN){
+    public void setMove(Square square, int GID){
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(GID + "/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        DatabaseReference movesRef = userRef.child("/Moves");
 
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("pos_x", square.getX());
+        result.put("pos_y", square.getY());
+        result.put("Flower", square.hasFlower());
+
+        Map<String, Object> moveValues = result;
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/Move"+moveCount++, result);
+        movesRef.updateChildren(childUpdates);
     }
 
     /**
