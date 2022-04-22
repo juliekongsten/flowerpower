@@ -54,7 +54,8 @@ public class ExitView extends View{
             Rectangle log_outBounds = new Rectangle(FlowerPowerGame.WIDTH-log_out.getWidth()-5,5, log_out.getWidth(),log_out.getHeight());
             if(replayBounds.contains(pos.x, pos.y)){
                 gameController.clear();
-                vm.set(new PlaceBedsView(vm, gameController)); //assuming that replay means forwarding to new PlaceBedsView
+                //TODO: Handle reset of beds?
+                vm.set(new PlaceBedsView(vm)); //assuming that replay means forwarding to new PlaceBedsView
             }
             if(to_startBounds.contains(pos.x,pos.y)){
                 vm.set(new MenuView(vm));

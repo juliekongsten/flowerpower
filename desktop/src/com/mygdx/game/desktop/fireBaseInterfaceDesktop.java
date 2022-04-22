@@ -3,6 +3,8 @@ package com.mygdx.game.desktop;
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.Model.Player;
 
+import java.util.List;
+
 /**
  * Currently not used but required for communication between modules
  */
@@ -17,6 +19,15 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     @Override
     public void newPlayer(String username, String password) {
 
+    }
+
+    @Override
+    public List<String> getPlayers(int gameID){
+        return null;
+    }
+    @Override
+    public List<Integer> getGameIDs(){
+        return null;
     }
 
     @Override

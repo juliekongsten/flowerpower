@@ -56,9 +56,9 @@ public class PlaceBedsView extends View{
     private boolean opponent_exited = false; //If the opponent exited the game before it started.
 
 
-    public PlaceBedsView(ViewManager vm, GameController gameController){
+    public PlaceBedsView(ViewManager vm){
         super(vm);
-        this.gameController = gameController;
+        this.gameController = vm.getController();
         //Prepares textures for parts of the view
         pool = new Texture("bedpool.png");
         ready = new Texture("Button.png");
