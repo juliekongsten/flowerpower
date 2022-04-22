@@ -76,7 +76,7 @@ public class PlaceBedsView extends View{
         back = new Texture("back.png");
         opponent_exited_text = new Texture("opponent_exited.png");
         go_to_menu = new Texture("go_to_menu.png");
-        sure = new Texture("sure.png");
+        sure = new Texture("sure_pbw.png");
         no = new Texture("no.png");
         yes = new Texture("yes.png");
         pop_up = new Texture("POP-UP.png");

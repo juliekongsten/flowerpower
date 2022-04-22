@@ -7,6 +7,7 @@ public class Player {
 
     private String username;
     private String UID;
+    private CharSequence score;
     private FireBaseInterface _FBIC;
 
     /**
@@ -85,6 +86,26 @@ public class Player {
         return _FBIC.getUsername();
     }
 
+    //TODO delete this after HighscoreView is connected to DB and working
+    public void update_dummyplayer(String username, CharSequence score){
+        this.username = username;
+        this.score = score;
+
+    }
+    public CharSequence getScore() {
+        return score;
+    }
+    //TODO delete this after HighscoreView is connected to DB and working
+    public String getDummyUsername(){
+        return username;
+    }
+
+    /**
+     * checks if the username is valid and not already in use
+     * @param username
+     * @return
+     */
+    /*private boolean validUsername(String username){
 
 
 
