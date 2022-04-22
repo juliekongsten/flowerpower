@@ -25,7 +25,7 @@ public class MenuView extends View {
         this.gameController = new GameController();
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
-        highscore = new Texture("highscore.png");
+        highscore = new Texture("Highscore.png");
         join = new Texture("join.png");
         create = new Texture("create.png");
         highscore_x = FlowerPowerGame.WIDTH-highscore.getWidth()-10;

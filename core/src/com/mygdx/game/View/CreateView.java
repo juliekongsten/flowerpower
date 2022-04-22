@@ -32,7 +32,7 @@ public class CreateView extends View {
         vm.setController(gameController);
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
-        highscore = new Texture("highscore.png");
+        highscore = new Texture("Highscore.png");
         pinText = new Texture("create_pin.png");
         waitText = new Texture("create_wait.png");
         back = new Texture("back.png");

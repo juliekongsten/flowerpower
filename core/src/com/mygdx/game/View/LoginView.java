@@ -134,6 +134,7 @@ public class LoginView extends View {
                             validCredentials = false;
 
                         } else {
+                            System.out.println(e.getMessage());
                             otherMistake = true;
                         }
                     }

@@ -43,7 +43,7 @@ public class JoinView extends View {
         vm.setController(gameController);
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
-        highscore = new Texture("highscore.png");
+        highscore = new Texture("Highscore.png");
         pinText = new Texture("join_pin.png");
         join = new Texture("join.png");
         back = new Texture("back.png");
