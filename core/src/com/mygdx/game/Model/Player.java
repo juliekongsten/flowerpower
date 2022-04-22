@@ -59,6 +59,10 @@ public class Player {
     public void signIn(String username, String password) throws Exception{
         this._FBIC= FlowerPowerGame.getFBIC();
         _FBIC.signIn(username, password);
+        boolean ready = this._FBIC.getIsDone();
+        while (!ready){
+            ready = this._FBIC.getIsDone();
+        }
         if (_FBIC.getException()!=null){
             throw _FBIC.getException();
         }

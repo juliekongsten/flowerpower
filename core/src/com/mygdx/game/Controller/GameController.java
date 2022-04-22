@@ -11,6 +11,7 @@ import java.util.List;
 public class GameController {
     private Game game;
     private int GID;
+    private Player player;
 
     //har per nå laget kun en liste, kan heller ha liste i liste for å lettere navigere seg opp/ned/sidelengs men har ikke det nå
     private List<Square> opBoard = new ArrayList<>();
@@ -72,6 +73,8 @@ public class GameController {
         this.GID = game.getGID();
     }
 
+
+
     public int getGID(){
         return this.GID;
     }
@@ -129,11 +132,19 @@ public class GameController {
         myBeds.add(bed5);
     }
 
+    public void clear(){
+        this.opBeds = new ArrayList<>();
+        this.myBeds = new ArrayList<>();
+        this.opBoard = new ArrayList<>();
+        this.myBoard = new ArrayList<>();
+
+    }
+
     /**
      * Set my ready to true in the database
      */
-    public void setMyReady(){
-        //TODO: Logic database
+    public void setPlayerReady(){
+        this.game.setPlayerReady();
     }
 
     public boolean getOpReady(){
@@ -239,6 +250,22 @@ public class GameController {
         return gameOver;
     }
 
+    /**
+     * Returns if the opponent has exited, (pressed on "go back to menu") in placebedsview,
+     * before the game has started
+     * @return
+     */
+    public boolean getOpExited() {
+        //TODO get this information from DB
+        return false;
+    }
 
-
+    /**
+     * Returns if the opponent has forfeitet, (pressed on "go back to menu") in GameView
+     * @return
+     */
+    public boolean getOpForfeitet() {
+        //TODO get this information from DB
+        return false;
+    }
 }

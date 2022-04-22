@@ -3,11 +3,6 @@ package com.mygdx.game.Model;
 import androidx.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseNetworkException;
-import com.google.firebase.auth.AuthResult;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
@@ -38,9 +33,9 @@ import java.util.Map;
  */
 
 public class fireBaseConnector implements FireBaseInterface {
-     private FirebaseDatabase database;
+     private final FirebaseDatabase database;
      private DatabaseReference myRef;
-     private FirebaseAuth mAuth;
+     private final FirebaseAuth mAuth;
      private Exception exception = null;
      private boolean isDone = false;
      private String playerTurn;
@@ -144,6 +139,7 @@ public class fireBaseConnector implements FireBaseInterface {
                 // Sign in failed
                 //TODO: send message back to register class for error handling
                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                this.exception = new CustomException("Unknown exception");
 
             }
             isDone = true;
@@ -159,6 +155,7 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     public void signIn(String username, String password){
         this.exception = null;
+        this.isDone = false;
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -168,21 +165,23 @@ public class fireBaseConnector implements FireBaseInterface {
                         Log.d(TAG, user.getEmail());
 
                     }
-                    else if (task.getException() instanceof FirebaseAuthInvalidUserException)
-                    {
-                        //user does not exist
-                        this.exception = new CustomException("Invalid user");
-
+                    else if (task.getException() instanceof FirebaseAuthInvalidUserException){
+                        this.exception = new CustomException("Invalid email/password");
                     }
                     else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                        //password is invalid
-                        this.exception = new CustomException("Invalid password");
+                        //Thrown when one or more of the credentials passed to a method fail to
+                        // identify and/or authenticate the user subject of that operation.
+                        //--> email OR password wrong
+                        this.exception = new CustomException("Invalid email/password");
 
                     }
                     else {
                         // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());}
+                        Log.w(TAG, "signInWithEmail:failure", task.getException());
+                        this.exception = new CustomException("Unknown exception");
 
+                    }
+                    isDone = true;
                 });
 
     }
@@ -258,7 +257,6 @@ public class fireBaseConnector implements FireBaseInterface {
      * The player that creates the game gets the first turn
      * @param GID - get generated in Game in Model, and used as identifier in database
      */
-    //NOTE: alle stedene det står "player1" skal det heller være en reell bruker
     public void createGame(int GID){
 
         DatabaseReference gameRef = database.getReference().child("/Games");
@@ -326,20 +324,22 @@ public class fireBaseConnector implements FireBaseInterface {
 
     /**
      * ready gets called when a user presses ready to say that the game can start
-     * @param gameID
-     * @param user
+     * @param GID the gamePin ID
      */
-    //TODO: listen for ready - game starts when both users are ready
-    // om det er stress her kan vi ha en boolean hjelpemetode
 
-    public void ready(int gameID, String user){
-        //når brukeren har trykket bli klar skal
-        //sjekker brukeren (helst current user)
+
+    @Override
+    public void setPlayerReady(int GID){
+        System.out.println("Kommer hit");
         DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(gameID+"/Ready");
+        DatabaseReference playerRef = gameRef.child(GID+"/Ready");
         Map<String, Object> updates = new HashMap<>();
-        updates.put(user, true);
+        String[] displayName = this.getUsername().split("@");
+        updates.put(displayName[0], true);
         playerRef.updateChildren(updates);
+
+
+
     }
     /**
      * getPlayers gets all the in the game with this gameID
@@ -391,7 +391,7 @@ public class fireBaseConnector implements FireBaseInterface {
         }
     }
 
-    private void setPlayer(String name){
+    private void setPlayerTurn(String name){
         this.playerTurn = name;
     }
 
@@ -401,6 +401,7 @@ public class fireBaseConnector implements FireBaseInterface {
      * @return String UID of player that
      */
     public String getTurn(int gameID){
+        isDone = false;
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Turn");
         playerRef.addValueEventListener(new ValueEventListener() {
@@ -411,14 +412,19 @@ public class fireBaseConnector implements FireBaseInterface {
 
                 for (String name : map.keySet()) {
                     System.out.println("turn: " + name);
-                    setPlayer(name);
+                    setPlayerTurn(name);
                 }
+                isDone=true;
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
             }
         });
+        while (!isDone){
+            //waiting
+        }
         return this.playerTurn;
     }
 

@@ -38,7 +38,7 @@ public class JoinView extends View {
 
     protected JoinView(ViewManager vm) {
         super(vm);
-        gameController= new GameController();
+        this.gameController= gameController;
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
         settings = new Texture("settings.png");

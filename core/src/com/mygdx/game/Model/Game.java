@@ -76,7 +76,14 @@ public class Game {
         return this.GID;
     }
 
+    public void setPlayerReady(){
+        this._FBIC.setPlayerReady(this.GID);
+    }
 
+    //TODO: fjerne denne, tror ikke vi trenger den mtp konstruktøren gjør det samme
+    public void joinGame(int existingGID){
+        this.GID= existingGID;
+    }
 
 
 }

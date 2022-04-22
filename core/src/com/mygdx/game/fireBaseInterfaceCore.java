@@ -44,6 +44,8 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public boolean getIsDone() {
         return false;
     }
+    @Override
+    public void setPlayerReady(int GID){}
 
 
     @Override

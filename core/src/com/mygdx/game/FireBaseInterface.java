@@ -20,6 +20,7 @@ public interface FireBaseInterface {
     Exception getException();
 
     boolean getIsDone();
+    void setPlayerReady(int GID);
 
     List<String> getPlayers(int GID);
     List<Integer> getGameIDs();
