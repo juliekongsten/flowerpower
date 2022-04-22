@@ -87,7 +87,7 @@ public class CreateView extends View {
         font.getData().setScale((float) 1.3);
         font.setColor(Color.BLACK);
         font.draw(sb, gamePin, (float) FlowerPowerGame.WIDTH/2-40, 280);
-        this.start= gameController.checkForGameStart();
+        this.start = gameController.checkForGameStart();
         if (start){
             vm.set(new PlaceBedsView(vm));
         }

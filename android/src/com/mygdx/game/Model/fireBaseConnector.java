@@ -435,6 +435,7 @@ public class fireBaseConnector implements FireBaseInterface {
         //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
         while(!isDone){
             //waiting
+            System.out.println("please be done"); //don't remove
         }
         return players;
     }
@@ -478,7 +479,7 @@ public class fireBaseConnector implements FireBaseInterface {
 
         while (!isDone){
             //waiting
-            System.out.println("waiting");
+            System.out.println("waiting"); //don't remove
         }
         System.out.println("FBIC playersready: "+this.playersReady);
         return this.playersReady;
