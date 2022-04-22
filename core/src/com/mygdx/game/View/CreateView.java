@@ -37,7 +37,6 @@ public class CreateView extends View {
         waitText = new Texture("create_wait.png");
         back = new Texture("back.png");
         highscore_x = FlowerPowerGame.WIDTH-highscore.getWidth()-10;
-        setGamePin();
         this.gamePin = gamePin;
     }
 

@@ -34,7 +34,6 @@ public class LoginView extends View {
     private String usernameTyped;
     private String passwordTyped;
     private Pixmap cursorColor;
-    private LoginController LoginController;
     private float highscore_x;
     private PlayerController playerController;
 
