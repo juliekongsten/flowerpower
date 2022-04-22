@@ -50,7 +50,7 @@ public class MenuView extends View {
                 System.out.println("Playbook pressed");
             }
             if (highscoreBounds.contains(pos.x, pos.y)) {
-                //vm.set(new SettingsView(vm));
+                vm.set(new HighscoreView(vm));
                 System.out.println("Settings pressed");
             }
         }

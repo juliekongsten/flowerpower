@@ -57,8 +57,7 @@ public class CreateView extends View {
                 System.out.println("Playbook pressed");
             }
             if (highscoreBounds.contains(pos.x, pos.y)) {
-                //vm.set(new SettingsView(vm));
-                System.out.println("Settings pressed");
+                vm.set(new HighscoreView(vm));
             }
             if (backBounds.contains(pos.x, pos.y)) {
                 vm.set(new MenuView(vm));
