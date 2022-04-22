@@ -223,11 +223,6 @@ public class fireBaseConnector implements FireBaseInterface {
     }
 
 
-    //TODO: hvordan fikse dette?
-    /*public boolean emailAlreadyInUse(String email){
-        UserRecord userRecord = mAuth.getUserByEmail(email);
-    }*/
-
     public boolean getIsDone(){
         return this.isDone;
     }
@@ -658,6 +653,7 @@ public class fireBaseConnector implements FireBaseInterface {
         }
         return squareList;
     }
+
 
 
     /**

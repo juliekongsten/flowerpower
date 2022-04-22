@@ -173,9 +173,10 @@ public class GameView extends View{
 
     /**
      *
-     * @param square
+     * @param
      */
-    protected void receiveOpMove(Square square){
+    //TODO: hente ut denne når det er din turn
+    protected void receiveOpMove(){
         //Should only be called when the opponent has made a move
         //TODO: Give feedback to user that your square has been hit/miss
         //Do not draw the flower/miss as this is done in render
@@ -197,10 +198,11 @@ public class GameView extends View{
         if (waiting){
             //TODO: Find way to get square from controller
             //TODO: Find out if we should implement this as squarelistener instead and how
-            Square square = new Square(1,1,1); //should get this from controller
+            this.receiveOpMove();
+            /*Square square = new Square(1,1,1); //should get this from controller
             if (square != null){
-                receiveOpMove(square);
-            }
+                receiveOpMove();
+            }*/
 
         }
     }
