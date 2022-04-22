@@ -17,11 +17,12 @@ public class CreateView extends View {
 
     private final Texture logo;
     private final Texture playbook;
-    private final Texture settings;
+    private final Texture highscore;
     private final Texture pinText;
     private final Texture waitText;
     private final Texture back;
     private String gamePin;
+    private final float highscore_x;
     private GameController gameController;
 
 
@@ -31,10 +32,11 @@ public class CreateView extends View {
         vm.setController(gameController);
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
-        settings = new Texture("settings.png");
+        highscore = new Texture("Highscore.png");
         pinText = new Texture("create_pin.png");
         waitText = new Texture("create_wait.png");
         back = new Texture("back.png");
+        highscore_x = FlowerPowerGame.WIDTH-highscore.getWidth()-10;
         this.gamePin = gamePin;
     }
 
@@ -44,17 +46,15 @@ public class CreateView extends View {
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            float settings_x = FlowerPowerGame.WIDTH - playbook.getWidth() - 10;
             Rectangle playbookBounds = new Rectangle(10, 15, playbook.getWidth(), playbook.getHeight());
-            Rectangle settingsBounds = new Rectangle(settings_x, 15, settings.getWidth(), settings.getHeight());
+            Rectangle highscoreBounds = new Rectangle(highscore_x, 15, highscore.getWidth(), highscore.getHeight());
             Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
             if (playbookBounds.contains(pos.x, pos.y)) {
                 //vm.set(new PlaybookView(vm));
                 System.out.println("Playbook pressed");
             }
-            if (settingsBounds.contains(pos.x, pos.y)) {
-                //vm.set(new SettingsView(vm));
-                System.out.println("Settings pressed");
+            if (highscoreBounds.contains(pos.x, pos.y)) {
+                vm.set(new HighscoreView(vm));
             }
             if (backBounds.contains(pos.x, pos.y)) {
                 vm.set(new MenuView(vm));
@@ -77,8 +77,7 @@ public class CreateView extends View {
         sb.draw(playbook, 10, 15);
         sb.draw(pinText, (float) (FlowerPowerGame.WIDTH/2-pinText.getWidth()/2), 300);
         sb.draw(waitText, (float) (FlowerPowerGame.WIDTH/2-waitText.getWidth()/2), 200);
-        float settings_x = FlowerPowerGame.WIDTH-settings.getWidth()-10;
-        sb.draw(settings, settings_x, 15);
+        sb.draw(highscore, highscore_x, 15);
         sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
         BitmapFont font = new BitmapFont();
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);

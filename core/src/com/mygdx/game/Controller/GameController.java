@@ -40,23 +40,11 @@ public class GameController {
         //TODO: (Low priority) Get x- and y-values without hardkoding :D
         //må hente x og y-verdier fra view heller sånn at vi får riktige :D
         //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
-        int x = 26+15;
-        int my_y = 65+12;
-        int op_y = 424+12;
+
+        setStartBoards();
         setMyBeds(null);
 
-        for (int i = 0; i< numberSquaresHeight; i++){
-            for (int j = 0; j< numberSquaresWidth; j++){
-                Square mySquare = new Square(x, my_y, squaresize);
-                Square opSquare = new Square(x,op_y,squaresize); //should find somewhere
-                myBoard.add(mySquare);
-                opBoard.add(opSquare);
-                x+=squaresize;
-            }
-            x = 26+15;
-            my_y+=squaresize;
-            op_y+=squaresize;
-        }
+
 
 
 
@@ -140,11 +128,28 @@ public class GameController {
         myBeds.add(bed5);
     }
 
+    private void setStartBoards(){
+        int x = 26+15;
+        int my_y = 65+12;
+        int op_y = 424+12;
+        for (int i = 0; i< numberSquaresHeight; i++){
+            for (int j = 0; j< numberSquaresWidth; j++){
+                Square mySquare = new Square(x, my_y, squaresize);
+                Square opSquare = new Square(x,op_y,squaresize); //should find somewhere
+                myBoard.add(mySquare);
+                opBoard.add(opSquare);
+                x+=squaresize;
+            }
+            x = 26+15;
+            my_y+=squaresize;
+            op_y+=squaresize;
+        }
+    }
+
     public void clear(){
         this.opBeds = new ArrayList<>();
-        this.myBeds = new ArrayList<>();
-        this.opBoard = new ArrayList<>();
-        this.myBoard = new ArrayList<>();
+        setStartBoards();
+        setMyBeds(null);
 
     }
 
