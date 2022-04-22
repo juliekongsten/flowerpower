@@ -83,11 +83,21 @@ public class GameController {
      */
     public boolean hitSquare(Square square){
         //TODO: find logic to update opponent as well
-        if (!opBoard.contains(square)){
+        /*if (!opBoard.contains(square)){
             return false;
         }
         square.setHit(true);
-        return square.hasFlower();
+        return square.hasFlower();*/
+        boolean hasFlower = false;
+        for (Bed bed : opBeds){
+            System.out.println("Bed: "+bed.getBounds());
+            if (bed.getSquares(opBoard).contains(square)){
+                System.out.println("contains square");
+                hasFlower=true;
+            }
+        }
+        square.setHit(true);
+        return hasFlower;
     }
 
     public void setMyBeds(List<Bed> beds){
@@ -282,6 +292,11 @@ public class GameController {
         System.out.println("Controller is my turn: "+myTurn);
         return myTurn;
     }
+
+    public void setTurnToOtherPlayer(){
+        this.game.setTurnToOtherPlayer();
+    }
+
     public boolean checkForGameStart() {
         boolean start = this.game.checkForGameStart();
         System.out.println("start status: "+start);
