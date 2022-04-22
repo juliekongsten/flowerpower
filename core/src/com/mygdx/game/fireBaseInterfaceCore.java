@@ -58,6 +58,9 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     @Override
     public void storeBeds(List<Bed> beds, int GID) {
 
+    }
+
+    @Override
     public List<String> getPlayers(int gameID){
         return null;
     }

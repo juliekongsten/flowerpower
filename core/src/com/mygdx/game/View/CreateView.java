@@ -64,6 +64,7 @@ public class CreateView extends View {
 
     @Override
     public void update(float dt) {
+        //TODO: Check if player has joined your game
         handleInput();
     }
 
