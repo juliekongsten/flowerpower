@@ -1,6 +1,7 @@
 package com.mygdx.game.desktop;
 
 import com.mygdx.game.FireBaseInterface;
+import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
 
 import java.util.List;
@@ -67,9 +68,10 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public void joinGame(int GID){}
 
     @Override
-    public void signOut() {
+    public void storeBeds(List<Bed> beds, int GID){}
 
-    }
+    @Override
+    public void signOut() {}
 
 
 }

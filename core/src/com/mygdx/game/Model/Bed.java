@@ -23,6 +23,10 @@ public class Bed {
     private String texturePath;
 
 
+    public Bed() {
+
+    }
+
     public Bed(int size, boolean horizontal, String texturePath){
         this.size = size;
         this.horizontal = horizontal;
@@ -113,8 +117,18 @@ public class Bed {
         }
     }
 
-
-
-
+    @Override
+    public String toString() {
+        final StringBuilder build = new StringBuilder("Bed{");
+        build.append("size='").append(size).append('\'');
+        build.append(", horizontal='").append(horizontal).append('\'');
+        build.append(", bed='").append(bed).append('\'');
+        build.append(", bounds='").append(bounds).append('\'');
+        build.append(", pos_x='").append(pos_x).append('\'');
+        build.append(", pos_y='").append(pos_y).append('\'');
+        build.append(", texturePath='").append(texturePath).append('\'');
+        build.append('}');
+        return build.toString();
+    }
 
 }

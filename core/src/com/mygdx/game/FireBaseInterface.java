@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
 
 import java.util.List;
@@ -29,5 +30,5 @@ public interface FireBaseInterface {
     //void writeUserDataToDb(Player player);
     void createGame(int GID);
     void joinGame(int GID);
-
+    void storeBeds(List<Bed> beds, int GID);
 }

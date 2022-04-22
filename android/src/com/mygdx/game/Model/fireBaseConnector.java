@@ -65,6 +65,7 @@ public class fireBaseConnector implements FireBaseInterface {
 
     }
 
+
     /**
      * readFromDb creates a listener that listens to the location of myRef and logs the value on that reference
      * will implement the publish subscriber pattern
@@ -266,18 +267,45 @@ public class fireBaseConnector implements FireBaseInterface {
     TODO: Disse burde kanskje være protected?
      */
 
-    /**
-     * createGame gets called when user wants to create a game
-     * The player that created the game, currentUser, gets automatically added
-     * The player is set as ready: false
-     * The player that creates the game gets the first turn
-     * @param GID - get generated in Game in Model, and used as identifier in database
-     */
+    @Override
+    public void storeBeds(List<Bed> beds, int GID) {
+        System.out.println("gets called");
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(GID + "/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        DatabaseReference bedsRef = userRef.child("/Beds");
+        int i = 0;
+        for (Bed bed : beds) {
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("pos_x", bed.getPos_x());
+            result.put("pos_y", bed.getPos_y());
+            result.put("size", bed.getSize());
+            result.put("horizontal", bed.isHorizontal());
+            result.put("texturePath", bed.getTexturePath());
+            Map<String, Object> bedValues = result;
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put("/bed" + (i+1), bedValues);
+            bedsRef.updateChildren(childUpdates);
+            i++;
+        }
+    }
+
+
+
+        /**
+         * createGame gets called when user wants to create a game
+         * The player that created the game, currentUser, gets automatically added
+         * The player is set as ready: false
+         * The player that creates the game gets the first turn
+         * @param GID - get generated in Game in Model, and used as identifier in database
+         */
+    //NOTE: alle stedene det står "player1" skal det heller være en reell bruker
     public void createGame(int GID){
 
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
+
         Map uidData = new HashMap();
         uidData.put("Username", this.getUsername());
         userRef.setValue(uidData);
@@ -286,6 +314,11 @@ public class fireBaseConnector implements FireBaseInterface {
         readyData.put(displayName[0],false);
         DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
+
+
+
+
+
         //TODO: fikse så denne ikke overskriver alle de andre
         Map turnData = new HashMap();
         turnData.put("Turn",this.getUID());
