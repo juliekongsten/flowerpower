@@ -93,15 +93,12 @@ public class GameController {
     }
 
     public void setMyBeds(List<Bed> beds){
-        System.out.println("setmybeds");
         if (beds == null){
             setStartBeds();
         } else {
             myBeds = beds;
             if (gameStarted) {
-                System.out.println("gets in game controller");
                 game.storePlacedBeds(myBeds);
-                System.out.println("MY BEDS: " + myBeds);
             }
             for (Square mySquare : myBoard){
                 if (isSquareInBed(mySquare,myBeds)){
