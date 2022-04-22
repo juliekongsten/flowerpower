@@ -65,7 +65,7 @@ public class GameView extends View{
     private List<Square> myBoard;
     private List<Bed> myBeds;
     private List<Bed> opBeds;
-    private List<Square> already_pressed;
+    private List<Square> squareList;
 
 
 
@@ -81,7 +81,7 @@ public class GameView extends View{
         gameController.receiveOpBeds();
         opBeds = gameController.getOpBeds();
         opBoard = gameController.getOpBoard();
-        already_pressed = new ArrayList<>();
+        squareList = gameController.getMyMoves();
 
     }
 
@@ -123,11 +123,12 @@ public class GameView extends View{
             //If player is not waiting on opponents move we check if player presses any of opponents
             //squares and act accordingly
             if (!waiting){
+
                 for (Square square : opBoard){
-                    if (square.getBounds().contains(pos.x,pos.y) && !already_pressed.contains(square)){
+                    if (square.getBounds().contains(pos.x,pos.y) && !squareList.contains(square)){
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
                         boolean flower = gameController.hitSquare(square);
-                        already_pressed.add(square);
+                        //squareList.add(square);
                         if (flower){
                             hit = true;
                             miss = false;

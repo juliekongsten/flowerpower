@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 
+import sun.security.util.ArrayUtil;
+
 public class Game {
 
     private int GID;
@@ -91,6 +93,16 @@ public class Game {
     public void storePlacedBeds(List<Bed> beds) {
         System.out.println("gets in to game");
         _FBIC.storeBeds(beds, GID);
+    }
+
+    public ArrayList<Square> getMyMoves(){
+        System.out.println("Getting opponents moves");
+        ArrayList<Square> squareList = _FBIC.getMoves(GID);
+        return squareList;
+    }
+
+    public void setMove(Square square){
+        _FBIC.setMove(square, this.getGID());
     }
 
 }

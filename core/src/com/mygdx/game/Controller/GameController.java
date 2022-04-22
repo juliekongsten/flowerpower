@@ -92,6 +92,7 @@ public class GameController {
         if (!opBoard.contains(square)){
             return false;
         }
+        game.setMove(square);
         square.setHit(true);
         return square.hasFlower();
     }
@@ -183,6 +184,10 @@ public class GameController {
         //TODO: Logic
     }
 
+    public ArrayList<Square> getMyMoves(){
+        return this.game.getMyMoves();
+    }
+
     /**
      * Moves Opponents bed to the opponent board as the sent beds have myboard coordinates
      * @param receivedOpBeds
@@ -262,6 +267,8 @@ public class GameController {
         updateStatus();
         return gameOver;
     }
+
+
 
     /**
      * Returns if the opponent has exited, (pressed on "go back to menu") in placebedsview,

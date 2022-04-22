@@ -4,6 +4,7 @@ import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
 import com.mygdx.game.Model.Square;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,5 +34,5 @@ public interface FireBaseInterface {
     void joinGame(int GID);
     void storeBeds(List<Bed> beds, int GID);
     void setMove(Square square, int GID);
-    void getMoves(int GID);
+    ArrayList<Square> getMoves(int GID);
 }

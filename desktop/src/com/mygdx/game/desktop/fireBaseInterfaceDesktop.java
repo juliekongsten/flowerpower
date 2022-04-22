@@ -5,6 +5,7 @@ import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
 import com.mygdx.game.Model.Square;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -77,8 +78,8 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     }
 
     @Override
-    public void getMoves(int GID) {
-
+    public ArrayList<Square> getMoves(int GID) {
+return null;
     }
 
     @Override
