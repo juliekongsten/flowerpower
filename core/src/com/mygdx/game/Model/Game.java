@@ -96,4 +96,16 @@ public class Game {
         return myTurn;
     }
 
+    public boolean checkForGameStart(){
+        List<String> players =_FBIC.getPlayers(this.GID);
+        System.out.println("these are the players:"+players);
+        if (players.size()==2){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
 }

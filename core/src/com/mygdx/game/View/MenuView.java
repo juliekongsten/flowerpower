@@ -23,6 +23,7 @@ public class MenuView extends View {
     protected MenuView(ViewManager vm) {
         super(vm);
         this.gameController = new GameController();
+        vm.setController(gameController);
         logo = new Texture("logo.png");
         playbook = new Texture("playbook.png");
         highscore = new Texture("Highscore.png");

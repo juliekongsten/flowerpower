@@ -282,4 +282,10 @@ public class GameController {
         System.out.println("Controller is my turn: "+myTurn);
         return myTurn;
     }
+    public boolean checkForGameStart() {
+        boolean start = this.game.checkForGameStart();
+        System.out.println("start status: "+start);
+        return start;
+
+    }
 }
