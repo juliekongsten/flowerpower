@@ -5,9 +5,6 @@ import com.mygdx.game.FlowerPowerGame;
 
 import java.util.List;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Game {
 
     private int GID;
@@ -83,14 +80,34 @@ public class Game {
         this._FBIC.setPlayerReady(this.GID);
     }
 
-    //TODO: fjerne denne, tror ikke vi trenger den mtp konstruktøren gjør det samme
-    public void joinGame(int existingGID){
-        this.GID= existingGID;
+    public boolean getPlayersReady(){
+        //Get opponents ready value from database
+        boolean ready = this._FBIC.getPlayersReady(this.GID);
+        System.out.println("Game getplayersready: "+ready);
+        return ready;
     }
 
     public void storePlacedBeds(List<Bed> beds) {
         System.out.println("gets in to game");
         _FBIC.storeBeds(beds, GID);
+    }
+
+    public boolean isMyTurn(){
+        boolean myTurn =this._FBIC.isMyTurn(this.GID);
+        System.out.println("Game is my turn: "+myTurn);
+        return myTurn;
+    }
+
+    public boolean checkForGameStart(){
+        List<String> players =_FBIC.getPlayers(this.GID);
+        System.out.println("these are the players:"+players);
+        if (players.size()==2){
+            return true;
+        }
+        else{
+            return false;
+        }
+
     }
 
 }

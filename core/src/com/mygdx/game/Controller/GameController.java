@@ -37,16 +37,10 @@ public class GameController {
         numberSquaresWidth = 9;
         gameStarted = false;
 
-        //TODO: (Low priority) Get x- and y-values without hardkoding :D
-        //må hente x og y-verdier fra view heller sånn at vi får riktige :D
-        //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
+
 
         setStartBoards();
         setMyBeds(null);
-
-
-
-
 
     }
     public void joinGame(int GID) {
@@ -129,6 +123,9 @@ public class GameController {
     }
 
     private void setStartBoards(){
+        //TODO: (Low priority) Get x- and y-values without hardkoding :D
+        //må hente x og y-verdier fra view heller sånn at vi får riktige :D
+        //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
         int x = 26+15;
         int my_y = 65+12;
         int op_y = 424+12;
@@ -160,9 +157,10 @@ public class GameController {
         this.game.setPlayerReady();
     }
 
-    public boolean getOpReady(){
-        //TODO: Logic, database
-        boolean ready = true; //get from database
+    public boolean getPlayersReady(){
+        boolean ready = this.game.getPlayersReady();
+        System.out.println("controller playersready: "+ready);
+
         return ready;
     }
 
@@ -190,10 +188,8 @@ public class GameController {
      */
     private void moveOpBeds(List<Bed> receivedOpBeds){
         List<Bed> newBeds = new ArrayList<>();
-        System.out.println("SentOpBeds: "+receivedOpBeds);
 
         for (Bed bed : receivedOpBeds){
-            System.out.println("SentOpBed: "+bed.getPos_x()+","+bed.getPos_y());
             int size = bed.getSize();
             boolean horizontal = bed.isHorizontal();
             String texturePath = bed.getTexturePath();
@@ -201,7 +197,6 @@ public class GameController {
             float y = bed.getPos_y()+distance;
             float x = bed.getPos_x();
             newBed.updatePosition(x, y);
-            System.out.println("Newbed: "+newBed.getPos_x()+","+newBed.getPos_y());
             newBeds.add(newBed);
 
         }
@@ -280,5 +275,17 @@ public class GameController {
     public boolean getOpForfeitet() {
         //TODO get this information from DB
         return false;
+    }
+
+    public boolean isMyTurn(){
+        boolean myTurn = this.game.isMyTurn();
+        System.out.println("Controller is my turn: "+myTurn);
+        return myTurn;
+    }
+    public boolean checkForGameStart() {
+        boolean start = this.game.checkForGameStart();
+        System.out.println("start status: "+start);
+        return start;
+
     }
 }

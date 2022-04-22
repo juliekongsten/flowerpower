@@ -130,8 +130,11 @@ public class PlaceBedsView extends View{
                 if(!overlappingBeds & !bedsOutsideBoard){
                     //Set isReady to true so render will act accordingly
                     isReady = true;
+                    System.out.println("i am ready:)");
                     gameController.setPlayerReady();
-                }}
+                } else{
+                    System.out.println("i am not ready:(");}
+            }
             //Checks if replace-button is pressed
             Rectangle replaceBounds = new Rectangle(FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150,replace.getWidth(),replace.getHeight());
             if(replaceBounds.contains(pos.x,pos.y)){
@@ -250,12 +253,15 @@ public class PlaceBedsView extends View{
      * @param sb
      */
     private void checkOtherPlayer(SpriteBatch sb){
-        boolean opReady = gameController.getOpReady();
+        boolean opReady = gameController.getPlayersReady();
+        System.out.println("In check other player");
 
         if (opReady){
+            System.out.println("opready<3");
             gameController.sendMyBeds(beds);
-            vm.setController(gameController);
+            System.out.println("after sendmybeds");
             vm.set(new GameView(vm, gameController));
+            System.out.println("after vm set");
         } else{
             //Draw waiting-graphics
             sb.draw(waiting_black,0,0);
@@ -310,6 +316,7 @@ public class PlaceBedsView extends View{
             sb.draw(go_to_menu,FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2,FlowerPowerGame.HEIGHT/2+120);
         }
         if(isReady){
+            System.out.println("inside isREady");
             checkOtherPlayer(sb);
         }
         sb.end();
