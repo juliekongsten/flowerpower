@@ -83,6 +83,11 @@ public class Game {
         this._FBIC.setPlayerReady(this.GID);
     }
 
+    public boolean getPlayersReady(){
+        //Get opponents ready value from database
+        return this._FBIC.getPlayersReady(this.GID);
+    }
+
     //TODO: fjerne denne, tror ikke vi trenger den mtp konstruktøren gjør det samme
     public void joinGame(int existingGID){
         this.GID= existingGID;

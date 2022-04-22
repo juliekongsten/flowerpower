@@ -42,6 +42,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private String playerTurn;
      private List<String> players;
      private List<Integer> gameIDs;
+     private boolean playersReady = true;
 
 
     /**
@@ -387,9 +388,54 @@ public class fireBaseConnector implements FireBaseInterface {
         updates.put(displayName[0], true);
         playerRef.updateChildren(updates);
 
+    }
+
+    private void setPlayersReady(boolean ready){
+        this.playersReady=ready;
+    }
+
+    @Override
+    public boolean getPlayersReady(int GID) {
+        isDone=false;
+        setPlayersReady(true);
+        System.out.println("Ready start FBIC: "+playersReady);
+
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference readyRef = gameRef.child(GID+"/Ready/");
+        readyRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
+                System.out.println(map.containsValue(false));
+
+                if (map.containsValue(false)){
+                    setPlayersReady(false);
+                }
+
+                System.out.println("Ready after ondatachange: "+playersReady);
+                isDone=true;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("The read failed: " + error.getCode());
+                setPlayersReady(false);
+                isDone=true;
+            }
+
+
+        });
+
+        while (!isDone){
+            //waiting
+        }
+        return this.playersReady;
+
 
 
     }
+
+
     /**
      * getPlayers gets all the in the game with this gameID
      * @param gameID

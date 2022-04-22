@@ -160,10 +160,8 @@ public class GameController {
         this.game.setPlayerReady();
     }
 
-    public boolean getOpReady(){
-        //TODO: Logic, database
-        boolean ready = true; //get from database
-        return ready;
+    public boolean getPlayersReady(){
+        return this.game.getPlayersReady();
     }
 
     /**

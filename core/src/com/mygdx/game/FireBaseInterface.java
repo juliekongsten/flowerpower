@@ -23,6 +23,7 @@ public interface FireBaseInterface {
 
     boolean getIsDone();
     void setPlayerReady(int GID);
+    boolean getPlayersReady(int GID);
 
     List<String> getPlayers(int GID);
     List<Integer> getGameIDs();

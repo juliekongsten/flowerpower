@@ -65,6 +65,11 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public void setPlayerReady(int GID){}
 
     @Override
+    public boolean getPlayersReady(int GID) {
+        return false;
+    }
+
+    @Override
     public void joinGame(int GID){}
 
     @Override

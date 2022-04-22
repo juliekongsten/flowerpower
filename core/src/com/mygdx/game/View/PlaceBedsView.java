@@ -250,7 +250,7 @@ public class PlaceBedsView extends View{
      * @param sb
      */
     private void checkOtherPlayer(SpriteBatch sb){
-        boolean opReady = gameController.getOpReady();
+        boolean opReady = gameController.getPlayersReady();
 
         if (opReady){
             gameController.sendMyBeds(beds);
