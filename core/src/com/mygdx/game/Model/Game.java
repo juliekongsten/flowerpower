@@ -3,10 +3,12 @@ package com.mygdx.game.Model;
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
 
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Game {
 
@@ -93,8 +95,9 @@ public class Game {
         _FBIC.storeBeds(beds, GID);
     }
 
-    public void retrievePlacedBeds() {
-        _FBIC.retrieveBeds(GID);
+    public Map<String, Object> retrievePlacedBeds() {
+        System.out.println("Game, retrievePlacedBeds(): " + _FBIC.retrieveBeds(GID));
+        return _FBIC.retrieveBeds(GID);
     }
 
 }

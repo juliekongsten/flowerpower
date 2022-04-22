@@ -42,7 +42,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private String playerTurn;
      private List<String> players;
      private List<Integer> gameIDs;
-     private List<String> test;
+     private Map<String, Object> beds;
 
 
     /**
@@ -291,8 +291,17 @@ public class fireBaseConnector implements FireBaseInterface {
     }
 
     @Override
-    public void retrieveBeds(int GID) {
-        // Denne henter egne beds! Kan hente OP beds dersom man endrer hvilken ID man henter fra
+    public Map<String, Object> retrieveBeds(int GID) {
+        // Getting the UID for the opponent
+        isDone = false;
+        beds = new HashMap<>();
+        List<String> players = this.getPlayers(GID);
+        String opUID = "";
+        for (int i =0; i < players.size(); i++){
+            if(!players.get(i).equals(getUID())){
+                opUID = players.get(i);
+            }
+        }
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID + "/Players/");
         DatabaseReference userRef = playerRef.child(getUID());
@@ -301,7 +310,7 @@ public class fireBaseConnector implements FireBaseInterface {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                System.out.println("HER ER BEDSENE: "+ map);
+                beds = map;
                 isDone=true;
             }
             @Override
@@ -310,8 +319,7 @@ public class fireBaseConnector implements FireBaseInterface {
                 isDone=true;
             }
         });
-
-
+        return beds;
     }
 
 

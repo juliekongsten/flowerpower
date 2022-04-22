@@ -132,7 +132,6 @@ public class PlaceBedsView extends View{
                     isReady = true;
                     gameController.setPlayerReady();
                 }
-                gameController.retrieveBeds();
             }
             //Checks if replace-button is pressed
             Rectangle replaceBounds = new Rectangle(FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150,replace.getWidth(),replace.getHeight());
