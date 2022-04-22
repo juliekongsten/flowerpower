@@ -82,7 +82,7 @@ public class GameView extends View{
         opBeds = gameController.getOpBeds();
         opBoard = gameController.getOpBoard();
         already_pressed = new ArrayList<>();
-        waiting = gameController.isMyTurn();
+        waiting = !gameController.isMyTurn();
 
     }
 
@@ -186,7 +186,7 @@ public class GameView extends View{
     @Override
     public void update(float dt) {
         handleInput();
-        waiting = gameController.isMyTurn();
+        waiting = !gameController.isMyTurn();
 
         //Checks if the game is over and takes player to ExitView
         if (gameOver){
@@ -310,6 +310,7 @@ public class GameView extends View{
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
 
+        waiting = !gameController.isMyTurn();
         //Draws message (your turn/waiting) in the pool
         if (!waiting){
             sb.draw(my_turn, my_turn_x, my_turn_y);

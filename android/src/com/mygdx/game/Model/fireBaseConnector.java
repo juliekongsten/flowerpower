@@ -312,7 +312,7 @@ public class fireBaseConnector implements FireBaseInterface {
         userRef.setValue(uidData);
         Map readyData = new HashMap();
         String displayName[] = this.getUsername().split("@");
-        readyData.put(displayName[0],false);
+        readyData.put(displayName[0],true);
         DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
 
