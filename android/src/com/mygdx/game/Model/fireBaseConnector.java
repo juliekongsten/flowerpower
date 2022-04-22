@@ -42,7 +42,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private String playerTurn;
      private List<String> players;
      private List<Integer> gameIDs;
-     private static int moveCount = 0;
+     private static int moveCount = 1;
 
 
     /**
@@ -500,16 +500,53 @@ public class fireBaseConnector implements FireBaseInterface {
 
         Map<String, Object> moveValues = result;
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/Move"+moveCount++, result);
+        childUpdates.put("/Move"+moveCount, result);
+        moveCount++;
         movesRef.updateChildren(childUpdates);
     }
 
     /**
      * Man må kunne hente alle movsene til den andre spilleren
-     * @param gamePIN
+     * @param GID
      * @return List (forslag)
      */
-    public void getMoves(int gamePIN){
+    public void getMoves(int GID){
+        // Getting the UID for the opponent
+        isDone = false;
+        List<String> players = this.getPlayers(GID);
+       String opUID = "";
+        for (int i =0; i < players.size(); i++){
+            if(!players.get(i).equals(getUID())){
+               opUID = players.get(i);
+            }
+        }
+        System.out.println("opUid: "+ opUID);
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(GID + "/Players/");
+        DatabaseReference userRef = playerRef.child(opUID);
+        DatabaseReference movesRef = userRef.child("/Moves");
+        movesRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                System.out.println("HER ER MOVSENE: "+ map);
+                /*
+                TODO: fikse denne
+                for (String name : map.keySet()) {
+                    System.out.println("turn: " + name);
+                    setPlayerTurn(name);
+                }*/
+                isDone=true;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+                isDone=true;
+            }
+        });
+
+
+
     }
 
     /**

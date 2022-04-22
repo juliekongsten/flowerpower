@@ -77,6 +77,11 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     }
 
     @Override
+    public void getMoves(int GID) {
+
+    }
+
+    @Override
     public void signOut() {}
 
 

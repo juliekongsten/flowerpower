@@ -32,5 +32,6 @@ public interface FireBaseInterface {
     void createGame(int GID);
     void joinGame(int GID);
     void storeBeds(List<Bed> beds, int GID);
-    public void setMove(Square square, int GID);
+    void setMove(Square square, int GID);
+    void getMoves(int GID);
 }

@@ -67,6 +67,12 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     }
 
     @Override
+    public void getMoves(int GID) {
+
+    }
+
+
+    @Override
     public List<String> getPlayers(int gameID){
         return null;
     }
