@@ -53,6 +53,11 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
         return false;
     }
 
+    @Override
+    public boolean isMyTurn(int gameID) {
+        return false;
+    }
+
 
     @Override
     public void createGame(int GID){}

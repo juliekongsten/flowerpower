@@ -496,6 +496,7 @@ public class fireBaseConnector implements FireBaseInterface {
      * @return String UID of player that
      */
     public String getTurn(int gameID){
+        //TODO: Implement check for if this is yooou
         isDone = false;
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Turn");
@@ -521,6 +522,13 @@ public class fireBaseConnector implements FireBaseInterface {
             //waiting
         }
         return this.playerTurn;
+    }
+
+    public boolean isMyTurn(int gameID){
+        String[] displayName = this.getUsername().split("@");
+        String name = displayName[0];
+        System.out.println("Is my turn: "+name.equals(getTurn(gameID)));
+        return name.equals(getTurn(gameID));
     }
 
     //TODO: spillhåndtering - se forslag til database metoder videre

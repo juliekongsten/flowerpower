@@ -37,16 +37,10 @@ public class GameController {
         numberSquaresWidth = 9;
         gameStarted = false;
 
-        //TODO: (Low priority) Get x- and y-values without hardkoding :D
-        //må hente x og y-verdier fra view heller sånn at vi får riktige :D
-        //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
+
 
         setStartBoards();
         setMyBeds(null);
-
-
-
-
 
     }
     public void joinGame(int GID) {
@@ -129,6 +123,9 @@ public class GameController {
     }
 
     private void setStartBoards(){
+        //TODO: (Low priority) Get x- and y-values without hardkoding :D
+        //må hente x og y-verdier fra view heller sånn at vi får riktige :D
+        //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
         int x = 26+15;
         int my_y = 65+12;
         int op_y = 424+12;
@@ -278,5 +275,11 @@ public class GameController {
     public boolean getOpForfeitet() {
         //TODO get this information from DB
         return false;
+    }
+
+    public boolean isMyTurn(){
+        boolean myTurn = this.game.isMyTurn();
+        System.out.println("Controller is my turn: "+myTurn);
+        return myTurn;
     }
 }
