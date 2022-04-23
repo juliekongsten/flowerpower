@@ -70,7 +70,7 @@ public class GameView extends View{
     private List<Square> myBoard;
     private List<Bed> myBeds;
     private List<Bed> opBeds;
-    private List<Square> already_pressed;
+    private List<Square> squareList;
 
     private final Stage stage;
     private final ImageButton backButton;
@@ -88,6 +88,7 @@ public class GameView extends View{
         gameController.receiveOpBeds();
         opBeds = gameController.getOpBeds();
         opBoard = gameController.getOpBoard();
+        squareList = gameController.getMyMoves();
         already_pressed = new ArrayList<>();
         waiting = !gameController.isMyTurn(); //check, stopper?
 
@@ -151,14 +152,18 @@ public class GameView extends View{
             //If player is not waiting on opponents move we check if player presses any of opponents
             //squares and act accordingly
             if (!waiting){
+
                 for (Square square : opBoard){
+                    if (square.getBounds().contains(pos.x,pos.y) && !squareList.contains(square)){
+                        //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
+                        boolean flower = gameController.hitSquare(square);
+                        //squareList.add(square);
                     System.out.println("square: "+square.getBounds());
-                    if (square.getBounds().contains(pos.x,pos.y) && !already_pressed.contains(square)){
+                    
                         System.out.println("is pressed");
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
                         boolean flower = gameController.hitSquare(square);
 
-                        already_pressed.add(square);
                         if (flower){
                             hit = true;
                             miss = false;
@@ -212,14 +217,15 @@ public class GameView extends View{
         }}
     }
 
-    /**
-     *
-     * @param square received square
-     */
-    protected void receiveOpMove(Square square){
+
+    //TODO: hente ut denne når det er din turn
+    protected void receiveOpMove(){
         //Should only be called when the opponent has made a move
         //TODO: Give feedback to user that your square has been hit/miss
         //Do not draw the flower/miss as this is done in render
+
+        gameController.getOpMoves();
+
 
     }
 
@@ -237,10 +243,11 @@ public class GameView extends View{
         if (waiting){
             //TODO: Find way to get square from controller
             //TODO: Find out if we should implement this as squarelistener instead and how
-            Square square = new Square(1,1,1); //should get this from controller
+            this.receiveOpMove();
+            /*Square square = new Square(1,1,1); //should get this from controller
             if (square != null){
-                receiveOpMove(square);
-            }
+                receiveOpMove();
+            }*/
 
         }
     }

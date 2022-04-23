@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import sun.security.util.ArrayUtil;
+
 public class Game {
 
     private int GID;
@@ -107,6 +109,21 @@ public class Game {
     public void storePlacedBeds(List<Bed> beds) {
         _FBIC.storeBeds(beds, GID);
     }
+
+    public ArrayList<Square> getMyMoves(){
+        System.out.println("Getting opponents moves");
+        ArrayList<Square> squareList = _FBIC.getMoves(GID);
+        return squareList;
+    }
+    public ArrayList<Square> getOpMoves(){
+        System.out.println("Getting opponents moves");
+        ArrayList<Square> squareList = _FBIC.getOpMoves(GID);
+        return squareList;
+    }
+
+
+    public void setMove(Square square){
+        _FBIC.setMove(square, this.getGID());
 
     /**
      * if a player forfeits a game, the game should be deleted and the opponent should get notified
