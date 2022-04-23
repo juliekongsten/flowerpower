@@ -264,6 +264,7 @@ public class fireBaseConnector implements FireBaseInterface {
         );
         while (!isDone){
             //waiting:)
+            System.out.println("Dont delete me");
         }
         return this.gameIDs;
 

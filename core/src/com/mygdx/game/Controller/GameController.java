@@ -176,6 +176,7 @@ public class GameController {
         Map<String, Object> receivedOpBeds;
         receivedOpBeds = game.retrievePlacedBeds();
         bedsList.addAll(receivedOpBeds.values());
+
         for (int j=0; j<5; j++) {
             String newString = bedsList.get(j).toString();
             String pos_yString;
