@@ -77,11 +77,6 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     }
 
     @Override
-    public boolean isMyTurn(int gameID) {
-        return false;
-    }
-
-    @Override
     public void joinGame(int GID){}
 
     @Override
@@ -99,6 +94,16 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
 
     @Override
     public void forfeitedGame(int gid) {
+
+    }
+
+    @Override
+    public boolean getOpHasForfeited() {
+        return false;
+    }
+
+    @Override
+    public void OpHasForfeited(int gid) {
 
     }
 

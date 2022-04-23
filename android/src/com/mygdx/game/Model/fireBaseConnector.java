@@ -203,7 +203,6 @@ public class fireBaseConnector implements FireBaseInterface {
     }
 
     public String getUID(){
-
         FirebaseUser user = mAuth.getCurrentUser();
         return user.getUid();
     }
@@ -431,24 +430,15 @@ public class fireBaseConnector implements FireBaseInterface {
         gameRef.child(String.valueOf(gamePIN)).removeValue();
     }
 
-    /**
-     * ready gets called when a user presses ready to say that the game can start
-     * @param GID the gamePin ID
-     */
-
-
-    public void setPlayerReady(int GID){
+    @Override
+    public void forfeitedGame(int gamePin) {
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gamePin+"/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
         DatabaseReference forfeitedRef = userRef.child("/Forfeited");
         forfeitedRef.setValue(true);
-        DatabaseReference playerRef = gameRef.child(GID+"/Ready");
-        Map<String, Object> updates = new HashMap<>();
-        String[] displayName = this.getUsername().split("@");
-        updates.put(displayName[0], true);
-        playerRef.updateChildren(updates);
     }
+
 
     private void setPlayersReady(boolean ready){
         this.playersReady=ready;
@@ -485,6 +475,19 @@ public class fireBaseConnector implements FireBaseInterface {
                     }
                 }
 
+            });
+            while (!isDone) {
+                //waiting
+                System.out.println("please be done"); //don't remove
+            }
+            this.players=foundPlayers;
+
+        }
+        return this.players;
+    }
+
+
+
     public void OpHasForfeited(int gamePin){
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gamePin+"/Players/");
@@ -511,12 +514,11 @@ public class fireBaseConnector implements FireBaseInterface {
         }
     }
 
-private boolean Forfeited = false;
+    private boolean Forfeited = false;
     public void setOpHasForfeited(String forfeited){
          Forfeited = Boolean.parseBoolean(forfeited);
     }
 
-    @Override
     public boolean getOpHasForfeited(){
         return Forfeited;
     }
@@ -526,28 +528,14 @@ private boolean Forfeited = false;
      * ready gets called when a user presses ready to say that the game can start
      * @param GID the gamePin ID
      */
-
-
-    @Override
     public void setPlayerReady(int GID){
-        System.out.println("Kommer hit");
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Ready");
         Map<String, Object> updates = new HashMap<>();
         String[] displayName = this.getUsername().split("@");
         updates.put(displayName[0], true);
         playerRef.updateChildren(updates);
-            });
-            while (!isDone) {
-                //waiting
-                System.out.println("please be done"); //don't remove
-            }
-            this.players=foundPlayers;
-
-        }
-        return this.players;
     }
-
 
     public List<Boolean> getPlayersReady(int GID) {
         isDone=false;
