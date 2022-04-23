@@ -38,8 +38,6 @@ public class RegisterView extends View {
     private TextField password;
     private TextField passwordCheck;
     private Pixmap cursorColor;
-    private final ImageButton highscoreButton;
-    private final ImageButton playbookButton;
     private final ImageButton backButton;
 
 
@@ -91,48 +89,12 @@ public class RegisterView extends View {
         setPasswordCheckField(textFieldStyle);
         stage.addActor(passwordCheck);
 
-        Button playbook = new Button("playbook.png", 10, 15);
-        playbookButton = playbook.getButton();
-        setPlaybookButtonEvent();
-        stage.addActor(playbookButton);
-
-        Button highscore = new Button("Highscore.png", FlowerPowerGame.WIDTH - 125, 15);
-        highscoreButton = highscore.getButton();
-        setHighscoreButtonEvent();
-        stage.addActor(highscoreButton);
-
         Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
         backButton = back.getButton();
         setBackButtonEvent();
         stage.addActor(backButton);
     }
 
-    private void setPlaybookButtonEvent() {
-        playbookButton.addListener(new EventListener()
-        {
-            @Override
-            public boolean handle(Event event)
-            {
-                //Handle the input event.
-                //vm.set(new PlaybookView(vm));
-                System.out.println("PLAYBOOK");
-                return true;
-            }
-        });
-    }
-
-    private void setHighscoreButtonEvent() {
-        highscoreButton.addListener(new EventListener()
-        {
-            @Override
-            public boolean handle(Event event)
-            {
-                //Handle the input event.
-                vm.set(new HighscoreView(vm));
-                return true;
-            }
-        });
-    }
 
     private void setBackButtonEvent() {
         backButton.addListener(new EventListener()

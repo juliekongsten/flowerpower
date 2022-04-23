@@ -76,8 +76,6 @@ public class GameView extends View{
     private final ImageButton backButton;
 
 
-
-
     public GameView(ViewManager vm, GameController gameController) {
         super(vm);
         System.out.println("in gameview");
@@ -176,14 +174,10 @@ public class GameView extends View{
                 }
 
             }
-            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, backButton.getWidth()+3, backButton.getHeight()+3);
-            Rectangle noBounds = new Rectangle(FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100,no.getWidth(),no.getHeight());
-            Rectangle yesBounds = new Rectangle(FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100,yes.getWidth(),yes.getHeight());
-            /*
-            if (backBounds.contains(pos.x, pos.y)) {
-                goBack = true;
-            }
-             */
+            Rectangle noBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-no.getWidth()-5),
+                    (float) FlowerPowerGame.HEIGHT/2-100, no.getWidth(),no.getHeight());
+            Rectangle yesBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2+yes.getWidth()/8),
+                    (float) FlowerPowerGame.HEIGHT/2-100, yes.getWidth(),yes.getHeight());
 
             if(goBack){
                 if(noBounds.contains(pos.x,pos.y)){
@@ -198,7 +192,8 @@ public class GameView extends View{
             }
                    
             else{
-                Rectangle exit_gameBounds = new Rectangle(FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2,FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
+                Rectangle exit_gameBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2),
+                        (float) FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
                 if(exit_gameBounds.contains(pos.x,pos.y)){
                     vm.set(new ExitView(vm,true, this.gameController));
                     gameController.deleteGame();
@@ -208,20 +203,18 @@ public class GameView extends View{
 
     /**
      *
-     * @param square
+     * @param square received square
      */
     protected void receiveOpMove(Square square){
         //Should only be called when the opponent has made a move
         //TODO: Give feedback to user that your square has been hit/miss
         //Do not draw the flower/miss as this is done in render
 
-
     }
 
     @Override
     public void update(float dt) {
         handleInput();
-
 
         //Checks if the game is over and takes player to ExitView
         if (gameOver){
@@ -386,7 +379,6 @@ public class GameView extends View{
         }
         gameOver = gameController.getGameOver();
 
-        System.out.println("after render gameview");
         sb.end();
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
