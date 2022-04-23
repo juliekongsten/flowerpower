@@ -44,6 +44,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private Map<String, Object> beds;
      private boolean playersReady = true;
      private String UID;
+     private List<Boolean> playersReadyList;
 
 
     /**
@@ -540,32 +541,30 @@ public class fireBaseConnector implements FireBaseInterface {
     public List<Boolean> getPlayersReady(int GID) {
         isDone=false;
         System.out.println("Ready start FBIC: "+playersReady);
-        List<Boolean> playersReady = new ArrayList<>();
+        playersReadyList = new ArrayList<>();
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference readyRef = gameRef.child(GID+"/Ready/");
-        readyRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                    isDone = true;
-                } else {
-                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                    Map<String, Boolean> map = (Map<String, Boolean>) task.getResult().getValue();
-                    map.values();
-                    playersReady.addAll(map.values());
-                    System.out.println("key: " + players);
-                    isDone = true;
-
-                }
+        readyRef.get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+                isDone = true;
+            } else {
+                Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                Map<String, Boolean> map = (Map<String, Boolean>) task.getResult().getValue();
+                map.values();
+                System.out.println(map.values());
+                playersReadyList.addAll(map.values());
+                System.out.println(playersReady);
+                System.out.println("key: " + players);
+                isDone = true;
             }
-
         });
         while (!isDone) {
             //waiting
             System.out.println("please be done"); //don't remove
         }
-        return playersReady;
+        System.out.println("LAST LIST:" + playersReadyList);
+        return playersReadyList;
     }
 
 
