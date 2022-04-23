@@ -482,8 +482,58 @@ private boolean Forfeited = false;
 
     @Override
     public boolean getPlayersReady(int GID) {
-        return false;
+        isDone=false;
+        System.out.println("Ready start FBIC: "+playersReady);
+
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference readyRef = gameRef.child(GID+"/Ready/");
+        readyRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
+                System.out.println(map.containsValue(false));
+
+                if (map.containsValue(false)){
+                    System.out.println("Values:");
+                    Collection<Object> values = map.values();
+                    for (Object value: values){
+                        System.out.println(value);
+                    }
+                    setPlayersReady(false);
+                }
+
+                System.out.println("Ready after ondatachange: "+playersReady);
+                isDone=true;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                System.out.println("The read failed: " + error.getCode());
+                setPlayersReady(false);
+                isDone=true;
+            }
+
+
+        });
+
+
+        while (!isDone){
+            //waiting
+            System.out.println("waiting"); //don't remove
+        }
+        System.out.println("FBIC playersready: "+this.playersReady);
+        return this.playersReady;
+
+
+
     }
+
+
+    private void setPlayersReady(boolean ready){
+        this.playersReady=ready;
+    }
+
+
 
 
     /**
