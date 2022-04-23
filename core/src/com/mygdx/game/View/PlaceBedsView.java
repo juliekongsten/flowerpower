@@ -316,7 +316,7 @@ public class PlaceBedsView extends View{
             sb.draw(go_to_menu,FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2,FlowerPowerGame.HEIGHT/2+120);
         }
         if(isReady){
-            System.out.println("inside isREady");
+            System.out.println("inside isReady");
             checkOtherPlayer(sb);
         }
         sb.end();

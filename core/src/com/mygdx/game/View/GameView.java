@@ -160,9 +160,8 @@ public class GameView extends View{
                     goBack = false;
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
+                    gameController.myForfeited();
                     vm.set(new ExitView(vm, false, this.gameController));
-                    //delete game and notify op
-                    //gameController.myForfeited();
                 }
             }
                    
@@ -170,7 +169,7 @@ public class GameView extends View{
                 Rectangle exit_gameBounds = new Rectangle(FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2,FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
                 if(exit_gameBounds.contains(pos.x,pos.y)){
                     vm.set(new ExitView(vm,true, this.gameController));
-                    //gameController.deleteGame();
+                    gameController.deleteGame();
                 }
         }}
     }
