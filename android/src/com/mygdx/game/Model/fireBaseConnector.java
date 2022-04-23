@@ -1,6 +1,8 @@
 package com.mygdx.game.Model;
 
 import androidx.annotation.NonNull;
+
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -340,6 +342,7 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
+        DatabaseReference forfeitedRef = playerRef.child(this.getUID());
 
         Map uidData = new HashMap();
         uidData.put("Username", this.getUsername());
@@ -349,6 +352,10 @@ public class fireBaseConnector implements FireBaseInterface {
         readyData.put(displayName[0],false);
         DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
+
+        Map forfeitedGame = new HashMap();
+        forfeitedGame.put("Forfeited", false);
+        forfeitedRef.updateChildren(forfeitedGame);
 
 
 
@@ -404,6 +411,52 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference gameRef = database.getReference().child("/Games");
         gameRef.child(String.valueOf(gamePIN)).removeValue();
     }
+
+    public void forfeitedGame(int gamePin){
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gamePin+"/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        DatabaseReference forfeitedRef = userRef.child("/Forfeited");
+        forfeitedRef.setValue(true);
+    }
+
+
+    public void OpHasForfeited(int gamePin){
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gamePin+"/Players/");
+        List<String> players = getPlayers(gamePin);
+        for (String player : players) {
+            if (!player.equals(this.getUID())){
+                DatabaseReference userRef = playerRef.child(player);
+                DatabaseReference forfeitedRef = userRef.child("/Forfeited");
+                forfeitedRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task.getException());
+                        }
+                        else {
+                            Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                            String value = String.valueOf(task.getResult().getValue());
+                            setOpHasForfeited(value);
+                        }
+                    }
+
+                });
+            }
+        }
+    }
+
+private boolean Forfeited = false;
+    public void setOpHasForfeited(String forfeited){
+         Forfeited = Boolean.parseBoolean(forfeited);
+    }
+
+    @Override
+    public boolean getOpHasForfeited(){
+        return Forfeited;
+    }
+
 
     /**
      * ready gets called when a user presses ready to say that the game can start

@@ -96,7 +96,7 @@ public class Game {
     public boolean getPlayersReady(){
         //Get opponents ready value from database
         boolean ready = this._FBIC.getPlayersReady(this.GID);
-        //System.out.println("Game getplayersready: "+ready);
+        System.out.println("Game getplayersready: "+ready);
         return ready;
     }
 
@@ -115,6 +115,15 @@ public class Game {
         //notify the other user too!
         _FBIC.leaveGame(GID);
 
+    }
+
+    public boolean hasForfeited(){
+        _FBIC.OpHasForfeited(GID);
+        return _FBIC.getOpHasForfeited();
+    }
+
+    public void excited(){
+        _FBIC.forfeitedGame(GID);
     }
 
 

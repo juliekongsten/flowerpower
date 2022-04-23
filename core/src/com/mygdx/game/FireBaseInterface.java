@@ -39,4 +39,10 @@ public interface FireBaseInterface {
     Map<String, Object> retrieveBeds(int GID);
 
     void leaveGame(int gid);
+
+    void forfeitedGame(int gid);
+
+    boolean getOpHasForfeited();
+
+    void OpHasForfeited(int gid);
 }

@@ -30,7 +30,7 @@ public class GameController {
 
     private boolean gameOver = false;
     private boolean won = false;
-    private boolean forfeited = false;
+
 
     public GameController(){
         //tenker her at vi kan ha satt tall for de forskjellige vanskelighetsgradene
@@ -288,32 +288,16 @@ public class GameController {
         return gameOver;
     }
 
-
-    public void myExited(Boolean exited){
-        //TODO set that I exited the game before it started, in DB
-    }
-    /**
-     * Returns if the opponent has exited, (pressed on "go back to menu") in placebedsview,
-     * before the game has started
-     * @return
-     */
-    public boolean getOpExited() {
-        //TODO get this information from DB
-        // gjør denne til true senere
-        return false;
+    public void myForfeited() {
+        game.excited();
     }
 
-
-    public void myForfeitet(boolean opForfeited) {
-        //TODO set that I forfeited the game in the DB
-    }
     /**
      * Returns if the opponent has forfeited, (pressed on "go back to menu") in GameView
      * @return
      */
     public boolean getOpForfeited(){
-        //TODO get opforfeited from the Database
-        return forfeited;
+       return game.hasForfeited();
     }
 
     public void deleteGame() {
