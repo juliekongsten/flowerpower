@@ -326,7 +326,7 @@ public class GameView extends View{
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
 
-        if (waiting){
+        if (waiting && !opForfeitet){
             waiting = !gameController.isMyTurn();
         }
 
