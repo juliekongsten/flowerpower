@@ -97,12 +97,13 @@ public class Game {
         //Get opponents ready value from database
         List<Boolean> ready = this._FBIC.getPlayersReady(this.GID);
         System.out.println("Game getplayersready: "+ready);
-        if (ready.contains(false)){
+        if (ready.contains(false) || ready.isEmpty()){
             return false;
         }
-        else{
+        else if (!ready.isEmpty()){
             return true;
         }
+        return false;
     }
 
     /**
@@ -137,8 +138,10 @@ public class Game {
     }
 
     public boolean isMyTurn(){
-        boolean myTurn =this._FBIC.isMyTurn(this.GID);
-
+        boolean myTurn = false;
+        if (getPlayersReady()) {
+            myTurn = this._FBIC.isMyTurn(this.GID);
+        }
         return myTurn;
     }
 

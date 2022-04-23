@@ -249,7 +249,6 @@ public class fireBaseConnector implements FireBaseInterface {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<Integer, Object> map = (Map<Integer, Object>) dataSnapshot.getValue();
-                //System.out.println(map);
                 gameIDs.addAll(map.keySet());
                 isDone=true;
             }
@@ -553,8 +552,8 @@ public class fireBaseConnector implements FireBaseInterface {
                 Map<String, Boolean> map = (Map<String, Boolean>) task.getResult().getValue();
                 map.values();
                 System.out.println(map.values());
-                playersReadyList.addAll(map.values());
-                System.out.println(playersReady);
+                this.playersReadyList.addAll(map.values());
+                System.out.println("NEST SITE: " + playersReady);
                 System.out.println("key: " + players);
                 isDone = true;
             }
@@ -563,8 +562,8 @@ public class fireBaseConnector implements FireBaseInterface {
             //waiting
             System.out.println("please be done"); //don't remove
         }
-        System.out.println("LAST LIST:" + playersReadyList);
-        return playersReadyList;
+        System.out.println("LAST LIST:" + this.playersReadyList);
+        return this.playersReadyList;
     }
 
 
@@ -609,6 +608,7 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     public String getTurn(int gameID){
         //TODO: Implement check for if this is yooou
+        System.out.println("GAME ID: " + gameID);
         isDone = false;
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Turn");
