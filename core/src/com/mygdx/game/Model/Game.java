@@ -128,6 +128,10 @@ public class Game {
         return myTurn;
     }
 
+    public void setTurnToOtherPlayer(){
+        this._FBIC.setPlayerReady(this.GID);
+    }
+
     public boolean checkForGameStart(){
         List<String> players =_FBIC.getPlayers(this.GID);
 

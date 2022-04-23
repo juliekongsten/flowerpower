@@ -146,14 +146,18 @@ public class GameView extends View{
         //TODO: Handle state of game - do not handle playing input if not in playing state (partially implemented)
         if (Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+            System.out.println("Pressed: x:"+pos.x+" y:"+pos.y);
 
             //If player is not waiting on opponents move we check if player presses any of opponents
             //squares and act accordingly
             if (!waiting){
                 for (Square square : opBoard){
+                    System.out.println("square: "+square.getBounds());
                     if (square.getBounds().contains(pos.x,pos.y) && !already_pressed.contains(square)){
+                        System.out.println("is pressed");
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
                         boolean flower = gameController.hitSquare(square);
+
                         already_pressed.add(square);
                         if (flower){
                             hit = true;
@@ -166,9 +170,16 @@ public class GameView extends View{
                             miss = true;
                             miss_x = square.getBounds().x + 30;
                             miss_y = square.getBounds().y;
+                            //When you miss it's opponents turn
+                            waiting = true;
+                            gameController.setTurnToOtherPlayer();
 
                         }
+
                         //TODO: Give feedback to controller so that the other player also is notified (or implement squarelistener in some way)
+                    }
+                    else {
+                        System.out.println("is not pressed");
                     }
 
                 }
