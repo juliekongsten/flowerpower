@@ -119,6 +119,7 @@ public class Game {
      */
     public void deleteGame(){
         //notify the other user too!
+        System.out.println("LEAVING GAME DILDO");
         _FBIC.leaveGame(GID);
 
     }
