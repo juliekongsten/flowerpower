@@ -1,12 +1,15 @@
 package com.mygdx.game.Model;
 
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
 
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import sun.security.util.ArrayUtil;
 
@@ -77,21 +80,33 @@ public class Game {
         }
     }
 
+    /**
+     * returns this games pin
+     * @return GID
+     */
     public int getGID(){
         return this.GID;
     }
 
+    /**
+     * tells the database that the player is ready to start the game
+     */
     public void setPlayerReady(){
         this._FBIC.setPlayerReady(this.GID);
     }
 
-    //TODO: fjerne denne, tror ikke vi trenger den mtp konstruktøren gjør det samme
-    public void joinGame(int existingGID){
-        this.GID= existingGID;
+    public boolean getPlayersReady(){
+        //Get opponents ready value from database
+        boolean ready = this._FBIC.getPlayersReady(this.GID);
+        //System.out.println("Game getplayersready: "+ready);
+        return ready;
     }
 
+    /**
+     * tells the db to store the bed objects
+     * @param beds
+     */
     public void storePlacedBeds(List<Bed> beds) {
-        System.out.println("gets in to game");
         _FBIC.storeBeds(beds, GID);
     }
 
@@ -109,6 +124,40 @@ public class Game {
 
     public void setMove(Square square){
         _FBIC.setMove(square, this.getGID());
+
+    /**
+     * if a player forfeits a game, the game should be deleted and the opponent should get notified
+     */
+    public void deleteGame(){
+        //notify the other user too!
+        _FBIC.leaveGame(GID);
+
+    }
+
+
+    public Map<String, Object> retrievePlacedBeds() {
+        return _FBIC.retrieveBeds(GID);
+    }
+
+    public boolean isMyTurn(){
+        boolean myTurn =this._FBIC.isMyTurn(this.GID);
+
+        return myTurn;
+    }
+
+    public void setTurnToOtherPlayer(){
+        this._FBIC.setPlayerReady(this.GID);
+    }
+
+    public boolean checkForGameStart(){
+        List<String> players =_FBIC.getPlayers(this.GID);
+
+        if (players.size()==2){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 }

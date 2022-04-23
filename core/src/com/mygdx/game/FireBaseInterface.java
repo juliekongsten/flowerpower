@@ -4,8 +4,11 @@ import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
 import com.mygdx.game.Model.Square;
 
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface to enable communication between modules
@@ -25,6 +28,9 @@ public interface FireBaseInterface {
 
     boolean getIsDone();
     void setPlayerReady(int GID);
+    boolean getPlayersReady(int GID);
+
+    boolean isMyTurn(int gameID);
 
     List<String> getPlayers(int GID);
     List<Integer> getGameIDs();
@@ -36,4 +42,7 @@ public interface FireBaseInterface {
     void setMove(Square square, int GID);
     ArrayList<Square> getMoves(int GID);
     ArrayList<Square> getOpMoves(int GID);
+    Map<String, Object> retrieveBeds(int GID);
+
+    void leaveGame(int gid);
 }

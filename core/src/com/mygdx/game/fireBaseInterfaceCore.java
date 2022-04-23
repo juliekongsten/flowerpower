@@ -6,6 +6,11 @@ import com.mygdx.game.Model.Player;
 import com.mygdx.game.Model.Square;
 
 import java.util.ArrayList;
+
+import java.util.Map;
+
+import java.util.HashMap;
+
 import java.util.List;
 
 /**
@@ -50,6 +55,16 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     @Override
     public void setPlayerReady(int GID){}
 
+    @Override
+    public boolean getPlayersReady(int GID) {
+        return false;
+    }
+
+    @Override
+    public boolean isMyTurn(int gameID) {
+        return false;
+    }
+
 
     @Override
     public void createGame(int GID){}
@@ -58,7 +73,13 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public void joinGame(int GID){}
 
     @Override
-    public void storeBeds(List<Bed> beds, int GID) {
+    public void storeBeds(List<Bed> beds, int GID) {}
+
+    @Override
+    public Map<String, Object> retrieveBeds(int GID) { return null;}
+
+    @Override
+    public void leaveGame(int gid) {
 
     }
 

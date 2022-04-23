@@ -7,6 +7,7 @@ import com.mygdx.game.Model.Square;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Currently not used but required for communication between modules
@@ -67,12 +68,23 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public void setPlayerReady(int GID){}
 
     @Override
+    public boolean getPlayersReady(int GID) {
+        return false;
+    }
+
+    @Override
+    public boolean isMyTurn(int gameID) {
+        return false;
+    }
+
+    @Override
     public void joinGame(int GID){}
 
     @Override
     public void storeBeds(List<Bed> beds, int GID){}
 
     @Override
+
     public void setMove(Square square, int GID) {
 
     }
@@ -83,6 +95,15 @@ return null;
     }
     @Override
     public ArrayList<Square> getOpMoves(int GID){return null; }
+
+    public Map<String, Object> retrieveBeds(int GID) {
+        return null;
+    }
+
+    @Override
+    public void leaveGame(int gid) {
+
+    }
 
     @Override
     public void signOut() {}

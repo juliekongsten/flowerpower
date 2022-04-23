@@ -5,10 +5,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Bed;
+import com.mygdx.game.Model.Button;
 import com.mygdx.game.Model.Square;
 
 import java.util.ArrayList;
@@ -16,7 +22,7 @@ import java.util.List;
 
 public class GameView extends View{
 
-    private boolean waiting = false;
+    private boolean waiting;
 
     private Texture pool;
     private Texture ready;
@@ -29,7 +35,6 @@ public class GameView extends View{
     private Texture opFrame; //midlertidig? er fordi opGrass bare er grønt og uten svart ramme
     private Texture flower;
     private Texture miss_texture;
-    private Texture back;
     private Texture waiting_black;
     private Texture sure;
     private Texture no;
@@ -67,12 +72,14 @@ public class GameView extends View{
     private List<Bed> opBeds;
     private List<Square> squareList;
 
-
+    private final Stage stage;
+    private final ImageButton backButton;
 
 
     public GameView(ViewManager vm, GameController gameController) {
         super(vm);
-        this.gameController = gameController;
+        System.out.println("in gameview");
+        this.gameController = vm.getController();
         pool = new Texture("pool.png");
         createTextures();
         findStaticCoordinates();
@@ -82,6 +89,15 @@ public class GameView extends View{
         opBeds = gameController.getOpBeds();
         opBoard = gameController.getOpBoard();
         squareList = gameController.getMyMoves();
+        already_pressed = new ArrayList<>();
+        waiting = !gameController.isMyTurn(); //check, stopper?
+
+        stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
+        Gdx.input.setInputProcessor(stage);
+
+        Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
+        backButton = back.getButton();
+        setBackButtonEvent();
 
     }
 
@@ -100,7 +116,6 @@ public class GameView extends View{
         opFrame = new Texture("opframe.png");
         flower = new Texture("flower.png");
         miss_texture = new Texture("miss.png");
-        back = new Texture("back.png");
         waiting_black = new Texture("waiting_black.png");
         sure = new Texture("sure.png");
         no = new Texture("no.png");
@@ -111,6 +126,19 @@ public class GameView extends View{
         exit_game = new Texture("exit_game.png");
     }
 
+    private void setBackButtonEvent() {
+        backButton.addListener(new EventListener()
+        {
+            @Override
+            public boolean handle(Event event)
+            {
+                //Handle the input event.
+                goBack = true;
+                return true;
+            }
+        });
+    }
+
     /**
      * Handles input from user
      */
@@ -119,6 +147,7 @@ public class GameView extends View{
         //TODO: Handle state of game - do not handle playing input if not in playing state (partially implemented)
         if (Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+            System.out.println("Pressed: x:"+pos.x+" y:"+pos.y);
 
             //If player is not waiting on opponents move we check if player presses any of opponents
             //squares and act accordingly
@@ -129,6 +158,12 @@ public class GameView extends View{
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
                         boolean flower = gameController.hitSquare(square);
                         //squareList.add(square);
+                    System.out.println("square: "+square.getBounds());
+                    
+                        System.out.println("is pressed");
+                        //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
+                        boolean flower = gameController.hitSquare(square);
+
                         if (flower){
                             hit = true;
                             miss = false;
@@ -140,47 +175,57 @@ public class GameView extends View{
                             miss = true;
                             miss_x = square.getBounds().x + 30;
                             miss_y = square.getBounds().y;
+                            //When you miss it's opponents turn
+                            waiting = true;
+                            gameController.setTurnToOtherPlayer();
 
                         }
+
                         //TODO: Give feedback to controller so that the other player also is notified (or implement squarelistener in some way)
+                    }
+                    else {
+                        System.out.println("is not pressed");
                     }
 
                 }
 
             }
-            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth()+3, back.getHeight()+3);
-            Rectangle noBounds = new Rectangle(FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100,no.getWidth(),no.getHeight());
-            Rectangle yesBounds = new Rectangle(FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100,yes.getWidth(),yes.getHeight());
-            if (backBounds.contains(pos.x, pos.y)) {
-                goBack = true;
-            }
+            Rectangle noBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-no.getWidth()-5),
+                    (float) FlowerPowerGame.HEIGHT/2-100, no.getWidth(),no.getHeight());
+            Rectangle yesBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2+yes.getWidth()/8),
+                    (float) FlowerPowerGame.HEIGHT/2-100, yes.getWidth(),yes.getHeight());
+
             if(goBack){
                 if(noBounds.contains(pos.x,pos.y)){
                     goBack = false;
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
                     vm.set(new ExitView(vm, false, this.gameController));
+                    //delete game and notify op
+                    gameController.myForfeitet(true);
+                    gameController.deleteGame();
                 }
             }
                    
             else{
-                Rectangle exit_gameBounds = new Rectangle(FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2,FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
+                Rectangle exit_gameBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2),
+                        (float) FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
                 if(exit_gameBounds.contains(pos.x,pos.y)){
                     vm.set(new ExitView(vm,true, this.gameController));
+                    gameController.deleteGame();
                 }
         }}
     }
 
-    /**
-     *
-     * @param
-     */
+
     //TODO: hente ut denne når det er din turn
     protected void receiveOpMove(){
         //Should only be called when the opponent has made a move
         //TODO: Give feedback to user that your square has been hit/miss
         //Do not draw the flower/miss as this is done in render
+
         gameController.getOpMoves();
+
 
     }
 
@@ -311,6 +356,7 @@ public class GameView extends View{
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
 
+        waiting = !gameController.isMyTurn();
         //Draws message (your turn/waiting) in the pool
         if (!waiting){
             sb.draw(my_turn, my_turn_x, my_turn_y);
@@ -333,7 +379,8 @@ public class GameView extends View{
 
         //draws Back button, if it isnt touched
         if(!goBack){
-            sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
+            //sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
+            stage.addActor(backButton);
         }
         else{
             sb.draw(waiting_black,0,0);
@@ -342,7 +389,7 @@ public class GameView extends View{
             sb.draw(yes,FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100);
         }
 
-        opForfeitet = gameController.getOpForfeitet();
+        opForfeitet = gameController.getOpForfeited();
         if(opForfeitet){
             sb.draw(waiting_black,0,0);
             sb.draw(forfeitet_text,FlowerPowerGame.WIDTH/2-forfeitet_text.getWidth()/2,FlowerPowerGame.HEIGHT/2);
@@ -350,8 +397,9 @@ public class GameView extends View{
         }
         gameOver = gameController.getGameOver();
 
-
         sb.end();
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
 
     }
 }
