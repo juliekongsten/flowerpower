@@ -125,7 +125,7 @@ public class GameView extends View{
 
             //If player is not waiting on opponents move we check if player presses any of opponents
             //squares and act accordingly
-            if (!waiting){
+            if (!waiting && !opForfeitet){
                 for (Square square : opBoard){
                     System.out.println("square: "+square.getBounds());
                     if (square.getBounds().contains(pos.x,pos.y) && !already_pressed.contains(square)){
