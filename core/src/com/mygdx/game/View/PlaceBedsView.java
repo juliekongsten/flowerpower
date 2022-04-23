@@ -124,13 +124,13 @@ public class PlaceBedsView extends View{
                     }
                 }
 
-                gameController.setMyBeds(beds);
                 overlappingBeds = checkOverlappingBeds();
                 if(!overlappingBeds & !bedsOutsideBoard){
                     //Set isReady to true so render will act accordingly
                     isReady = true;
                     System.out.println("i am ready:)");
                     gameController.setPlayerReady();
+                    gameController.setMyBeds(beds);
                 } else{
                     System.out.println("i am not ready:(");}
             }
