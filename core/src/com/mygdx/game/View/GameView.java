@@ -89,7 +89,6 @@ public class GameView extends View{
         opBeds = gameController.getOpBeds();
         opBoard = gameController.getOpBoard();
         squareList = gameController.getMyMoves();
-        already_pressed = new ArrayList<>();
         waiting = !gameController.isMyTurn(); //check, stopper?
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
@@ -162,9 +161,9 @@ public class GameView extends View{
                     
                         System.out.println("is pressed");
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
-                        boolean flower = gameController.hitSquare(square);
+                        boolean hasFlower = gameController.hitSquare(square);
 
-                        if (flower){
+                        if (hasFlower){
                             hit = true;
                             miss = false;
                             hit_x = square.getBounds().x + 30;
