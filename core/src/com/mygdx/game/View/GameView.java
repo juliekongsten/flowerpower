@@ -172,6 +172,7 @@ public class GameView extends View{
                     goBack = false;
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
+                    gameController.myForfeited();
                     vm.set(new ExitView(vm, false, this.gameController));
                 }
             }
@@ -180,6 +181,7 @@ public class GameView extends View{
                 Rectangle exit_gameBounds = new Rectangle(FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2,FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
                 if(exit_gameBounds.contains(pos.x,pos.y)){
                     vm.set(new ExitView(vm,true, this.gameController));
+                    gameController.deleteGame();
                 }
         }}
     }
@@ -205,6 +207,7 @@ public class GameView extends View{
         if (gameOver){
             boolean won = gameController.getWinner();
             //TODO: mulig ikke denne controlelren
+            gameController.deleteGame(); //slette spill når det er ferdig
             vm.set(new ExitView(vm, won, this.gameController));
         }
         //If waiting we check if the opponent has made a move so we can give give feedback
@@ -358,7 +361,7 @@ public class GameView extends View{
             sb.draw(yes,FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100);
         }
 
-        opForfeitet = gameController.getOpForfeitet();
+        opForfeitet = gameController.getOpForfeited();
         if(opForfeitet){
             sb.draw(waiting_black,0,0);
             sb.draw(forfeitet_text,FlowerPowerGame.WIDTH/2-forfeitet_text.getWidth()/2,FlowerPowerGame.HEIGHT/2);

@@ -77,6 +77,11 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     }
 
     @Override
+    public boolean isMyTurn(int gameID) {
+        return false;
+    }
+
+    @Override
     public void joinGame(int GID){}
 
     @Override
@@ -85,6 +90,16 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     @Override
     public Map<String, Object> retrieveBeds(int GID) {
         return null;
+    }
+
+    @Override
+    public void leaveGame(int gid) {
+
+    }
+
+    @Override
+    public void forfeitedGame(int gid) {
+
     }
 
     @Override

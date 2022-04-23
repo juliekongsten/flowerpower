@@ -37,4 +37,12 @@ public interface FireBaseInterface {
     void joinGame(int GID);
     void storeBeds(List<Bed> beds, int GID);
     Map<String, Object> retrieveBeds(int GID);
+
+    void leaveGame(int gid);
+
+    void forfeitedGame(int gid);
+
+    boolean getOpHasForfeited();
+
+    void OpHasForfeited(int gid);
 }

@@ -90,7 +90,6 @@ public class GameController {
         }
         square.setHit(true);
         return square.hasFlower();
-
     }
 
     public void setMyBeds(List<Bed> beds){
@@ -175,7 +174,6 @@ public class GameController {
         List<Bed> result = new ArrayList<>();
         Map<String, Object> receivedOpBeds;
         receivedOpBeds = game.retrievePlacedBeds();
-
         bedsList.addAll(receivedOpBeds.values());
         for (int j=0; j<bedsList.size(); j++) {
             String newString = bedsList.get(j).toString();
@@ -289,23 +287,20 @@ public class GameController {
         return gameOver;
     }
 
-    /**
-     * Returns if the opponent has exited, (pressed on "go back to menu") in placebedsview,
-     * before the game has started
-     * @return
-     */
-    public boolean getOpExited() {
-        //TODO get this information from DB
-        return false;
+    public void myForfeited() {
+        game.excited();
     }
 
     /**
-     * Returns if the opponent has forfeitet, (pressed on "go back to menu") in GameView
+     * Returns if the opponent has forfeited, (pressed on "go back to menu") in GameView
      * @return
      */
-    public boolean getOpForfeitet() {
-        //TODO get this information from DB
-        return false;
+    public boolean getOpForfeited(){
+       return game.hasForfeited();
+    }
+
+    public void deleteGame() {
+        game.deleteGame();
     }
 
     public boolean isMyTurn(){

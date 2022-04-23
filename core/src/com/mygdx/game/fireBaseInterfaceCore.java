@@ -73,6 +73,26 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public Map<String, Object> retrieveBeds(int GID) { return null;}
 
     @Override
+    public void leaveGame(int gid) {
+
+    }
+
+    @Override
+    public void forfeitedGame(int gid) {
+
+    }
+
+    @Override
+    public boolean getOpHasForfeited() {
+        return false;
+    }
+
+    @Override
+    public void OpHasForfeited(int gamePin){
+
+    }
+
+    @Override
     public List<String> getPlayers(int gameID){
         return null;
     }

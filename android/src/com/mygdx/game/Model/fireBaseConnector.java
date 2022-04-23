@@ -262,6 +262,7 @@ public class fireBaseConnector implements FireBaseInterface {
         );
         while (!isDone){
             //waiting:)
+            System.out.println("Dont delete me");
         }
         return this.gameIDs;
 
@@ -355,15 +356,20 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
+        DatabaseReference forfeitedRef = playerRef.child(this.getUID());
 
         Map uidData = new HashMap();
         uidData.put("Username", this.getUsername());
         userRef.setValue(uidData);
         Map readyData = new HashMap();
         String displayName[] = this.getUsername().split("@");
-        readyData.put(displayName[0], false);
+        readyData.put(displayName[0],false);
         DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
+
+        Map forfeitedGame = new HashMap();
+        forfeitedGame.put("Forfeited", false);
+        forfeitedRef.updateChildren(forfeitedGame);
 
 
 
@@ -391,6 +397,7 @@ public class fireBaseConnector implements FireBaseInterface {
 
     //TODO: redudant kode
     public void joinGame(int gameID){
+         // TODO  lage disse globale? brukes jo overalt?
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
@@ -402,8 +409,13 @@ public class fireBaseConnector implements FireBaseInterface {
         readyData.put(displayName[0],false);
         DatabaseReference readyRef = gameRef.child(gameID+"/Ready");
         readyRef.updateChildren(readyData);
-        //check user logged in - getID
-        //check gamepin - if the same, get user into the game
+
+        //Added forfeited if the players joins the game
+        DatabaseReference forfeitedRef = playerRef.child(this.getUID());
+        Map forfeitedGame = new HashMap();
+        forfeitedGame.put("Forfeited", false);
+        forfeitedRef.updateChildren(forfeitedGame);
+
         //ready(gameID,displayName[0]);
         //setTurnToOtherPlayer(gameID);
     }
@@ -411,14 +423,12 @@ public class fireBaseConnector implements FireBaseInterface {
 
 
     /**
-     * Når en bruker har forlatt spillet, ved å trykke exit f.eks, må leave game
+     * Deletes the game when a player exits or quits
      * @param gamePIN
      */
     public void leaveGame(int gamePIN){
-        //må slette spillet fra databasen
-
-        //må notifisere den andre spilleren før det skjer (skjer ikke her men i en annen klasse)
-
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        gameRef.child(String.valueOf(gamePIN)).removeValue();
     }
 
     /**
@@ -429,6 +439,10 @@ public class fireBaseConnector implements FireBaseInterface {
 
     public void setPlayerReady(int GID){
         DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gamePin+"/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        DatabaseReference forfeitedRef = userRef.child("/Forfeited");
+        forfeitedRef.setValue(true);
         DatabaseReference playerRef = gameRef.child(GID+"/Ready");
         Map<String, Object> updates = new HashMap<>();
         String[] displayName = this.getUsername().split("@");
@@ -471,6 +485,58 @@ public class fireBaseConnector implements FireBaseInterface {
                     }
                 }
 
+    public void OpHasForfeited(int gamePin){
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gamePin+"/Players/");
+        List<String> players = getPlayers(gamePin);
+        for (String player : players) {
+            if (!player.equals(this.getUID())){
+                DatabaseReference userRef = playerRef.child(player);
+                DatabaseReference forfeitedRef = userRef.child("/Forfeited");
+                forfeitedRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task.getException());
+                        }
+                        else {
+                            Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                            String value = String.valueOf(task.getResult().getValue());
+                            setOpHasForfeited(value);
+                        }
+                    }
+
+                });
+            }
+        }
+    }
+
+private boolean Forfeited = false;
+    public void setOpHasForfeited(String forfeited){
+         Forfeited = Boolean.parseBoolean(forfeited);
+    }
+
+    @Override
+    public boolean getOpHasForfeited(){
+        return Forfeited;
+    }
+
+
+    /**
+     * ready gets called when a user presses ready to say that the game can start
+     * @param GID the gamePin ID
+     */
+
+
+    @Override
+    public void setPlayerReady(int GID){
+        System.out.println("Kommer hit");
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(GID+"/Ready");
+        Map<String, Object> updates = new HashMap<>();
+        String[] displayName = this.getUsername().split("@");
+        updates.put(displayName[0], true);
+        playerRef.updateChildren(updates);
             });
             while (!isDone) {
                 //waiting
@@ -577,7 +643,7 @@ public class fireBaseConnector implements FireBaseInterface {
         });
         while (!isDone){
             //waiting
-            System.out.println("waiting");
+            System.out.println("Dont delete me");
         }
         return this.playerTurn;
     }

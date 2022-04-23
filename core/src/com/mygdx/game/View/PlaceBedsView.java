@@ -153,13 +153,14 @@ public class PlaceBedsView extends View{
                     goBack = false;
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
-                    //TODO update that the user has pressed "go back" and yes, and exited the game DB
+                    gameController.myForfeited();
                     vm.set(new MenuView(vm));
                 }
             }
             Rectangle go_to_menuBounds = new Rectangle(FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2,FlowerPowerGame.HEIGHT/2+120,go_to_menu.getWidth(),go_to_menu.getHeight());
             if (go_to_menuBounds.contains(pos.x,pos.y)&&opponent_exited){
                 vm.set(new MenuView(vm));
+                gameController.deleteGame();
             }
         }
 
@@ -297,7 +298,7 @@ public class PlaceBedsView extends View{
             sb.draw(yes,FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100);
         }
         //Checks if the opponent exited the game
-        opponent_exited = gameController.getOpExited();
+        opponent_exited = gameController.getOpForfeited();
         if(opponent_exited){
             sb.draw(waiting_black,0,0);
             sb.draw(opponent_exited_text,FlowerPowerGame.WIDTH/2-opponent_exited_text.getWidth()/2,FlowerPowerGame.HEIGHT-130); //vil ikke tegnes
