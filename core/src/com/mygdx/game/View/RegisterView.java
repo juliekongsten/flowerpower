@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -31,14 +33,13 @@ public class RegisterView extends View {
     private final Texture invalidEmailMessage;
     private final Texture usernameTakenMessage;
     private final Texture otherMistakeMessage;
-    private Stage stage;
+    private final Stage stage;
     private TextField username;
     private TextField password;
     private TextField passwordCheck;
-    private String usernameTyped;
-    private String passwordTyped;
-    private String passwordCheckTyped;
     private Pixmap cursorColor;
+    private final ImageButton highscoreButton;
+    private final ImageButton playbookButton;
     private final ImageButton backButton;
 
 
@@ -50,7 +51,6 @@ public class RegisterView extends View {
     private boolean otherMistake = false;
     private PlayerController playerController;
     private GameController gameController; //not used
-    private float highscore_x;
 
 
 
@@ -67,8 +67,6 @@ public class RegisterView extends View {
         invalidEmailMessage = new Texture("invalidEmail.png");
         usernameTakenMessage = new Texture("usernameTaken.png");
         otherMistakeMessage = new Texture("wentWrong.png");
-
-
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -93,10 +91,60 @@ public class RegisterView extends View {
         setPasswordCheckField(textFieldStyle);
         stage.addActor(passwordCheck);
 
+        Button playbook = new Button("playbook.png", 10, 15);
+        playbookButton = playbook.getButton();
+        setPlaybookButtonEvent();
+        stage.addActor(playbookButton);
+
+        Button highscore = new Button("Highscore.png", FlowerPowerGame.WIDTH - 125, 15);
+        highscoreButton = highscore.getButton();
+        setHighscoreButtonEvent();
+        stage.addActor(highscoreButton);
+
         Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
         backButton = back.getButton();
-        //setBackButtonEvent();
+        setBackButtonEvent();
         stage.addActor(backButton);
+    }
+
+    private void setPlaybookButtonEvent() {
+        playbookButton.addListener(new EventListener()
+        {
+            @Override
+            public boolean handle(Event event)
+            {
+                //Handle the input event.
+                //vm.set(new PlaybookView(vm));
+                System.out.println("PLAYBOOK");
+                return true;
+            }
+        });
+    }
+
+    private void setHighscoreButtonEvent() {
+        highscoreButton.addListener(new EventListener()
+        {
+            @Override
+            public boolean handle(Event event)
+            {
+                //Handle the input event.
+                vm.set(new HighscoreView(vm));
+                return true;
+            }
+        });
+    }
+
+    private void setBackButtonEvent() {
+        backButton.addListener(new EventListener()
+        {
+            @Override
+            public boolean handle(Event event)
+            {
+                //Handle the input event.
+                vm.set(new StartView(vm));
+                return true;
+            }
+        });
     }
 
     private void setUsernameField(TextField.TextFieldStyle ts) {
@@ -147,20 +195,18 @@ public class RegisterView extends View {
                 newEmail=true;
                 otherMistake=false;
 
-                usernameTyped = username.getText();
+                String usernameTyped = username.getText();
                 System.out.println("Username typed:");
                 System.out.println(usernameTyped);
-                passwordTyped = password.getText();
+                String passwordTyped = password.getText();
                 System.out.println("Password typed:");
                 System.out.println(passwordTyped);
-                passwordCheckTyped = passwordCheck.getText();
+                String passwordCheckTyped = passwordCheck.getText();
                 System.out.println("Password check typed: \n" + passwordCheckTyped);
                 // Sjekke at passordene stemmer overens og hvis de gjør det, send videre til Registercontroller og player
 
 
                 if (passwordTyped.equals(passwordCheckTyped)){
-
-
                     // Sende videre til MenuView med innlogget bruker
                     // sendes videre for å sjekke med db
                     try {
@@ -213,24 +259,22 @@ public class RegisterView extends View {
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
         sb.draw(logo,36,395);
         sb.draw(register,100,50);
-        // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
-        // ikke helt skjønt hvorfor enda
         sb.draw(enter_username,60,345);
         sb.draw(enter_password,60,275);
         sb.draw(password_again,60,200);
         if (!passwordMatch){
-            sb.draw(passwordMessage, FlowerPowerGame.WIDTH/2-passwordMessage.getWidth()/2,130);
+            sb.draw(passwordMessage, (float) (FlowerPowerGame.WIDTH/2-passwordMessage.getWidth()/2),130);
         } else if (!newEmail) {
-            sb.draw(usernameTakenMessage, FlowerPowerGame.WIDTH/2-usernameTakenMessage.getWidth()/2,130);
+            sb.draw(usernameTakenMessage, (float) (FlowerPowerGame.WIDTH/2-usernameTakenMessage.getWidth()/2),130);
         } else if (!validEmail){
-            sb.draw(invalidEmailMessage, FlowerPowerGame.WIDTH/2-invalidEmailMessage.getWidth()/2, 130);
+            sb.draw(invalidEmailMessage, (float) (FlowerPowerGame.WIDTH/2-invalidEmailMessage.getWidth()/2), 130);
         } else if (!strongPassword){
-            sb.draw(weakPasswordMessage, FlowerPowerGame.WIDTH/2-weakPasswordMessage.getWidth()/2,130);
+            sb.draw(weakPasswordMessage, (float) (FlowerPowerGame.WIDTH/2-weakPasswordMessage.getWidth()/2),130);
         } else if (otherMistake){
-            sb.draw(otherMistakeMessage,FlowerPowerGame.WIDTH/2-otherMistakeMessage.getWidth()/2,130);
+            sb.draw(otherMistakeMessage,(float) (FlowerPowerGame.WIDTH/2-otherMistakeMessage.getWidth()/2),130);
         }
         sb.end();
+        stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-        stage.act();
     }
 }
