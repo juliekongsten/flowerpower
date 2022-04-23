@@ -46,7 +46,7 @@ public class CreateView extends View {
     private void checkGame() {
         System.out.println("HIT KOMMER VI");
         System.out.println("GID: " + gameController.getGID());
-        if (gameController.getGID() >= 0) {
+        if (gameController.getGID() > 0) {
             System.out.print("GETGID: " + gameController.getGID());
             gameController.deleteGame();
         }

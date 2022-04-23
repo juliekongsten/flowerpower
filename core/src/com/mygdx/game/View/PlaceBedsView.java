@@ -154,7 +154,6 @@ public class PlaceBedsView extends View{
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
                     gameController.myForfeited();
-                    vm.setController(new GameController());
                     vm.set(new MenuView(vm));
                 }
             }
