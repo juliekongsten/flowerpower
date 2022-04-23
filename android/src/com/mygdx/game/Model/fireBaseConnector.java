@@ -262,6 +262,7 @@ public class fireBaseConnector implements FireBaseInterface {
         );
         while (!isDone){
             //waiting:)
+            System.out.println("Dont delete me");
         }
         return this.gameIDs;
 
@@ -477,6 +478,7 @@ public class fireBaseConnector implements FireBaseInterface {
         //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
         while(!isDone){
             //waiting
+            System.out.println("Dont delete me");
         }
         return players;
     }
@@ -530,6 +532,7 @@ public class fireBaseConnector implements FireBaseInterface {
         });
         while (!isDone){
             //waiting
+            System.out.println("Dont delete me");
         }
         return this.playerTurn;
     }
