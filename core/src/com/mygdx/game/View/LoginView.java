@@ -8,52 +8,48 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.FlowerPowerGame;
+import com.mygdx.game.Model.Button;
 
 public class LoginView extends View {
 
     private final Texture logo;
     private final Texture login;
-    private Stage stage;
+    private final Stage stage;
     private TextField username;
     private TextField password;
-    private final Texture playbook;
-    private final Texture highscore;
     private final Texture enter_username;
     private final Texture enter_password;
     private final Texture invalidCredentials;
     private final Texture otherMistakeMessage;
-    private final Texture back;
-    private String usernameTyped;
-    private String passwordTyped;
+    private final ImageButton highscoreButton;
+    private final ImageButton playbookButton;
+    private final ImageButton backButton;
     private Pixmap cursorColor;
-    private float highscore_x;
     private PlayerController playerController;
 
     boolean validCredentials = true;
     boolean otherMistake = false;
 
 
-
     protected LoginView(ViewManager vm) {
         super(vm);
         logo = new Texture("logo.png");
         login = new Texture("login.png");
-        playbook = new Texture("playbook.png");
-        highscore = new Texture("Highscore.png");
         enter_username = new Texture("enter_email.png");
         enter_password = new Texture("enter_password.png");
         invalidCredentials = new Texture("invalidCredential.png");
         otherMistakeMessage = new Texture("wentWrong.png");
-        back = new Texture("back.png");
-        highscore_x = FlowerPowerGame.WIDTH-highscore.getWidth()-10;
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -74,8 +70,64 @@ public class LoginView extends View {
 
         setPasswordField(textFieldStyle);
         stage.addActor(password);
+
+        Button playbook = new Button("playbook.png", 10, 15);
+        playbookButton = playbook.getButton();
+        setPlaybookButtonEvent();
+        stage.addActor(playbookButton);
+
+        Button highscore = new Button("Highscore.png", FlowerPowerGame.WIDTH - 125, 15);
+        highscoreButton = highscore.getButton();
+        setHighscoreButtonEvent();
+        stage.addActor(highscoreButton);
+
+        Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
+        backButton = back.getButton();
+        setBackButtonEvent();
+        stage.addActor(backButton);
+
     }
 
+
+    private void setPlaybookButtonEvent() {
+        playbookButton.addListener(new EventListener()
+        {
+            @Override
+            public boolean handle(Event event)
+            {
+                //Handle the input event.
+                //vm.set(new PlaybookView(vm));
+                System.out.println("PLAYBOOK");
+                return true;
+            }
+        });
+    }
+
+    private void setHighscoreButtonEvent() {
+        highscoreButton.addListener(new EventListener()
+        {
+            @Override
+            public boolean handle(Event event)
+            {
+                //Handle the input event.
+                vm.set(new HighscoreView(vm));
+                return true;
+            }
+        });
+    }
+
+    private void setBackButtonEvent() {
+        backButton.addListener(new EventListener()
+        {
+            @Override
+            public boolean handle(Event event)
+            {
+                //Handle the input event.
+                vm.set(new StartView(vm));
+                return true;
+            }
+        });
+    }
 
     private void setUsernameField(TextField.TextFieldStyle ts) {
         username = new TextField("", ts);
@@ -92,6 +144,7 @@ public class LoginView extends View {
         password.setHeight(37);
         password.setPosition((float) (FlowerPowerGame.WIDTH/2)-(password.getWidth()/2), 160);
     }
+
 
     private void setCursor(Label.LabelStyle ls) {
         Label label = new Label("|", ls);
@@ -110,17 +163,15 @@ public class LoginView extends View {
 
             Rectangle loginBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-(login.getWidth()/2)), 40,
                     login.getWidth(), login.getHeight());
-            Rectangle playbookBounds = new Rectangle(10, 15, playbook.getWidth(), playbook.getHeight());
-            Rectangle highscoreBounds = new Rectangle(highscore_x, 15, highscore.getWidth(), highscore.getHeight());
             if (loginBounds.contains(pos.x, pos.y)) {
-                usernameTyped = username.getText();
+                String usernameTyped = username.getText();
                 System.out.println("Username typed:");
                 System.out.println(usernameTyped);
-                passwordTyped = password.getText();
+                String passwordTyped = password.getText();
                 System.out.println("Password typed:");
                 System.out.println(passwordTyped);
 
-                if (usernameTyped.isEmpty()||passwordTyped.isEmpty()){
+                if (usernameTyped.isEmpty()|| passwordTyped.isEmpty()){
                     validCredentials = false;
                 } else {
                     try {
@@ -140,17 +191,6 @@ public class LoginView extends View {
                     }
 
                 }}
-            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
-            if (backBounds.contains(pos.x, pos.y)) {
-                vm.set(new StartView(vm));
-            }
-            if (playbookBounds.contains(pos.x, pos.y)) {
-                //vm.set(new PlaybookView(vm));
-                System.out.println("Playbook pressed");
-            }
-            if (highscoreBounds.contains(pos.x, pos.y)) {
-                vm.set(new HighscoreView(vm));
-            }
         }
 
     }
@@ -168,23 +208,18 @@ public class LoginView extends View {
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
         sb.draw(logo,36,395);
         sb.draw(login, (float) ((FlowerPowerGame.WIDTH/2)-(login.getWidth()/2)),40);
-        sb.draw(playbook, 10, 15);
-        sb.draw(highscore, highscore_x, 15);
-        // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
-        // ikke helt skjønt hvorfor enda
         sb.draw(enter_username, 60,310);
         sb.draw(enter_password,60,210);
         if (!validCredentials){
-            sb.draw(invalidCredentials, FlowerPowerGame.WIDTH/2-invalidCredentials.getWidth()/2,120);
+            sb.draw(invalidCredentials, (float)
+                    (FlowerPowerGame.WIDTH/2-invalidCredentials.getWidth()/2),120);
         } else if (otherMistake){
-            sb.draw(otherMistakeMessage, FlowerPowerGame.WIDTH/2-otherMistakeMessage.getWidth()/2, 120);
+            sb.draw(otherMistakeMessage, (float)
+                    (FlowerPowerGame.WIDTH/2-otherMistakeMessage.getWidth()/2), 120);
         }
-
-        sb.draw(back,10,FlowerPowerGame.HEIGHT-20);
         sb.end();
+        stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-        stage.act();
     }
-
 
 }

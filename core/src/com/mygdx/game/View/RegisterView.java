@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -17,12 +18,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.FlowerPowerGame;
+import com.mygdx.game.Model.Button;
 
 public class RegisterView extends View {
     private final Texture logo;
     private final Texture register;
-    private final Texture playbook;
-    private final Texture highscore;
     private final Texture enter_username;
     private final Texture enter_password;
     private final Texture password_again;
@@ -31,7 +31,6 @@ public class RegisterView extends View {
     private final Texture invalidEmailMessage;
     private final Texture usernameTakenMessage;
     private final Texture otherMistakeMessage;
-    private final Texture back;
     private Stage stage;
     private TextField username;
     private TextField password;
@@ -40,6 +39,7 @@ public class RegisterView extends View {
     private String passwordTyped;
     private String passwordCheckTyped;
     private Pixmap cursorColor;
+    private final ImageButton backButton;
 
 
 
@@ -59,8 +59,6 @@ public class RegisterView extends View {
         //gameController = new GameController(); //never used
         logo = new Texture("logo.png");
         register = new Texture("register.png");
-        playbook = new Texture("playbook.png");
-        highscore = new Texture("Highscore.png");
         enter_username = new Texture("enter_email.png");
         enter_password = new Texture("enter_password.png");
         password_again = new Texture("password_again.png");
@@ -70,9 +68,6 @@ public class RegisterView extends View {
         usernameTakenMessage = new Texture("usernameTaken.png");
         otherMistakeMessage = new Texture("wentWrong.png");
 
-
-        back = new Texture("back.png");
-        highscore_x = FlowerPowerGame.WIDTH-highscore.getWidth()-10;
 
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
@@ -97,6 +92,11 @@ public class RegisterView extends View {
 
         setPasswordCheckField(textFieldStyle);
         stage.addActor(passwordCheck);
+
+        Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
+        backButton = back.getButton();
+        //setBackButtonEvent();
+        stage.addActor(backButton);
     }
 
     private void setUsernameField(TextField.TextFieldStyle ts) {
@@ -139,8 +139,6 @@ public class RegisterView extends View {
 
             Rectangle registerBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-(register.getWidth()/2)),
                     40, register.getWidth(), register.getHeight());
-            Rectangle playbookBounds = new Rectangle(10, 15, playbook.getWidth(), playbook.getHeight());
-            Rectangle highscoreBounds = new Rectangle(highscore_x, 15, highscore.getWidth(), highscore.getHeight());
             if (registerBounds.contains(pos.x, pos.y)) {
                 // Sende inn til databasen ny bruker
                 passwordMatch=true;
@@ -199,18 +197,6 @@ public class RegisterView extends View {
                 }
 
             }
-            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
-            if (backBounds.contains(pos.x, pos.y)) {
-                vm.set(new StartView(vm));
-            }
-            if (playbookBounds.contains(pos.x, pos.y)) {
-                //vm.set(new PlaybookView(vm));
-                System.out.println("Playbook pressed");
-            }
-            if (highscoreBounds.contains(pos.x, pos.y)) {
-                vm.set(new HighscoreView(vm));
-                System.out.println("Settings pressed");
-            }
         }
         }
 
@@ -227,8 +213,6 @@ public class RegisterView extends View {
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
         sb.draw(logo,36,395);
         sb.draw(register,100,50);
-        sb.draw(playbook, 10, 15);
-        sb.draw(highscore, highscore_x, 15);
         // Playbook og settings blir plassert veldig forskjellig i y-retning på desktop og emulator,
         // ikke helt skjønt hvorfor enda
         sb.draw(enter_username,60,345);
@@ -245,8 +229,6 @@ public class RegisterView extends View {
         } else if (otherMistake){
             sb.draw(otherMistakeMessage,FlowerPowerGame.WIDTH/2-otherMistakeMessage.getWidth()/2,130);
         }
-
-        sb.draw(back,10,FlowerPowerGame.HEIGHT-20);
         sb.end();
         stage.draw();
         stage.act();
