@@ -530,6 +530,7 @@ private boolean Forfeited = false;
         //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
         while(!isDone){
             //waiting
+            System.out.println("Dont delete me");
         }
         return players;
     }
@@ -583,6 +584,7 @@ private boolean Forfeited = false;
         });
         while (!isDone){
             //waiting
+            System.out.println("Dont delete me");
         }
         return this.playerTurn;
     }
