@@ -17,15 +17,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mygdx.game.Model.CustomException;
-
-
 
 
 import static android.content.ContentValues.TAG;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -431,7 +427,6 @@ public class fireBaseConnector implements FireBaseInterface {
      */
 
 
-    @Override
     public void setPlayerReady(int GID){
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Ready");
@@ -439,7 +434,6 @@ public class fireBaseConnector implements FireBaseInterface {
         String[] displayName = this.getUsername().split("@");
         updates.put(displayName[0], true);
         playerRef.updateChildren(updates);
-
     }
 
     private void setPlayersReady(boolean ready){
@@ -488,52 +482,39 @@ public class fireBaseConnector implements FireBaseInterface {
         return this.players;
     }
 
-    @Override
-    public boolean getPlayersReady(int GID) {
+
+    public List<Boolean> getPlayersReady(int GID) {
         isDone=false;
         System.out.println("Ready start FBIC: "+playersReady);
-
+        List<Boolean> playersReady = new ArrayList<>();
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference readyRef = gameRef.child(GID+"/Ready/");
-        readyRef.addValueEventListener(new ValueEventListener() {
+        readyRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
-                System.out.println(map.containsValue(false));
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                    isDone = true;
+                } else {
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                    Map<String, Boolean> map = (Map<String, Boolean>) task.getResult().getValue();
+                    map.values();
+                    playersReady.addAll(map.values());
+                    System.out.println("key: " + players);
+                    isDone = true;
 
-                if (map.containsValue(false)){
-                    System.out.println("Values:");
-                    Collection<Object> values = map.values();
-                    for (Object value: values){
-                        System.out.println(value);
-                    }
-                    setPlayersReady(false);
                 }
-
-                System.out.println("Ready after ondatachange: "+playersReady);
-                isDone=true;
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("The read failed: " + error.getCode());
-                setPlayersReady(false);
-                isDone=true;
-            }
-
 
         });
-
-        while (!isDone){
+        while (!isDone) {
             //waiting
-            System.out.println("waiting"); //don't remove
+            System.out.println("please be done"); //don't remove
         }
-        System.out.println("FBIC playersready: "+this.playersReady);
-        return this.playersReady;
-
-
-
+        return playersReady;
     }
+
+
 
 
 

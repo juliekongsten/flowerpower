@@ -1,9 +1,7 @@
 package com.mygdx.game;
 
 import com.mygdx.game.Model.Bed;
-import com.mygdx.game.Model.Player;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +23,7 @@ public interface FireBaseInterface {
 
     boolean getIsDone();
     void setPlayerReady(int GID);
-    boolean getPlayersReady(int GID);
+    List<Boolean> getPlayersReady(int GID);
 
     boolean isMyTurn(int gameID);
 

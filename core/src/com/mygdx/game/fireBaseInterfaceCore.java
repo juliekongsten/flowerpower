@@ -2,10 +2,9 @@ package com.mygdx.game;
 
 
 import com.mygdx.game.Model.Bed;
-import com.mygdx.game.Model.Player;
+
 import java.util.Map;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -51,8 +50,8 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public void setPlayerReady(int GID){}
 
     @Override
-    public boolean getPlayersReady(int GID) {
-        return false;
+    public List<Boolean> getPlayersReady(int GID) {
+        return null;
     }
 
     @Override

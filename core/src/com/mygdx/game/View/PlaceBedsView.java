@@ -53,6 +53,7 @@ public class PlaceBedsView extends View{
     private boolean overlappingBeds = false;
     private boolean bedsOutsideBoard = false;
     private boolean goBack;
+    private boolean bothReady;
     private boolean opponent_exited = false; //If the opponent exited the game before it started.
 
 
@@ -251,24 +252,9 @@ public class PlaceBedsView extends View{
      * Checks if the other player is ready and sends player to gameview if both players are ready
      * @param sb
      */
-    private void checkOtherPlayer(SpriteBatch sb){
-        boolean opReady = gameController.getPlayersReady();
-        System.out.println("In check other player");
-
-        if (opReady){
-            System.out.println("opready<3");
-            gameController.setMyBeds(beds);
-            System.out.println("after sendmybeds");
-
-            vm.set(new GameView(vm, gameController));
-            System.out.println("after vm set");
-            
-
-        } else{
-            //Draw waiting-graphics
-            sb.draw(waiting_black,0,0);
-            sb.draw(waiting_text,FlowerPowerGame.WIDTH/2-waiting_text.getWidth()/2,FlowerPowerGame.HEIGHT/2);
-        }
+    private boolean checkOtherPlayer(SpriteBatch sb){
+        return  gameController.getPlayersReady();
+        //denne sjekker jo begge to?
 
     }
 
@@ -317,9 +303,20 @@ public class PlaceBedsView extends View{
             sb.draw(opponent_exited_text,FlowerPowerGame.WIDTH/2-opponent_exited_text.getWidth()/2,FlowerPowerGame.HEIGHT-130); //vil ikke tegnes
             sb.draw(go_to_menu,FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2,FlowerPowerGame.HEIGHT/2+120);
         }
-        if(isReady){
+        this.bothReady = gameController.getPlayersReady();
+        if(isReady && bothReady){
             System.out.println("inside isREady");
-            checkOtherPlayer(sb);
+            System.out.println("In check other player");
+            System.out.println("opready<3");
+            gameController.setMyBeds(beds);
+            System.out.println("after sendmybeds");
+            vm.set(new GameView(vm, gameController));
+            System.out.println("after vm set");
+
+        }
+        if (isReady && !bothReady){
+            sb.draw(waiting_black,0,0);
+            sb.draw(waiting_text,FlowerPowerGame.WIDTH/2-waiting_text.getWidth()/2,FlowerPowerGame.HEIGHT/2);
         }
         sb.end();
 
