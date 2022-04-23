@@ -395,8 +395,13 @@ public class fireBaseConnector implements FireBaseInterface {
         readyData.put(displayName[0],false);
         DatabaseReference readyRef = gameRef.child(gameID+"/Ready");
         readyRef.updateChildren(readyData);
-        //check user logged in - getID
-        //check gamepin - if the same, get user into the game
+
+        //Added forfeited if the players joins the game
+        DatabaseReference forfeitedRef = playerRef.child(this.getUID());
+        Map forfeitedGame = new HashMap();
+        forfeitedGame.put("Forfeited", false);
+        forfeitedRef.updateChildren(forfeitedGame);
+
         //ready(gameID,displayName[0]);
         //setTurnToOtherPlayer(gameID);
     }
