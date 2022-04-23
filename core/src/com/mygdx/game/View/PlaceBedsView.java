@@ -257,10 +257,13 @@ public class PlaceBedsView extends View{
 
         if (opReady){
             System.out.println("opready<3");
-            gameController.sendMyBeds(beds);
+            gameController.setMyBeds(beds);
             System.out.println("after sendmybeds");
+
             vm.set(new GameView(vm, gameController));
             System.out.println("after vm set");
+            
+
         } else{
             //Draw waiting-graphics
             sb.draw(waiting_black,0,0);

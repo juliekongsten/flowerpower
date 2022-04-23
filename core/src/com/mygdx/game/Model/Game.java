@@ -110,7 +110,7 @@ public class Game {
     }
 
     public void setTurnToOtherPlayer(){
-        this._FBIC.setPlayerReady(this.GID);
+        this._FBIC.setTurnToOtherPlayer(this.GID);
     }
 
     public boolean checkForGameStart(){

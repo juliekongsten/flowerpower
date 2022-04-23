@@ -32,6 +32,8 @@ public interface FireBaseInterface {
     List<String> getPlayers(int GID);
     List<Integer> getGameIDs();
 
+    void setTurnToOtherPlayer(int GID);
+
     //void writeUserDataToDb(Player player);
     void createGame(int GID);
     void joinGame(int GID);

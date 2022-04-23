@@ -91,5 +91,8 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     }**/
 
+    @Override
+    public void setTurnToOtherPlayer(int GID){}
+
 
 }

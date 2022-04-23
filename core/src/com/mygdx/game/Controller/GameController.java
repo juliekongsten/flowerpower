@@ -98,9 +98,10 @@ public class GameController {
             setStartBeds();
         } else {
             myBeds = beds;
-            if (gameStarted) {
+            /*if (gameStarted) {
                 game.storePlacedBeds(myBeds);
-            }
+            }*/
+            game.storePlacedBeds(myBeds);
             for (Square mySquare : myBoard){
                 if (isSquareInBed(mySquare,myBeds)){
                     mySquare.setHasFlower(true);
@@ -174,6 +175,7 @@ public class GameController {
         List<Bed> result = new ArrayList<>();
         Map<String, Object> receivedOpBeds;
         receivedOpBeds = game.retrievePlacedBeds();
+
         bedsList.addAll(receivedOpBeds.values());
         for (int j=0; j<bedsList.size(); j++) {
             String newString = bedsList.get(j).toString();

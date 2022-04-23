@@ -36,6 +36,8 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public void signIn(String username, String password) {
 
     }
+    @Override
+    public void setTurnToOtherPlayer(int GID){}
 
     @Override
     public String getUsername() {
@@ -67,6 +69,11 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
 
     @Override
     public boolean getPlayersReady(int GID) {
+        return false;
+    }
+
+    @Override
+    public boolean isMyTurn(int gameID) {
         return false;
     }
 
