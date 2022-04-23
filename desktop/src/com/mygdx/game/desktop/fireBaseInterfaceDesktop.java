@@ -5,6 +5,7 @@ import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Currently not used but required for communication between modules
@@ -65,10 +66,20 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public void setPlayerReady(int GID){}
 
     @Override
+    public boolean getPlayersReady(int GID) {
+        return false;
+    }
+
+    @Override
     public void joinGame(int GID){}
 
     @Override
     public void storeBeds(List<Bed> beds, int GID){}
+
+    @Override
+    public Map<String, Object> retrieveBeds(int GID) {
+        return null;
+    }
 
     @Override
     public void signOut() {}

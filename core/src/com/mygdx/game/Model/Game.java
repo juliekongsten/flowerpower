@@ -4,20 +4,25 @@ import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
 
+import java.util.HashMap;
 import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Game {
 
     private int GID;
     private FireBaseInterface _FBIC;
 
+    // TODO: må mer metoder til for å connecte med firebaseconnector
+
     /**
      *  Constructor for joining existing game
      * @param existingGID existing gamepin
      */
+
     public Game(int existingGID) {
         this.GID= existingGID;
         this._FBIC= FlowerPowerGame.getFBIC();
@@ -88,9 +93,11 @@ public class Game {
         this._FBIC.setPlayerReady(this.GID);
     }
 
-    //TODO: fjerne denne, tror ikke vi trenger den mtp konstruktøren gjør det samme
-    public void joinGame(int existingGID){
-        this.GID= existingGID;
+    public boolean getPlayersReady(){
+        //Get opponents ready value from database
+        boolean ready = this._FBIC.getPlayersReady(this.GID);
+        System.out.println("Game getplayersready: "+ready);
+        return ready;
     }
 
     /**
@@ -108,6 +115,29 @@ public class Game {
         //notify the other user too!
         _FBIC.leaveGame(GID);
 
+    }
+
+
+    public Map<String, Object> retrievePlacedBeds() {
+        System.out.println("Game, retrievePlacedBeds(): " + _FBIC.retrieveBeds(GID));
+        return _FBIC.retrieveBeds(GID);
+    }
+
+    public boolean isMyTurn(){
+        boolean myTurn =this._FBIC.isMyTurn(this.GID);
+        System.out.println("Game is my turn: "+myTurn);
+        return myTurn;
+    }
+
+    public boolean checkForGameStart(){
+        List<String> players =_FBIC.getPlayers(this.GID);
+        System.out.println("these are the players:"+players);
+        if (players.size()==2){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 }

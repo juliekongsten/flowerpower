@@ -6,7 +6,9 @@ import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Square;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameController {
     private Game game;
@@ -38,9 +40,7 @@ public class GameController {
         numberSquaresWidth = 9;
         gameStarted = false;
 
-        //TODO: (Low priority) Get x- and y-values without hardkoding :D
-        //må hente x og y-verdier fra view heller sånn at vi får riktige :D
-        //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
+
 
         setStartBoards();
         setMyBeds(null);
@@ -95,13 +95,11 @@ public class GameController {
     }
 
     public void setMyBeds(List<Bed> beds){
-        System.out.println("setmybeds");
         if (beds == null){
             setStartBeds();
         } else {
             myBeds = beds;
             if (gameStarted) {
-                System.out.println("gets in game controller");
                 game.storePlacedBeds(myBeds);
             }
             for (Square mySquare : myBoard){
@@ -127,6 +125,9 @@ public class GameController {
     }
 
     private void setStartBoards(){
+        //TODO: (Low priority) Get x- and y-values without hardkoding :D
+        //må hente x og y-verdier fra view heller sånn at vi får riktige :D
+        //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
         int x = 26+15;
         int my_y = 65+12;
         int op_y = 424+12;
@@ -158,9 +159,10 @@ public class GameController {
         this.game.setPlayerReady();
     }
 
-    public boolean getOpReady(){
-        //TODO: Logic, database
-        boolean ready = true; //get from database
+    public boolean getPlayersReady(){
+        boolean ready = this.game.getPlayersReady();
+        System.out.println("controller playersready: "+ready);
+
         return ready;
     }
 
@@ -169,8 +171,35 @@ public class GameController {
      */
     public void receiveOpBeds(){
         //TODO: Logic, database
-        List<Bed> receivedOpBeds = myBeds; //get from database
-        moveOpBeds(receivedOpBeds);
+        List<Object> bedsList = new ArrayList<>();
+        List<Bed> result = new ArrayList<>();
+        Map<String, Object> receivedOpBeds;
+        receivedOpBeds = game.retrievePlacedBeds();
+        bedsList.addAll(receivedOpBeds.values());
+        for (int j=0; j<5; j++) {
+            String newString = bedsList.get(j).toString();
+            String pos_yString;
+            String pos_xString;
+            String horizontalString;
+            String sizeString;
+            String texturePath;
+            String[] parts = newString.split(", ");
+            List<String> valueList = new ArrayList<>();
+            for (String part : parts) {
+                valueList.add(part.split("=")[1]);
+            }
+            pos_yString = valueList.get(0);
+            horizontalString = valueList.get(1);
+            pos_xString = valueList.get(2);
+            sizeString = valueList.get(3);
+            String texturePathString = valueList.get(4);
+            String substring = texturePathString.substring(0, texturePathString.length()-1);
+            texturePath = substring;
+            Bed bed = new Bed(Integer.parseInt(sizeString), Boolean.parseBoolean(horizontalString), texturePath);
+            bed.updatePosition(Integer.parseInt(pos_xString), Integer.parseInt(pos_yString));
+            result.add(bed);
+        }
+        moveOpBeds(result);
     }
 
     /**
@@ -178,7 +207,7 @@ public class GameController {
      * @param beds
      */
     public void sendMyBeds(List<Bed> beds){
-        //TODO: Logic
+
     }
 
     /**
@@ -188,10 +217,8 @@ public class GameController {
      */
     private void moveOpBeds(List<Bed> receivedOpBeds){
         List<Bed> newBeds = new ArrayList<>();
-        System.out.println("SentOpBeds: "+receivedOpBeds);
 
         for (Bed bed : receivedOpBeds){
-            System.out.println("SentOpBed: "+bed.getPos_x()+","+bed.getPos_y());
             int size = bed.getSize();
             boolean horizontal = bed.isHorizontal();
             String texturePath = bed.getTexturePath();
@@ -199,7 +226,6 @@ public class GameController {
             float y = bed.getPos_y()+distance;
             float x = bed.getPos_x();
             newBed.updatePosition(x, y);
-            System.out.println("Newbed: "+newBed.getPos_x()+","+newBed.getPos_y());
             newBeds.add(newBed);
 
         }
@@ -212,6 +238,7 @@ public class GameController {
 
             }
         }
+        System.out.println("MOVED BEDS: " + newBeds);
     }
 
     /**
@@ -291,5 +318,17 @@ public class GameController {
 
     public void deleteGame() {
         game.deleteGame();
+    }
+
+    public boolean isMyTurn(){
+        boolean myTurn = this.game.isMyTurn();
+        System.out.println("Controller is my turn: "+myTurn);
+        return myTurn;
+    }
+    public boolean checkForGameStart() {
+        boolean start = this.game.checkForGameStart();
+        System.out.println("start status: "+start);
+        return start;
+
     }
 }

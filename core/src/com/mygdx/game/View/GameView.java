@@ -16,7 +16,7 @@ import java.util.List;
 
 public class GameView extends View{
 
-    private boolean waiting = false;
+    private boolean waiting;
 
     private Texture pool;
     private Texture ready;
@@ -72,7 +72,8 @@ public class GameView extends View{
 
     public GameView(ViewManager vm, GameController gameController) {
         super(vm);
-        this.gameController = gameController;
+        System.out.println("in gameview");
+        this.gameController = vm.getController();
         pool = new Texture("pool.png");
         createTextures();
         findStaticCoordinates();
@@ -82,6 +83,7 @@ public class GameView extends View{
         opBeds = gameController.getOpBeds();
         opBoard = gameController.getOpBoard();
         already_pressed = new ArrayList<>();
+        waiting = !gameController.isMyTurn(); //check, stopper?
 
     }
 
@@ -189,6 +191,7 @@ public class GameView extends View{
     @Override
     public void update(float dt) {
         handleInput();
+
 
         //Checks if the game is over and takes player to ExitView
         if (gameOver){
@@ -312,6 +315,7 @@ public class GameView extends View{
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
 
+        waiting = !gameController.isMyTurn();
         //Draws message (your turn/waiting) in the pool
         if (!waiting){
             sb.draw(my_turn, my_turn_x, my_turn_y);
@@ -351,7 +355,7 @@ public class GameView extends View{
         }
         gameOver = gameController.getGameOver();
 
-
+        System.out.println("after render gameview");
         sb.end();
 
     }

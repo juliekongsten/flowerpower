@@ -3,7 +3,9 @@ package com.mygdx.game;
 import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Interface to enable communication between modules
@@ -23,6 +25,9 @@ public interface FireBaseInterface {
 
     boolean getIsDone();
     void setPlayerReady(int GID);
+    boolean getPlayersReady(int GID);
+
+    boolean isMyTurn(int gameID);
 
     List<String> getPlayers(int GID);
     List<Integer> getGameIDs();
@@ -31,6 +36,7 @@ public interface FireBaseInterface {
     void createGame(int GID);
     void joinGame(int GID);
     void storeBeds(List<Bed> beds, int GID);
+    Map<String, Object> retrieveBeds(int GID);
 
     void leaveGame(int gid);
 }
