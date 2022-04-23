@@ -7,8 +7,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.FlowerPowerGame;
+import com.mygdx.game.Model.Button;
 import com.mygdx.game.Model.Player;
 
 import java.util.ArrayList;
@@ -20,28 +26,45 @@ import java.util.List;
 public class HighscoreView extends View {
 
     private final Texture logo;
-    private final Texture back;
     private final Texture highscore;
     private final Texture email;
     private final Texture score;
+    private final Stage stage;
+    private final ImageButton backButton;
 
     protected HighscoreView(ViewManager vm) {
         super(vm);
         logo = new Texture("logo.png");
-        back = new Texture("back.png");
         highscore = new Texture("Highscorelist.png");
         email = new Texture("Email.png");
         score = new Texture("Score.png");
+
+        stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
+        Gdx.input.setInputProcessor(stage);
+        Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
+        backButton = back.getButton();
+        setBackButtonEvent();
+        stage.addActor(backButton);
+    }
+
+    private void setBackButtonEvent() {
+        backButton.addListener(new EventListener()
+        {
+            @Override
+            public boolean handle(Event event)
+            {
+                //Handle the input event.
+                vm.set(new MenuView(vm));
+                return true;
+            }
+        });
     }
 
     @Override
     protected void handleInput() {
         if (Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT - 20, back.getWidth(), back.getHeight());
-            if (backBounds.contains(pos.x, pos.y)) {
-                vm.set(new MenuView(vm));
-            }
+
         }
     }
 
@@ -82,12 +105,13 @@ public class HighscoreView extends View {
         sb.begin();
         ScreenUtils.clear((float) 180 / 255, (float) 245 / 255, (float) 162 / 255, 1);
         sb.draw(logo, 36, 405);
-        sb.draw(back, 10, FlowerPowerGame.HEIGHT - 20);
         sb.draw(highscore, FlowerPowerGame.WIDTH / 2 - highscore.getWidth() / 2, 355);
         sb.draw(email, FlowerPowerGame.WIDTH / 2 - highscore.getWidth() / 2 - 30, 315);
         sb.draw(score, FlowerPowerGame.WIDTH / 2 + 70, 315);
         printHighscoreList(sb);
         sb.end();
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
 
         }
     }

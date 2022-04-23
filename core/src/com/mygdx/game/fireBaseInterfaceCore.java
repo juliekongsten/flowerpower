@@ -74,6 +74,11 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public Map<String, Object> retrieveBeds(int GID) { return null;}
 
     @Override
+    public void leaveGame(int gid) {
+
+    }
+
+    @Override
     public List<String> getPlayers(int gameID){
         return null;
     }

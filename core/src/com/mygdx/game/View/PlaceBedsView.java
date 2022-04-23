@@ -5,10 +5,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Bed;
+import com.mygdx.game.Model.Button;
 import com.mygdx.game.Model.Square;
 
 import java.util.ArrayList;
@@ -55,6 +61,9 @@ public class PlaceBedsView extends View{
     private boolean goBack;
     private boolean opponent_exited = false; //If the opponent exited the game before it started.
 
+    private final Stage stage;
+    private final ImageButton backButton;
+
 
     public PlaceBedsView(ViewManager vm){
         super(vm);
@@ -87,6 +96,26 @@ public class PlaceBedsView extends View{
         myBoard = gameController.getMyBoard();
         beds = gameController.getMyBeds();
 
+        stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
+        Gdx.input.setInputProcessor(stage);
+
+        Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
+        backButton = back.getButton();
+        setBackButtonEvent();
+
+    }
+
+    private void setBackButtonEvent() {
+        backButton.addListener(new EventListener()
+        {
+            @Override
+            public boolean handle(Event event)
+            {
+                //Handle the input event.
+                goBack = true;
+                return true;
+            }
+        });
     }
 
     /**
@@ -104,7 +133,7 @@ public class PlaceBedsView extends View{
                     touchedBed = bed;
                 }
             }
-            touchedBed.updatePosition(pos.x-touchedBed.getTexture().getWidth()/2, pos.y - (touchedBed.getTexture().getHeight()/2));
+            touchedBed.updatePosition( pos.x-( (float) touchedBed.getTexture().getWidth()/2), pos.y - ((float) touchedBed.getTexture().getHeight()/2));
         }
 
         if (Gdx.input.justTouched()) {
@@ -135,30 +164,32 @@ public class PlaceBedsView extends View{
                     System.out.println("i am not ready:(");}
             }
             //Checks if replace-button is pressed
-            Rectangle replaceBounds = new Rectangle(FlowerPowerGame.WIDTH/2-replace.getWidth()/2,FlowerPowerGame.HEIGHT-150,replace.getWidth(),replace.getHeight());
+            Rectangle replaceBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-replace.getWidth()/2),FlowerPowerGame.HEIGHT-150,replace.getWidth(),replace.getHeight());
             if(replaceBounds.contains(pos.x,pos.y)){
                 System.out.println("REPLACE TOUCHED");
                 overlappingBeds = false;
                 bedsOutsideBoard = false;
             }
-            Rectangle backBounds = new Rectangle(10, FlowerPowerGame.HEIGHT-20, back.getWidth(), back.getHeight());
-            if (backBounds.contains(pos.x, pos.y)) {
-                goBack = true;
-            }
-            Rectangle noBounds = new Rectangle(FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100,no.getWidth(),no.getHeight());
-            Rectangle yesBounds = new Rectangle(FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100,yes.getWidth(),yes.getHeight());
+
+            Rectangle noBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-no.getWidth()-5),
+                    (float) FlowerPowerGame.HEIGHT/2-100, no.getWidth(),no.getHeight());
+            Rectangle yesBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2+yes.getWidth()/8),
+                    (float) FlowerPowerGame.HEIGHT/2-100, yes.getWidth(),yes.getHeight());
             if(goBack){
                 if(noBounds.contains(pos.x,pos.y)){
                     goBack = false;
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
-                    //TODO update that the user has pressed "go back" and yes, and exited the game DB
                     vm.set(new MenuView(vm));
+                    gameController.myExited(true);
+                    gameController.deleteGame();
                 }
             }
-            Rectangle go_to_menuBounds = new Rectangle(FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2,FlowerPowerGame.HEIGHT/2+120,go_to_menu.getWidth(),go_to_menu.getHeight());
+            Rectangle go_to_menuBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2),
+                    (float) FlowerPowerGame.HEIGHT/2+120,go_to_menu.getWidth(),go_to_menu.getHeight());
             if (go_to_menuBounds.contains(pos.x,pos.y)&&opponent_exited){
                 vm.set(new MenuView(vm));
+                gameController.deleteGame();
             }
         }
 
@@ -229,8 +260,8 @@ public class PlaceBedsView extends View{
     private void drawBeds(SpriteBatch sb){
         //Set the placement to inside pool IF they're not moved yet
         if ((beds.get(0).getPos_x() == 0 && beds.get(0).getPos_y() == 0) || beds.size()==0) {
-            float bed1_x = pool.getWidth()/2;
-            float bed1_y = pool_y+pool.getHeight()/2-20;
+            float bed1_x = (float) pool.getWidth()/2;
+            float bed1_y = pool_y+ (float) pool.getHeight()/2-20;
             float bed2_y = bed1_y - beds.get(1).getTexture().getHeight()-8;
             float bed3_x = pool_x + 20;
             float bed3_y = pool_y + 10;
@@ -264,7 +295,7 @@ public class PlaceBedsView extends View{
         } else{
             //Draw waiting-graphics
             sb.draw(waiting_black,0,0);
-            sb.draw(waiting_text,FlowerPowerGame.WIDTH/2-waiting_text.getWidth()/2,FlowerPowerGame.HEIGHT/2);
+            sb.draw(waiting_text,(float) (FlowerPowerGame.WIDTH/2-waiting_text.getWidth()/2),(float) FlowerPowerGame.HEIGHT/2);
         }
 
     }
@@ -299,7 +330,7 @@ public class PlaceBedsView extends View{
         }
 
         if(!goBack){
-            sb.draw(back, 10, FlowerPowerGame.HEIGHT-20);
+        stage.addActor(backButton);
         }
         else{
             sb.draw(waiting_black,0,0);
@@ -319,7 +350,8 @@ public class PlaceBedsView extends View{
             checkOtherPlayer(sb);
         }
         sb.end();
-
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
 
     }
 }
