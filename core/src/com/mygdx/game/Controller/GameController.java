@@ -315,6 +315,7 @@ public class GameController {
     }
 
     public void setTurnToOtherPlayer(){
+        System.out.println("setTurnToOtherPlayer in controller");
         this.game.setTurnToOtherPlayer();
     }
 

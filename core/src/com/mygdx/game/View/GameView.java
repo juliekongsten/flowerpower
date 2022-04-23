@@ -146,6 +146,7 @@ public class GameView extends View{
                             miss_x = square.getBounds().x + 30;
                             miss_y = square.getBounds().y;
                             //When you miss it's opponents turn
+                            System.out.println("Miss!");
                             waiting = true;
                             gameController.setTurnToOtherPlayer();
 
@@ -322,7 +323,10 @@ public class GameView extends View{
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
 
-        waiting = !gameController.isMyTurn();
+        if (waiting){
+            waiting = !gameController.isMyTurn();
+        }
+
         //Draws message (your turn/waiting) in the pool
         if (!waiting){
             sb.draw(my_turn, my_turn_x, my_turn_y);

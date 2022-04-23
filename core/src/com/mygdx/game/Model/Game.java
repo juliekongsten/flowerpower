@@ -110,6 +110,7 @@ public class Game {
     }
 
     public void setTurnToOtherPlayer(){
+        System.out.println("setTurnToOtherPlayer in game");
         this._FBIC.setTurnToOtherPlayer(this.GID);
     }
 
