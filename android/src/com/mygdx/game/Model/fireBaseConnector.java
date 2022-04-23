@@ -262,6 +262,7 @@ public class fireBaseConnector implements FireBaseInterface {
         );
         while (!isDone){
             //waiting:)
+            System.out.println("Dont delete me");
         }
         return this.gameIDs;
 
@@ -346,7 +347,7 @@ public class fireBaseConnector implements FireBaseInterface {
         userRef.setValue(uidData);
         Map readyData = new HashMap();
         String displayName[] = this.getUsername().split("@");
-        readyData.put(displayName[0], false);
+        readyData.put(displayName[0],false);
         DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
 
@@ -376,6 +377,7 @@ public class fireBaseConnector implements FireBaseInterface {
 
     //TODO: redudant kode
     public void joinGame(int gameID){
+         // TODO  lage disse globale? brukes jo overalt?
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
@@ -396,14 +398,12 @@ public class fireBaseConnector implements FireBaseInterface {
 
 
     /**
-     * Når en bruker har forlatt spillet, ved å trykke exit f.eks, må leave game
+     * Deletes the game when a player exits or quits
      * @param gamePIN
      */
     public void leaveGame(int gamePIN){
-        //må slette spillet fra databasen
-
-        //må notifisere den andre spilleren før det skjer (skjer ikke her men i en annen klasse)
-
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        gameRef.child(String.valueOf(gamePIN)).removeValue();
     }
 
     /**
@@ -414,18 +414,28 @@ public class fireBaseConnector implements FireBaseInterface {
 
     @Override
     public void setPlayerReady(int GID){
+        System.out.println("Kommer hit");
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Ready");
         Map<String, Object> updates = new HashMap<>();
         String[] displayName = this.getUsername().split("@");
         updates.put(displayName[0], true);
         playerRef.updateChildren(updates);
-
     }
 
-    private void setPlayersReady(boolean ready){
-        this.playersReady=ready;
+    @Override
+    public boolean getPlayersReady(int GID) {
+        return false;
     }
+
+
+    /**
+     * getPlayers gets all the in the game with this gameID
+     * @param gameID
+     * @return List<String> for player UID
+     */
+    //TODO: legge inn før join game så man sjekker at listen er allerede full
+
     public List<String> getPlayers(int gameID){
         isDone=false;
         players = new ArrayList<>();
@@ -468,93 +478,11 @@ public class fireBaseConnector implements FireBaseInterface {
         //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
         while(!isDone){
             //waiting
-            System.out.println("please be done"); //don't remove
+            System.out.println("Dont delete me");
         }
         return players;
     }
 
-    @Override
-    public boolean getPlayersReady(int GID) {
-        isDone=false;
-        setPlayersReady(true);
-        System.out.println("Ready start FBIC: "+playersReady);
-
-        DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference readyRef = gameRef.child(GID+"/Ready/");
-        readyRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
-                System.out.println(map.containsValue(false));
-
-                if (map.containsValue(false)){
-                    System.out.println("Values:");
-                    Collection<Object> values = map.values();
-                    for (Object value: values){
-                        System.out.println(value);
-                    }
-                    setPlayersReady(false);
-                }
-
-                System.out.println("Ready after ondatachange: "+playersReady);
-                isDone=true;
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("The read failed: " + error.getCode());
-                setPlayersReady(false);
-                isDone=true;
-            }
-
-
-        });
-
-        while (!isDone){
-            //waiting
-            System.out.println("waiting"); //don't remove
-        }
-        System.out.println("FBIC playersready: "+this.playersReady);
-        return this.playersReady;
-
-
-
-    }
-
-
-    /**
-     * getPlayers gets all the in the game with this gameID
-     * @param gameID
-     * @return List<String> for player UID
-     */
-    //TODO: legge inn før join game så man sjekker at listen er allerede full
-    /*public List<String> getPlayers(int gameID){
-        isDone=false;
-        players = new ArrayList<>();
-        DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
-        playerRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                //System.out.println(map);
-                players.addAll(map.keySet());
-                isDone=true;
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-                isDone=true;
-            }
-        });
-        //mDatabase.child("users").child(userId).get();
-        //bytter verdi til den andre spilleren i turn
-        //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
-        while(!isDone){
-            //waiting
-        }
-        return players;
-    }*/
 
     public void setTurnToOtherPlayer(int gameID){
         DatabaseReference gameRef = database.getReference().child("/Games");
@@ -604,6 +532,7 @@ public class fireBaseConnector implements FireBaseInterface {
         });
         while (!isDone){
             //waiting
+            System.out.println("Dont delete me");
         }
         return this.playerTurn;
     }

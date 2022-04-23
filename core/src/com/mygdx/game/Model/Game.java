@@ -1,5 +1,6 @@
 package com.mygdx.game.Model;
 
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.FlowerPowerGame;
 
@@ -77,10 +78,17 @@ public class Game {
         }
     }
 
+    /**
+     * returns this games pin
+     * @return GID
+     */
     public int getGID(){
         return this.GID;
     }
 
+    /**
+     * tells the database that the player is ready to start the game
+     */
     public void setPlayerReady(){
         this._FBIC.setPlayerReady(this.GID);
     }
@@ -88,30 +96,41 @@ public class Game {
     public boolean getPlayersReady(){
         //Get opponents ready value from database
         boolean ready = this._FBIC.getPlayersReady(this.GID);
-        System.out.println("Game getplayersready: "+ready);
+        //System.out.println("Game getplayersready: "+ready);
         return ready;
     }
 
+    /**
+     * tells the db to store the bed objects
+     * @param beds
+     */
     public void storePlacedBeds(List<Bed> beds) {
-        System.out.println("gets in to game");
         _FBIC.storeBeds(beds, GID);
+    }
+
+    /**
+     * if a player forfeits a game, the game should be deleted and the opponent should get notified
+     */
+    public void deleteGame(){
+        //notify the other user too!
+        _FBIC.leaveGame(GID);
+
     }
 
 
     public Map<String, Object> retrievePlacedBeds() {
-        System.out.println("Game, retrievePlacedBeds(): " + _FBIC.retrieveBeds(GID));
         return _FBIC.retrieveBeds(GID);
     }
 
     public boolean isMyTurn(){
         boolean myTurn =this._FBIC.isMyTurn(this.GID);
-        System.out.println("Game is my turn: "+myTurn);
+
         return myTurn;
     }
 
     public boolean checkForGameStart(){
         List<String> players =_FBIC.getPlayers(this.GID);
-        System.out.println("these are the players:"+players);
+
         if (players.size()==2){
             return true;
         }
