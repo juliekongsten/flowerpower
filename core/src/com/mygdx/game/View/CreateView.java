@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -17,6 +18,18 @@ import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Button;
 
 public class CreateView extends View {
+
+    // DET FUNKER IKKE Å TRYKKE PÅ NOE SOM HELST I CreateView!
+    // Virker som det kan ha noe å gjøre med disse print setningene å gjøre:
+     /*
+    I/System.out: key: [DfnjgnyDGjRfHwGzsIDPlUJ00wI3]
+    I/System.out: start status: false
+    D/firebase: {DfnjgnyDGjRfHwGzsIDPlUJ00wI3={Username=lolsi@mail.no}}
+    I/System.out: {DfnjgnyDGjRfHwGzsIDPlUJ00wI3={Username=lolsi@mail.no}}
+    I/System.out: key: [DfnjgnyDGjRfHwGzsIDPlUJ00wI3]
+      */
+    // fordi run loggen fryser helt etter dette, og UI-et reagerer ikke på noen klikk
+
 
     private final Texture logo;
     private final Texture pinText;
@@ -105,7 +118,6 @@ public class CreateView extends View {
     protected void handleInput() {
         if (Gdx.input.justTouched()) {
             Vector3 pos = cam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-
         }
     }
 

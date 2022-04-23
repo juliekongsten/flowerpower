@@ -196,13 +196,8 @@ public class RegisterView extends View {
                 otherMistake=false;
 
                 String usernameTyped = username.getText();
-                System.out.println("Username typed:");
-                System.out.println(usernameTyped);
                 String passwordTyped = password.getText();
-                System.out.println("Password typed:");
-                System.out.println(passwordTyped);
                 String passwordCheckTyped = passwordCheck.getText();
-                System.out.println("Password check typed: \n" + passwordCheckTyped);
                 // Sjekke at passordene stemmer overens og hvis de gjør det, send videre til Registercontroller og player
 
 
