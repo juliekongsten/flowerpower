@@ -428,6 +428,12 @@ public class fireBaseConnector implements FireBaseInterface {
     public void leaveGame(int gamePIN){
         DatabaseReference gameRef = database.getReference().child("/Games");
         gameRef.child(String.valueOf(gamePIN)).removeValue();
+        System.out.println("Playersready before DILDO: " + playersReady);
+        System.out.println("Players size before DILDO: " + players.size());
+        setPlayersReady(false);
+        players.clear();
+        System.out.println("Playersready after DILDO: " + playersReady);
+        System.out.println("Players size after DILDO: " + players.size());
     }
 
     @Override

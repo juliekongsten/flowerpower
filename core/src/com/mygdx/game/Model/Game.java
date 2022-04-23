@@ -152,13 +152,18 @@ public class Game {
 
     public boolean checkForGameStart(){
         List<String> players =_FBIC.getPlayers(this.GID);
+        System.out.println("NATALIA DILDO: " + GID);
+        System.out.println("Størrelse dildo: " + players.size());
+        System.out.println("Liste dildo: " + players);
 
-        if (players.size()==2){
+        if (players.size() == 0) {
+            return false;
+        } else if (players.size() == 1) {
+            return false;
+        } else if (players.size() == 2) {
             return true;
         }
-        else{
-            return false;
-        }
+        return false;
     }
 
 }
