@@ -96,7 +96,7 @@ public class Game {
     public boolean getPlayersReady(){
         //Get opponents ready value from database
         boolean ready = this._FBIC.getPlayersReady(this.GID);
-        System.out.println("Game getplayersready: "+ready);
+        //System.out.println("Game getplayersready: "+ready);
         return ready;
     }
 
@@ -119,19 +119,18 @@ public class Game {
 
 
     public Map<String, Object> retrievePlacedBeds() {
-        System.out.println("Game, retrievePlacedBeds(): " + _FBIC.retrieveBeds(GID));
         return _FBIC.retrieveBeds(GID);
     }
 
     public boolean isMyTurn(){
         boolean myTurn =this._FBIC.isMyTurn(this.GID);
-        System.out.println("Game is my turn: "+myTurn);
+
         return myTurn;
     }
 
     public boolean checkForGameStart(){
         List<String> players =_FBIC.getPlayers(this.GID);
-        System.out.println("these are the players:"+players);
+
         if (players.size()==2){
             return true;
         }

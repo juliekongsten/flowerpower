@@ -59,6 +59,8 @@ public class CreateView extends View {
                 vm.set(new HighscoreView(vm));
             }
             if (backBounds.contains(pos.x, pos.y)) {
+                System.out.println("backBounds");
+                gameController.deleteGame();
                 vm.set(new MenuView(vm));
             }
         }
