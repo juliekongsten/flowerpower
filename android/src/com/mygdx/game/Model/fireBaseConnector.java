@@ -438,6 +438,12 @@ public class fireBaseConnector implements FireBaseInterface {
     }
 
 
+    /*@Override
+    public boolean getPlayersReady(int GID) {
+        return false;
+    }*/
+
+
     private void setPlayersReady(boolean ready){
         this.playersReady=ready;
     }
@@ -488,6 +494,12 @@ public class fireBaseConnector implements FireBaseInterface {
         System.out.println("clearingPlayers");
         this.players = new ArrayList<>();
     }
+
+    public void setPlayersReady(boolean ready){
+        this.playersReady=ready;
+    }
+
+
 
     public void OpHasForfeited(int gamePin){
         DatabaseReference gameRef = database.getReference().child("/Games");
