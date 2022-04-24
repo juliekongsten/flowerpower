@@ -70,7 +70,7 @@ public class GameView extends View{
     private List<Square> myBoard;
     private List<Bed> myBeds;
     private List<Bed> opBeds;
-    private List<Square> already_pressed;
+    private List<Square> squareList;
 
     private final Stage stage;
     private final ImageButton backButton;
@@ -88,7 +88,7 @@ public class GameView extends View{
         gameController.receiveOpBeds();
         opBeds = gameController.getOpBeds();
         opBoard = gameController.getOpBoard();
-        already_pressed = new ArrayList<>();
+        squareList = gameController.getMyMoves();
         waiting = !gameController.isMyTurn(); //check, stopper?
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
@@ -150,16 +150,19 @@ public class GameView extends View{
 
             //If player is not waiting on opponents move we check if player presses any of opponents
             //squares and act accordingly
-            if (!waiting){
+            if (!waiting && !opForfeitet){
                 for (Square square : opBoard){
-                    System.out.println("square: "+square.getBounds());
-                    if (square.getBounds().contains(pos.x,pos.y) && !already_pressed.contains(square)){
-                        System.out.println("is pressed");
+                    if (square.getBounds().contains(pos.x,pos.y) && !squareList.contains(square)){
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
                         boolean flower = gameController.hitSquare(square);
+                        //squareList.add(square);
+                    System.out.println("square: "+square.getBounds());
+                    
+                        System.out.println("is pressed");
+                        //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
+                        boolean hasFlower = gameController.hitSquare(square);
 
-                        already_pressed.add(square);
-                        if (flower){
+                        if (hasFlower){
                             hit = true;
                             miss = false;
                             hit_x = square.getBounds().x + 30;
@@ -171,6 +174,7 @@ public class GameView extends View{
                             miss_x = square.getBounds().x + 30;
                             miss_y = square.getBounds().y;
                             //When you miss it's opponents turn
+                            System.out.println("Miss!");
                             waiting = true;
                             gameController.setTurnToOtherPlayer();
 
@@ -195,10 +199,9 @@ public class GameView extends View{
                     goBack = false;
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
+                    gameController.myForfeited();
                     vm.set(new ExitView(vm, false, this.gameController));
-                    //delete game and notify op
-                    gameController.myForfeitet(true);
-                    gameController.deleteGame();
+                    gameController.clearPlayers();
                 }
             }
                    
@@ -207,19 +210,20 @@ public class GameView extends View{
                         (float) FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
                 if(exit_gameBounds.contains(pos.x,pos.y)){
                     vm.set(new ExitView(vm,true, this.gameController));
-                    gameController.deleteGame();
+                    gameController.clearPlayers();
                 }
         }}
     }
 
-    /**
-     *
-     * @param square received square
-     */
-    protected void receiveOpMove(Square square){
+
+    //TODO: hente ut denne når det er din turn
+    protected void receiveOpMove(){
         //Should only be called when the opponent has made a move
         //TODO: Give feedback to user that your square has been hit/miss
         //Do not draw the flower/miss as this is done in render
+
+        gameController.getOpMoves();
+
 
     }
 
@@ -231,16 +235,18 @@ public class GameView extends View{
         if (gameOver){
             boolean won = gameController.getWinner();
             //TODO: mulig ikke denne controlelren
+            gameController.deleteGame(); //slette spill når det er ferdig
             vm.set(new ExitView(vm, won, this.gameController));
         }
         //If waiting we check if the opponent has made a move so we can give give feedback
         if (waiting){
             //TODO: Find way to get square from controller
             //TODO: Find out if we should implement this as squarelistener instead and how
-            Square square = new Square(1,1,1); //should get this from controller
+            this.receiveOpMove();
+            /*Square square = new Square(1,1,1); //should get this from controller
             if (square != null){
-                receiveOpMove(square);
-            }
+                receiveOpMove();
+            }*/
 
         }
     }
@@ -349,7 +355,10 @@ public class GameView extends View{
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
 
-        waiting = !gameController.isMyTurn();
+        if (waiting && !opForfeitet){
+            waiting = !gameController.isMyTurn();
+        }
+
         //Draws message (your turn/waiting) in the pool
         if (!waiting){
             sb.draw(my_turn, my_turn_x, my_turn_y);

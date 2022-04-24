@@ -34,10 +34,10 @@ public class MenuView extends View {
         logo = new Texture("logo.png");
         join = new Texture("join.png");
         create = new Texture("create.png");
+        checkGame();
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
-
 
         Button playbook = new Button("playbook.png", 10, 15);
         playbookButton = playbook.getButton();
@@ -48,9 +48,18 @@ public class MenuView extends View {
         highscoreButton = highscore.getButton();
         setHighscoreButtonEvent();
         stage.addActor(highscoreButton);
+
+        checkGame();
     }
 
-    private void setPlaybookButtonEvent() {
+    private void checkGame() {
+        if (gameController.getGID() > 0) {
+            gameController.deleteGame();
+        }
+    }
+
+
+        private void setPlaybookButtonEvent() {
         playbookButton.addListener(new EventListener()
         {
             @Override
@@ -75,6 +84,7 @@ public class MenuView extends View {
                 return true;
             }
         });
+
     }
 
     @Override

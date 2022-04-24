@@ -3,7 +3,9 @@ package com.mygdx.game.desktop;
 import com.mygdx.game.FireBaseInterface;
 import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
+import com.mygdx.game.Model.Square;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +38,8 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public void signIn(String username, String password) {
 
     }
+    @Override
+    public void setTurnToOtherPlayer(int GID){}
 
     @Override
     public String getUsername() {
@@ -66,8 +70,8 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public void setPlayerReady(int GID){}
 
     @Override
-    public boolean getPlayersReady(int GID) {
-        return false;
+    public List<Boolean> getPlayersReady(int GID) {
+        return null;
     }
 
     @Override
@@ -82,12 +86,41 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public void storeBeds(List<Bed> beds, int GID){}
 
     @Override
+
+    public void setMove(Square square, int GID) {
+
+    }
+
+    @Override
+    public ArrayList<Square> getMoves(int GID) {
+return null;
+    }
+    @Override
+    public ArrayList<Square> getOpMoves(int GID){return null; }
+
     public Map<String, Object> retrieveBeds(int GID) {
         return null;
     }
 
     @Override
     public void leaveGame(int gid) {
+
+    }
+
+    @Override
+    public void forfeitedGame(int gid) {
+
+    }
+
+    @Override
+    public boolean getOpHasForfeited() {
+        return false;
+    }
+
+    @Override
+    public void OpHasForfeited(int gid) {
+
+    public void clearPlayers() {
 
     }
 
