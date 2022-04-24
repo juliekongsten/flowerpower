@@ -203,7 +203,7 @@ public class GameView extends View{
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
                     gameController.myForfeited();
-                    vm.set(new ExitView(vm, false, this.gameController));
+                    vm.set(new ExitView(vm, false));
                     gameController.clearPlayers();
                 }
             }
@@ -212,7 +212,7 @@ public class GameView extends View{
                 Rectangle exit_gameBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2),
                         (float) FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
                 if(exit_gameBounds.contains(pos.x,pos.y)){
-                    vm.set(new ExitView(vm,true, this.gameController));
+                    vm.set(new ExitView(vm,true));
                     gameController.clearPlayers();
                 }
         }}
@@ -239,7 +239,7 @@ public class GameView extends View{
             boolean won = gameController.getWinner();
             //TODO: mulig ikke denne controlelren
             gameController.deleteGame(); //slette spill når det er ferdig
-            vm.set(new ExitView(vm, won, this.gameController));
+            vm.set(new ExitView(vm, won));
         }
         //If waiting we check if the opponent has made a move so we can give give feedback
         if (waiting){

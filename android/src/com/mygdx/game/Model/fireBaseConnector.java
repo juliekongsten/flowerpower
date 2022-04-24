@@ -444,9 +444,6 @@ public class fireBaseConnector implements FireBaseInterface {
     }*/
 
 
-    private void setPlayersReady(boolean ready){
-        this.playersReady=ready;
-    }
 
     public List<String> getPlayers(int gameID){
         System.out.println("this is the size"+players.size());
