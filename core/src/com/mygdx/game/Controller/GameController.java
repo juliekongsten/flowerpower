@@ -1,9 +1,13 @@
 package com.mygdx.game.Controller;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.mygdx.game.FlowerPowerGame;
+import com.mygdx.game.Model.Button;
 import com.mygdx.game.Model.Player;
 import com.mygdx.game.Model.Game;
 
 import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Square;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +19,7 @@ public class GameController {
     private int GID;
     private boolean gameStarted;
     private Player player;
+    private Button button;
 
     //har per nå laget kun en liste, kan heller ha liste i liste for å lettere navigere seg opp/ned/sidelengs men har ikke det nå
     private List<Square> opBoard = new ArrayList<>();
@@ -31,6 +36,7 @@ public class GameController {
     private boolean gameOver = false;
     private boolean won = false;
     private boolean forfeited = false;
+
 
     public GameController(){
         //tenker her at vi kan ha satt tall for de forskjellige vanskelighetsgradene
@@ -54,6 +60,7 @@ public class GameController {
         gameStarted = true;
 
     }
+
 
     public void createGame(){
         Game game = new Game();
@@ -94,6 +101,7 @@ public class GameController {
         return square.hasFlower();
 
     }
+
 
     public void setMyBeds(List<Bed> beds){
         if (beds == null){
@@ -337,4 +345,8 @@ public class GameController {
         return start;
 
     }
+
+
+
+
 }

@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.ButtonController;
 import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Button;
@@ -35,6 +36,7 @@ public class LoginView extends View {
     private final ImageButton backButton;
     private Pixmap cursorColor;
     private PlayerController playerController;
+    private ButtonController buttonController;
 
     boolean validCredentials = true;
     boolean otherMistake = false;
@@ -42,6 +44,7 @@ public class LoginView extends View {
 
     protected LoginView(ViewManager vm) {
         super(vm);
+        this.buttonController = new ButtonController();
         logo = new Texture("logo.png");
         login = new Texture("login.png");
         enter_username = new Texture("enter_email.png");
@@ -69,8 +72,7 @@ public class LoginView extends View {
         setPasswordField(textFieldStyle);
         stage.addActor(password);
 
-        Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
-        backButton = back.getButton();
+        backButton = buttonController.getBackButton();
         setBackButtonEvent();
         stage.addActor(backButton);
 

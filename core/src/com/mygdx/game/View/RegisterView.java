@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.ButtonController;
 import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.FlowerPowerGame;
@@ -48,13 +49,13 @@ public class RegisterView extends View {
     private boolean newEmail = true;
     private boolean otherMistake = false;
     private PlayerController playerController;
-    private GameController gameController; //not used
+    private ButtonController buttonController; //not used
 
 
 
     public RegisterView(ViewManager vm) {
         super(vm);
-        //gameController = new GameController(); //never used
+        this.buttonController = new ButtonController();
         logo = new Texture("logo.png");
         register = new Texture("register.png");
         enter_username = new Texture("enter_email.png");
@@ -89,8 +90,7 @@ public class RegisterView extends View {
         setPasswordCheckField(textFieldStyle);
         stage.addActor(passwordCheck);
 
-        Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
-        backButton = back.getButton();
+        backButton = buttonController.getBackButton();
         setBackButtonEvent();
         stage.addActor(backButton);
     }

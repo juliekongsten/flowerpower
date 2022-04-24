@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.ButtonController;
 import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Button;
@@ -21,6 +22,7 @@ public class MenuView extends View {
     private final Texture join;
     private final Texture create;
     private GameController gameController;
+    private ButtonController buttonController;
 
     private final Stage stage;
     private final ImageButton playbookButton;
@@ -30,6 +32,7 @@ public class MenuView extends View {
     protected MenuView(ViewManager vm) {
         super(vm);
         this.gameController = new GameController();
+        this.buttonController = new ButtonController();
         vm.setController(gameController);
         logo = new Texture("logo.png");
         join = new Texture("join.png");
@@ -39,15 +42,15 @@ public class MenuView extends View {
         Gdx.input.setInputProcessor(stage);
 
 
-        Button playbook = new Button("playbook.png", 10, 15);
-        playbookButton = playbook.getButton();
+        playbookButton = buttonController.getPlaybookButton();
         setPlaybookButtonEvent();
+        highscoreButton = buttonController.getHighscoreButton();
+        setHighscoreButtonEvent();
+
         stage.addActor(playbookButton);
 
-        Button highscore = new Button("Highscore.png", FlowerPowerGame.WIDTH - 125, 15);
-        highscoreButton = highscore.getButton();
-        setHighscoreButtonEvent();
         stage.addActor(highscoreButton);
+
     }
 
     private void setPlaybookButtonEvent() {

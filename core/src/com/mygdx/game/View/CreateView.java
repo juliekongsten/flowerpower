@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.ButtonController;
 import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Button;
@@ -24,6 +25,7 @@ public class CreateView extends View {
     private final Texture waitText;
     private String gamePin;
     private GameController gameController;
+    private ButtonController buttonController;
     private boolean start;
 
     private final Stage stage;
@@ -35,6 +37,7 @@ public class CreateView extends View {
     protected CreateView(ViewManager vm, String gamePin) {
         super(vm);
         gameController = vm.getController();
+        this.buttonController = new ButtonController();
         logo = new Texture("logo.png");
         pinText = new Texture("create_pin.png");
         waitText = new Texture("create_wait.png");
@@ -43,6 +46,17 @@ public class CreateView extends View {
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
+
+        playbookButton = buttonController.getPlaybookButton();
+        setPlaybookButtonEvent();
+        stage.addActor(playbookButton);
+        highscoreButton = buttonController.getHighscoreButton();
+        setHighscoreButtonEvent();
+        stage.addActor(highscoreButton);
+        backButton = buttonController.getBackButton();
+        setBackButtonEvent();
+        stage.addActor(backButton);
+        /*
 
         Button playbook = new Button("playbook.png", 10, 15);
         playbookButton = playbook.getButton();
@@ -57,7 +71,7 @@ public class CreateView extends View {
         Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
         backButton = back.getButton();
         setBackButtonEvent();
-        stage.addActor(backButton);
+        stage.addActor(backButton);*/
     }
 
     private void setPlaybookButtonEvent() {
