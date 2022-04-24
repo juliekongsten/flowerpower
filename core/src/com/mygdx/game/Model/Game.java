@@ -193,9 +193,5 @@ public class Game {
         _FBIC.clearPlayers();
     }
 
-        public void clearPlayers(){
-            _FBIC.clearPlayers();
-        }
-
     }
 

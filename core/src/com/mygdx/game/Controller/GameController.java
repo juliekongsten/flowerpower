@@ -320,10 +320,6 @@ public class GameController {
         game.clearPlayers();
     }
 
-    public void clearPlayers(){
-        game.clearPlayers();
-    }
-
 
     public boolean isMyTurn(){
         boolean myTurn = this.game.isMyTurn();
