@@ -11,9 +11,11 @@ public class ButtonController {
     private Button back;
     private Button playbook;
     private Button highscore;
+    private Button logOut;
     private final ImageButton highscoreButton;
     private final ImageButton playbookButton;
     private final ImageButton backButton;
+    private final ImageButton logOutButton;
 
 
     public ButtonController(){
@@ -23,6 +25,8 @@ public class ButtonController {
         this.playbookButton = playbook.getButton();;
         this.highscore = new Button("Highscore.png", FlowerPowerGame.WIDTH - 125, 15);
         this.highscoreButton = highscore.getButton();
+        this.logOut = new Button("log_out.png", FlowerPowerGame.WIDTH - 125, 5);
+        this.logOutButton = logOut.getButton();
     }
 
     /**
@@ -49,5 +53,12 @@ public class ButtonController {
      */
     public ImageButton getBackButton(){
         return this.backButton;
+    }
+    /**
+     * Getting the button for logging out
+     * @return LogOutButton
+     */
+    public ImageButton getLogOutButton(){
+        return this.logOutButton;
     }
 }
