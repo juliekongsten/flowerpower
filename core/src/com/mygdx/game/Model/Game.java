@@ -197,42 +197,41 @@ public class Game {
     public Square getHit() {
         Map<String, Object> hit;
         hit = _FBIC.getHit(this.GID);
-        while (hit == null) {
-            System.out.println("no hits yet");
-            hit = _FBIC.getHit(this.GID);
-        }
-        int x = 0;
-        int y = 0;
-        int size = 0;
-        boolean flower =false;
-        System.out.println("DETTE ER MOVESENE VERDI: " + hit);
-        String formatString = hit.toString().replace("{", "").replace("}", "");
-        String[] values = formatString.split(",");
-        for (int i = 0; i < values.length; i++) {
-            System.out.println("MOVSENE verdien en og en: " + values[i]);
-            if (values[i].contains("pos_x")) {
-                String[] pos_x = values[i].split("=");
-                x = Integer.parseInt(pos_x[1]);
+        if(hit!=null) {
+            int x = 0;
+            int y = 0;
+            int size = 0;
+            boolean flower = false;
+            System.out.println("DETTE ER MOVESENE VERDI: " + hit);
+            String formatString = hit.toString().replace("{", "").replace("}", "");
+            String[] values = formatString.split(",");
+            for (int i = 0; i < values.length; i++) {
+                System.out.println("MOVSENE verdien en og en: " + values[i]);
+                if (values[i].contains("pos_x")) {
+                    String[] pos_x = values[i].split("=");
+                    x = Integer.parseInt(pos_x[1]);
+                }
+                if (values[i].contains("pos_y")) {
+                    String[] pos_y = values[i].split("=");
+                    y = Integer.parseInt(pos_y[1]);
+                    y -= distance; //nå lik koordinatet på vårt eget board
+                }
+                if (values[i].contains("Size")) {
+                    String[] sizeString = values[i].split("=");
+                    size = Integer.parseInt(sizeString[1]);
+                }
+                if (values[i].contains("Flower")) {
+                    String[] sizeString = values[i].split("=");
+                    flower = Boolean.parseBoolean(sizeString[1]);
+                }
             }
-            if (values[i].contains("pos_y")) {
-                String[] pos_y = values[i].split("=");
-                y = Integer.parseInt(pos_y[1]);
-                y-=distance; //nå lik koordinatet på vårt eget board
-            }
-            if (values[i].contains("Size")) {
-                String[] sizeString = values[i].split("=");
-                size = Integer.parseInt(sizeString[1]);
-            }
-            if (values[i].contains("Flower")) {
-                String[] sizeString = values[i].split("=");
-                flower = Boolean.parseBoolean(sizeString[1]);
-            }
-        }
 
-        Square square = new Square(x, y, size);
-        square.setHasFlower(flower);
-        square.setHit(true);
-        return square; //vet den er i et av mine bed
+            Square square = new Square(x, y, size);
+            square.setHasFlower(flower);
+            square.setHit(true);
+            return square;
+        }
+        return null; //vet den er i et av mine bed
     }
 }
 
