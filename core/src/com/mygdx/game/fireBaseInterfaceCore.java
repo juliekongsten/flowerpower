@@ -84,6 +84,11 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     }
 
     @Override
+    public void clearPlayers() {
+
+    }
+
+    @Override
     public void setMove(Square square, int GID) {
 
     }
