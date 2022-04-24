@@ -46,5 +46,12 @@ public interface FireBaseInterface {
 
     void leaveGame(int gid);
 
+    void forfeitedGame(int gid);
+
+    boolean getOpHasForfeited();
+
+    void OpHasForfeited(int gid);
+
     void clearPlayers();
+
 }

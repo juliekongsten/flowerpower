@@ -150,7 +150,7 @@ public class GameView extends View{
 
             //If player is not waiting on opponents move we check if player presses any of opponents
             //squares and act accordingly
-            if (!waiting){
+            if (!waiting && !opForfeitet){
 
                 for (Square square : opBoard){
                     if (square.getBounds().contains(pos.x,pos.y) && !squareList.contains(square)){
@@ -201,8 +201,9 @@ public class GameView extends View{
                 if(yesBounds.contains(pos.x,pos.y)){
                     vm.set(new ExitView(vm, false, this.gameController));
                     //delete game and notify op
-                    gameController.myForfeitet(true);
-                    gameController.deleteGame();
+                    gameController.myForfeited();
+                    vm.set(new ExitView(vm, false, this.gameController));
+                    gameController.clearPlayers();
                 }
             }
                    
@@ -355,7 +356,10 @@ public class GameView extends View{
         //Draws the background of "opponents board"
         sb.draw(op_board, board_x, op_board_y);
 
-        waiting = !gameController.isMyTurn();
+        if (waiting && !opForfeitet){
+            waiting = !gameController.isMyTurn();
+        }
+
         //Draws message (your turn/waiting) in the pool
         if (!waiting){
             sb.draw(my_turn, my_turn_x, my_turn_y);

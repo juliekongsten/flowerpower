@@ -115,6 +115,9 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     @Override
     public ArrayList<Square> getOpMoves(int GID){return null; }
 
+    @Override
+    public void forfeitedGame(int gamePin) {};
+
     /**@Override
     public void writeUserDataToDb(Player player) {
 

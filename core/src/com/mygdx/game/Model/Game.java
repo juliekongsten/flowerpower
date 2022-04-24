@@ -137,36 +137,46 @@ public class Game {
         /**
          * if a player forfeits a game, the game should be deleted and the opponent should get notified
          */
-        public void deleteGame () {
-            //notify the other user too!
-            _FBIC.leaveGame(GID);
+    public void deleteGame () {
+        //notify the other user too!
+        _FBIC.leaveGame(GID);
 
+    }
+
+    public boolean hasForfeited(){
+        _FBIC.OpHasForfeited(GID);
+        return _FBIC.getOpHasForfeited();
+    }
+
+    public void excited(){
+        _FBIC.forfeitedGame(GID);
+    }
+
+
+
+    public Map<String, Object> retrievePlacedBeds () {
+        return _FBIC.retrieveBeds(GID);
+    }
+
+    public boolean isMyTurn () {
+        boolean myTurn = this._FBIC.isMyTurn(this.GID);
+
+        return myTurn;
+    }
+
+    public void setTurnToOtherPlayer () {
+        this._FBIC.setPlayerReady(this.GID);
+    }
+
+    public boolean checkForGameStart() {
+        List<String> players = _FBIC.getPlayers(this.GID);
+
+        if (players.size() == 2) {
+            return true;
+        } else {
+            return false;
         }
-
-
-        public Map<String, Object> retrievePlacedBeds () {
-            return _FBIC.retrieveBeds(GID);
-        }
-
-        public boolean isMyTurn () {
-            boolean myTurn = this._FBIC.isMyTurn(this.GID);
-
-            return myTurn;
-        }
-
-        public void setTurnToOtherPlayer () {
-            this._FBIC.setPlayerReady(this.GID);
-        }
-
-        public boolean checkForGameStart() {
-            List<String> players = _FBIC.getPlayers(this.GID);
-
-            if (players.size() == 2) {
-                return true;
-            } else {
-                return false;
-            }
-        }
+    }
 
         public void clearPlayers(){
             _FBIC.clearPlayers();
