@@ -22,6 +22,7 @@ import java.util.List;
 
 public class PlaceBedsView extends View{
     private boolean isReady = false; //if the player is ready
+    private boolean bothReady;
 
     private final Texture pool;
     private final Texture ready;
@@ -282,6 +283,7 @@ public class PlaceBedsView extends View{
      * Checks if the other player is ready and sends player to gameview if both players are ready
      * @param sb
      */
+    /*
     private void checkOtherPlayer(SpriteBatch sb){
         boolean opReady = gameController.getPlayersReady();
         System.out.println("In check other player");
@@ -299,6 +301,7 @@ public class PlaceBedsView extends View{
         }
 
     }
+     */
 
     @Override
     public void render(SpriteBatch sb) {
@@ -334,20 +337,33 @@ public class PlaceBedsView extends View{
         }
         else{
             sb.draw(waiting_black,0,0);
-            sb.draw(sure,FlowerPowerGame.WIDTH/2-sure.getWidth()/2,FlowerPowerGame.HEIGHT/2);
-            sb.draw(no, FlowerPowerGame.WIDTH/2-no.getWidth()-5,FlowerPowerGame.HEIGHT/2-100);
-            sb.draw(yes,FlowerPowerGame.WIDTH/2+yes.getWidth()/8,FlowerPowerGame.HEIGHT/2 -100);
+            sb.draw(sure,(float) (FlowerPowerGame.WIDTH/2-sure.getWidth()/2),
+                    (float) FlowerPowerGame.HEIGHT/2);
+            sb.draw(no, (float) (FlowerPowerGame.WIDTH/2-no.getWidth()-5),
+                    (float) FlowerPowerGame.HEIGHT/2-100);
+            sb.draw(yes,(float) (FlowerPowerGame.WIDTH/2+yes.getWidth()/8),
+                    (float) FlowerPowerGame.HEIGHT/2 -100);
         }
         //Checks if the opponent exited the game
         opponent_exited = gameController.getOpExited();
         if(opponent_exited){
             sb.draw(waiting_black,0,0);
-            sb.draw(opponent_exited_text,FlowerPowerGame.WIDTH/2-opponent_exited_text.getWidth()/2,FlowerPowerGame.HEIGHT-130); //vil ikke tegnes
-            sb.draw(go_to_menu,FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2,FlowerPowerGame.HEIGHT/2+120);
+            sb.draw(opponent_exited_text, (float)(FlowerPowerGame.WIDTH/2-opponent_exited_text.getWidth()/2),
+                    FlowerPowerGame.HEIGHT-130); //vil ikke tegnes
+            sb.draw(go_to_menu,(float) (FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2),
+                    (float) FlowerPowerGame.HEIGHT/2+120);
         }
-        if(isReady){
+        this.bothReady = gameController.getPlayersReady();
+        if(isReady && bothReady){
             System.out.println("inside isREady");
-            checkOtherPlayer(sb);
+            gameController.setMyBeds(beds);
+            vm.set(new GameView(vm, gameController));
+            //checkOtherPlayer(sb);
+        }
+        if (isReady && !bothReady) {
+            sb.draw(waiting_black, 0, 0);
+            sb.draw(waiting_text, (float) (FlowerPowerGame.WIDTH/2-waiting_text.getWidth()/2),
+                    (float) FlowerPowerGame.HEIGHT/2);
         }
         sb.end();
         stage.act(Gdx.graphics.getDeltaTime());
