@@ -37,10 +37,10 @@ public class ExitView extends View{
 
 
 
-    protected ExitView(ViewManager vm, boolean won, GameController gameController) {
+    protected ExitView(ViewManager vm, boolean won) {
         super(vm);
         this.playerController = new PlayerController();
-        this.gameController = gameController;
+        this.gameController = vm.getController();
         this.buttonController = new ButtonController();
         this.logo = new Texture("small_logo.png");
         this.gameOver = new Texture("game_over.png");
@@ -90,11 +90,7 @@ public class ExitView extends View{
             if(to_startBounds.contains(pos.x,pos.y)){
                 vm.set(new MenuView(vm));
             }
-            /*if(log_outBounds.contains(pos.x, pos.y)){
-                //TODO log out and exit the application
-                playerController.logOut();
-                vm.set(new StartView(vm));
-            }*/
+
         }
 
 
