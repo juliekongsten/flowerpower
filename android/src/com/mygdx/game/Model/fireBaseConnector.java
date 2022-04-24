@@ -233,6 +233,7 @@ public class fireBaseConnector implements FireBaseInterface {
         return this.isDone;
     }
 
+
     /**
      *
      *
@@ -494,27 +495,6 @@ public class fireBaseConnector implements FireBaseInterface {
         this.players = new ArrayList<>();
     }
 
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            System.out.println("The read failed: " + databaseError.getCode());
-            isDone=true;
-        }
-    });*/
-        //mDatabase.child("users").child(userId).get();
-        //bytter verdi til den andre spilleren i turn
-        //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
-        while(!isDone){
-            //waiting
-            System.out.println("Dont delete me");
-        }
-        return players;
-    }
-
-    public List<Boolean> getPlayersReady(int GID) {
-        isDone=false;
-        System.out.println("Ready start FBIC: "+playersReady);
-
-
     public void OpHasForfeited(int gamePin){
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gamePin+"/Players/");
@@ -592,9 +572,6 @@ public class fireBaseConnector implements FireBaseInterface {
         System.out.println("LAST LIST:" + this.playersReadyList);
         return this.playersReadyList;
     }
-
-
-
 
 
     public void setTurnToOtherPlayer(int GID){
@@ -876,11 +853,6 @@ public class fireBaseConnector implements FireBaseInterface {
     }
     public FirebaseAuth getAuth(){
         return this.mAuth;
-    }
-
-    public void clearPlayers(){
-        System.out.println("clearing");
-        this.players = new ArrayList<>();
     }
 
 }
