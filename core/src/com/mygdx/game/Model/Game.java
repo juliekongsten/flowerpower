@@ -140,6 +140,7 @@ public class Game {
          */
     public void deleteGame () {
         //notify the other user too!
+        System.out.println("LEAVING GAME DILDO");
         _FBIC.leaveGame(GID);
 
     }
@@ -159,24 +160,37 @@ public class Game {
         return _FBIC.retrieveBeds(GID);
     }
 
-    public boolean isMyTurn () {
-        boolean myTurn = this._FBIC.isMyTurn(this.GID);
-
+    public boolean isMyTurn(){
+        boolean myTurn = false;
+        if (getPlayersReady()) {
+            myTurn = this._FBIC.isMyTurn(this.GID);
+        }
         return myTurn;
     }
 
-    public void setTurnToOtherPlayer () {
-        this._FBIC.setPlayerReady(this.GID);
+    public void setTurnToOtherPlayer(){
+        System.out.println("setTurnToOtherPlayer in game");
+        this._FBIC.setTurnToOtherPlayer(this.GID);
     }
 
-    public boolean checkForGameStart() {
-        List<String> players = _FBIC.getPlayers(this.GID);
+    public boolean checkForGameStart(){
+        List<String> players =_FBIC.getPlayers(this.GID); //returnerer 2 selvom det kun er 1 i db
+        System.out.println("NATALIA DILDO: " + GID);
+        System.out.println("Størrelse dildo: " + players.size());
+        System.out.println("Liste dildo: " + players);
 
-        if (players.size() == 2) {
-            return true;
-        } else {
+        if (players.size() == 0) {
             return false;
+        } else if (players.size() == 1) {
+            return false;
+        } else if (players.size() == 2) {
+            return true;
         }
+        return false;
+    }
+
+    public void clearPlayers(){
+        _FBIC.clearPlayers();
     }
 
         public void clearPlayers(){

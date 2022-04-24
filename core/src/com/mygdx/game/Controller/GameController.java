@@ -30,7 +30,6 @@ public class GameController {
 
     private boolean gameOver = false;
     private boolean won = false;
-    private boolean forfeited = false;
 
     public GameController(){
         //tenker her at vi kan ha satt tall for de forskjellige vanskelighetsgradene
@@ -44,7 +43,6 @@ public class GameController {
 
         setStartBoards();
         setMyBeds(null);
-
 
     }
     public void joinGame(int GID) {
@@ -93,7 +91,6 @@ public class GameController {
         game.setMove(square);
         square.setHit(true);
         return square.hasFlower();
-
     }
 
     public void setMyBeds(List<Bed> beds){
@@ -101,9 +98,10 @@ public class GameController {
             setStartBeds();
         } else {
             myBeds = beds;
-            if (gameStarted) {
+            /*if (gameStarted) {
                 game.storePlacedBeds(myBeds);
-            }
+            }*/
+            game.storePlacedBeds(myBeds);
             for (Square mySquare : myBoard){
                 if (isSquareInBed(mySquare,myBeds)){
                     mySquare.setHasFlower(true);
@@ -299,23 +297,26 @@ public class GameController {
         return gameOver;
     }
 
-
     public void myForfeited() {
         game.excited();
     }
-
 
     /**
      * Returns if the opponent has forfeited, (pressed on "go back to menu") in GameView
      * @return
      */
     public boolean getOpForfeited(){
-        return game.hasForfeited();
+       return game.hasForfeited();
     }
 
 
     public void deleteGame() {
+        System.out.println("deleting");
         game.deleteGame();
+        game.clearPlayers();
+    }
+
+    public void clearPlayers(){
         game.clearPlayers();
     }
 
@@ -331,6 +332,7 @@ public class GameController {
     }
 
     public void setTurnToOtherPlayer(){
+        System.out.println("setTurnToOtherPlayer in controller");
         this.game.setTurnToOtherPlayer();
     }
 

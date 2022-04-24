@@ -38,6 +38,8 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     public void signIn(String username, String password) {
 
     }
+    @Override
+    public void setTurnToOtherPlayer(int GID){}
 
     @Override
     public String getUsername() {
@@ -106,6 +108,18 @@ return null;
     }
 
     @Override
+    public void forfeitedGame(int gid) {
+
+    }
+
+    @Override
+    public boolean getOpHasForfeited() {
+        return false;
+    }
+
+    @Override
+    public void OpHasForfeited(int gid) {
+
     public void clearPlayers() {
 
     }

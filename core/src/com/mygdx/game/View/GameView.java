@@ -151,7 +151,6 @@ public class GameView extends View{
             //If player is not waiting on opponents move we check if player presses any of opponents
             //squares and act accordingly
             if (!waiting && !opForfeitet){
-
                 for (Square square : opBoard){
                     if (square.getBounds().contains(pos.x,pos.y) && !squareList.contains(square)){
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
@@ -175,6 +174,7 @@ public class GameView extends View{
                             miss_x = square.getBounds().x + 30;
                             miss_y = square.getBounds().y;
                             //When you miss it's opponents turn
+                            System.out.println("Miss!");
                             waiting = true;
                             gameController.setTurnToOtherPlayer();
 
@@ -202,7 +202,6 @@ public class GameView extends View{
                     gameController.myForfeited();
                     vm.set(new ExitView(vm, false, this.gameController));
                     gameController.clearPlayers();
-
                 }
             }
                    
@@ -236,7 +235,7 @@ public class GameView extends View{
         if (gameOver){
             boolean won = gameController.getWinner();
             //TODO: mulig ikke denne controlelren
-            gameController.deleteGame();
+            gameController.deleteGame(); //slette spill når det er ferdig
             vm.set(new ExitView(vm, won, this.gameController));
         }
         //If waiting we check if the opponent has made a move so we can give give feedback

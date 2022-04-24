@@ -60,6 +60,7 @@ public class PlaceBedsView extends View{
     private boolean overlappingBeds = false;
     private boolean bedsOutsideBoard = false;
     private boolean goBack;
+    private boolean bothReady;
     private boolean opponent_exited = false; //If the opponent exited the game before it started.
 
     private final Stage stage;
@@ -183,7 +184,6 @@ public class PlaceBedsView extends View{
                     gameController.myForfeited();
                     vm.set(new MenuView(vm));
                     gameController.clearPlayers();
-
                 }
             }
             Rectangle go_to_menuBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-go_to_menu.getWidth()/2),
@@ -283,6 +283,11 @@ public class PlaceBedsView extends View{
      * Checks if the other player is ready and sends player to gameview if both players are ready
      * @param sb
      */
+    private boolean checkOtherPlayer(SpriteBatch sb){
+        return  gameController.getPlayersReady();
+        //denne sjekker jo begge to?
+
+    }
 
     @Override
     public void render(SpriteBatch sb) {
@@ -339,10 +344,20 @@ public class PlaceBedsView extends View{
             gameController.setMyBeds(beds);
             vm.set(new GameView(vm, gameController));
         }
-        if (isReady && !bothReady) {
-            sb.draw(waiting_black, 0, 0);
-            sb.draw(waiting_text, (float) (FlowerPowerGame.WIDTH/2-waiting_text.getWidth()/2),
-                    (float) FlowerPowerGame.HEIGHT/2);
+        this.bothReady = gameController.getPlayersReady();
+        if(isReady && bothReady){
+            System.out.println("inside isREady");
+            System.out.println("In check other player");
+            System.out.println("opready<3");
+            gameController.setMyBeds(beds);
+            System.out.println("after sendmybeds");
+            vm.set(new GameView(vm, gameController));
+            System.out.println("after vm set");
+
+        }
+        if (isReady && !bothReady){
+            sb.draw(waiting_black,0,0);
+            sb.draw(waiting_text,FlowerPowerGame.WIDTH/2-waiting_text.getWidth()/2,FlowerPowerGame.HEIGHT/2);
         }
         sb.end();
         stage.act(Gdx.graphics.getDeltaTime());

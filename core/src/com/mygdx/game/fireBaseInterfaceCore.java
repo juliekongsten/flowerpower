@@ -85,6 +85,8 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     }
 
     @Override
+    public void forfeitedGame(int gid) {}
+
     public void clearPlayers() {
 
     }
@@ -95,6 +97,20 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     }
 
     @Override
+    public boolean getOpHasForfeited() {
+        return false;
+    }
+
+    @Override
+    public void OpHasForfeited(int gamePin){
+
+    }
+
+    @Override
+    public void clearPlayers() {
+
+    }
+
     public ArrayList<Square> getMoves(int GID) {
     return null;
     }
@@ -134,6 +150,9 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public void writeUserDataToDb(Player player) {
 
     }**/
+
+    @Override
+    public void setTurnToOtherPlayer(int GID){}
 
 
 }

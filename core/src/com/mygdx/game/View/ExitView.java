@@ -52,11 +52,13 @@ public class ExitView extends View{
             Rectangle replayBounds = new Rectangle(FlowerPowerGame.WIDTH/2-replay.getWidth()-10,80,replay.getWidth(),replay.getHeight());
             Rectangle to_startBounds = new Rectangle(FlowerPowerGame.WIDTH/2+to_start.getWidth()/10,80,to_start.getWidth(),to_start.getHeight());
             Rectangle log_outBounds = new Rectangle(FlowerPowerGame.WIDTH-log_out.getWidth()-5,5, log_out.getWidth(),log_out.getHeight());
+            /*
             if(replayBounds.contains(pos.x, pos.y)){
                 gameController.clear();
                 //TODO: Handle reset of beds?
                 vm.set(new PlaceBedsView(vm)); //assuming that replay means forwarding to new PlaceBedsView
             }
+             */
             if(to_startBounds.contains(pos.x,pos.y)){
                 vm.set(new MenuView(vm));
             }

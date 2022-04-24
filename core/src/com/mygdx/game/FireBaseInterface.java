@@ -28,12 +28,14 @@ public interface FireBaseInterface {
 
     boolean getIsDone();
     void setPlayerReady(int GID);
-    List <Boolean> getPlayersReady(int GID);
+    List<Boolean> getPlayersReady(int GID);
 
     boolean isMyTurn(int gameID);
 
     List<String> getPlayers(int GID);
     List<Integer> getGameIDs();
+
+    void setTurnToOtherPlayer(int GID);
 
     //void writeUserDataToDb(Player player);
     void createGame(int GID);
@@ -53,5 +55,4 @@ public interface FireBaseInterface {
     void OpHasForfeited(int gid);
 
     void clearPlayers();
-
 }
