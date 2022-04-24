@@ -88,6 +88,7 @@ public class GameController {
         if (!opBoard.contains(square)){
             return false;
         }
+        game.setMove(square);
         square.setHit(true);
         return square.hasFlower();
     }
@@ -208,6 +209,15 @@ public class GameController {
     public void sendMyBeds(List<Bed> beds){
 
     }
+
+    public ArrayList<Square> getMyMoves(){
+        return this.game.getMyMoves();
+    }
+    public ArrayList<Square> getOpMoves(){
+        return this.game.getOpMoves();
+    }
+
+
 
     /**
      * Moves Opponents bed to the opponent board as the sent beds have myboard coordinates

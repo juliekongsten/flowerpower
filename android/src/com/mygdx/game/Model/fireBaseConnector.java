@@ -41,6 +41,8 @@ public class fireBaseConnector implements FireBaseInterface {
      private String playerTurn;
      private List<String> players = new ArrayList<>();
      private List<Integer> gameIDs;
+     private static int moveCount = 1;
+
      private Map<String, Object> beds;
      private boolean playersReady = true;
      private String UID;
@@ -226,11 +228,6 @@ public class fireBaseConnector implements FireBaseInterface {
 
     }
 
-
-    //TODO: hvordan fikse dette?
-    /*public boolean emailAlreadyInUse(String email){
-        UserRecord userRecord = mAuth.getUserByEmail(email);
-    }*/
 
     public boolean getIsDone(){
         return this.isDone;
@@ -497,6 +494,27 @@ public class fireBaseConnector implements FireBaseInterface {
         this.players = new ArrayList<>();
     }
 
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            System.out.println("The read failed: " + databaseError.getCode());
+            isDone=true;
+        }
+    });*/
+        //mDatabase.child("users").child(userId).get();
+        //bytter verdi til den andre spilleren i turn
+        //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
+        while(!isDone){
+            //waiting
+            System.out.println("Dont delete me");
+        }
+        return players;
+    }
+
+    @Override
+    public boolean getPlayersReady(int GID) {
+        isDone=false;
+        setPlayersReady(true);
+        System.out.println("Ready start FBIC: "+playersReady);
 
 
     public void OpHasForfeited(int gamePin){
@@ -662,19 +680,181 @@ public class fireBaseConnector implements FireBaseInterface {
 
     /**
      * Når en spiller gjør et move må det legges inn under spilleren i databasen, under moves
-     * @param gamePIN
+     * @param GID
      */
-    public void setMove(int gamePIN){
+    public void setMove(Square square, int GID){
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(GID + "/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        DatabaseReference movesRef = userRef.child("/Moves");
 
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("pos_x", square.getX());
+        result.put("pos_y", square.getY());
+        result.put("Flower", square.hasFlower());
+        result.put("Size", square.getSide());
+
+        Map<String, Object> moveValues = result;
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/Move"+moveCount, moveValues);
+        moveCount++;
+        movesRef.updateChildren(childUpdates);
     }
 
     /**
      * Man må kunne hente alle movsene til den andre spilleren
-     * @param gamePIN
+     * @param GID
      * @return List (forslag)
      */
-    public void getMoves(int gamePIN){
+    public ArrayList<Square> getMoves(int GID){
+        // Getting the UID for the opponent
+        isDone = false;
+        ArrayList<Square> squareList = new ArrayList<>();
+        while(!isDone) {
+            DatabaseReference gameRef = database.getReference().child("/Games");
+            DatabaseReference playerRef = gameRef.child(GID + "/Players/");
+            DatabaseReference userRef = playerRef.child(this.getUID());
+            DatabaseReference movesRef = userRef.child("/Moves");
+            movesRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                    if (!(map== null)) {
+                        System.out.println("HER ER MOVSENE: " + map);
+
+                        for (String move : map.keySet()) {
+                            map.get(move);
+                            System.out.println("Dette er square til MOVESENE " + map.get(move));
+                        }
+                        //Trenger vel egt å bare sjekke siste verdi lagt til?
+
+                        for (Object value : map.values()) {
+                            //Default values
+                            int x = 0;
+                            int y = 0;
+                            int size = 0;
+                            System.out.println("DETTE ER MOVESENE VERDI: " + value);
+                            String formatString = value.toString().replace("{", "").replace("}", "");
+                            String[] values = formatString.split(",");
+
+                            for (int i = 0; i < values.length; i++) {
+                                System.out.println("MOVSENE verdien en og en: " + values[i]);
+                                if (values[i].contains("pos_x")) {
+                                    String[] pos_x = values[i].split("=");
+                                    x = Integer.parseInt(pos_x[1]);
+                                }
+                                if (values[i].contains("pos_y")) {
+                                    String[] pos_y = values[i].split("=");
+                                    y = Integer.parseInt(pos_y[1]);
+                                }
+                                if (values[i].contains("Size")) {
+                                    String[] sizeString = values[i].split("=");
+                                    size = Integer.parseInt(sizeString[1]);
+                                }
+
+                            }
+                            Square square = new Square(x, y, size);
+                            squareList.add(square);
+                            // DE BLIR PRINTET SLIK: DETTE ER MOVESENE VERDI: {pos_y=10, Flower=false, pos_x=10}
+                            //TODO: sjekke om det er et bed hos meg
+                        }
+                    }
+                    System.out.println("MOVSENE SIN LIST: " + squareList);
+                    isDone = true;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                    isDone = true;
+                }
+            });
+            }
+        return squareList;
     }
+
+    /**
+     * Method for getting the opponents moves
+     * @param GID game id
+     * @return list of square from opponent
+     */
+
+    public ArrayList<Square> getOpMoves(int GID){
+        // Getting the UID for the opponent
+        isDone = false;
+        ArrayList<Square> squareList = new ArrayList<>();
+        List<String> players = this.getPlayers(GID);
+        String opUID = "";
+        for (int i =0; i < players.size(); i++){
+            if(!players.get(i).equals(getUID())){
+                opUID = players.get(i);
+            }
+        }
+        System.out.println("opUid: "+ opUID);
+        while(!isDone) {
+            DatabaseReference gameRef = database.getReference().child("/Games");
+            DatabaseReference playerRef = gameRef.child(GID + "/Players/");
+            DatabaseReference userRef = playerRef.child(opUID);
+            DatabaseReference movesRef = userRef.child("/Moves");
+            movesRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                    if (!(map== null)) {
+                        System.out.println("HER ER MOVSENE: " + map);
+
+                        for (String move : map.keySet()) {
+                            map.get(move);
+                            System.out.println("Dette er square til MOVESENE " + map.get(move));
+                        }
+                        //Trenger vel egt å bare sjekke siste verdi lagt til?
+
+                        for (Object value : map.values()) {
+                            //Default values
+                            int x = 0;
+                            int y = 0;
+                            int size = 0;
+                            System.out.println("DETTE ER MOVESENE VERDI: " + value);
+                            String formatString = value.toString().replace("{", "").replace("}", "");
+                            String[] values = formatString.split(",");
+
+                            for (int i = 0; i < values.length; i++) {
+                                System.out.println("MOVSENE verdien en og en: " + values[i]);
+                                if (values[i].contains("pos_x")) {
+                                    String[] pos_x = values[i].split("=");
+                                    x = Integer.parseInt(pos_x[1]);
+                                }
+                                if (values[i].contains("pos_y")) {
+                                    String[] pos_y = values[i].split("=");
+                                    y = Integer.parseInt(pos_y[1]);
+                                }
+                                if (values[i].contains("Size")) {
+                                    String[] sizeString = values[i].split("=");
+                                    size = Integer.parseInt(sizeString[1]);
+                                }
+
+                            }
+                            Square square = new Square(x, y, size);
+                            squareList.add(square);
+                            // DE BLIR PRINTET SLIK: DETTE ER MOVESENE VERDI: {pos_y=10, Flower=false, pos_x=10}
+                            //TODO: sjekke om det er et bed hos meg
+                        }
+                    }
+                    System.out.println("MOVSENE SIN LIST: " + squareList);
+                    isDone = true;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                    isDone = true;
+                }
+            });
+        }
+        return squareList;
+    }
+
+
 
     /**
      * Man må kunne sette (i en liste feks) hvor man har plassert blomsterbedene

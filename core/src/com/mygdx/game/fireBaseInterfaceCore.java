@@ -2,8 +2,14 @@ package com.mygdx.game;
 
 
 import com.mygdx.game.Model.Bed;
+import com.mygdx.game.Model.Player;
+import com.mygdx.game.Model.Square;
+
+import java.util.ArrayList;
 
 import java.util.Map;
+
+import java.util.HashMap;
 
 import java.util.List;
 
@@ -78,7 +84,9 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     }
 
     @Override
-    public void forfeitedGame(int gid) {
+    public void forfeitedGame(int gid) {}
+
+    public void setMove(Square square, int GID) {
 
     }
 
@@ -97,6 +105,11 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     }
 
+    public ArrayList<Square> getMoves(int GID) {
+    return null;
+    }
+
+
     @Override
     public List<String> getPlayers(int gameID){
         return null;
@@ -109,6 +122,8 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     @Override
     public void signOut() {}
+    @Override
+    public ArrayList<Square> getOpMoves(int GID){return null; }
 
     /**@Override
     public void writeUserDataToDb(Player player) {
