@@ -495,12 +495,6 @@ public class fireBaseConnector implements FireBaseInterface {
         this.players = new ArrayList<>();
     }
 
-    public void setPlayersReady(boolean ready){
-        this.playersReady=ready;
-    }
-
-
-
     public void OpHasForfeited(int gamePin){
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gamePin+"/Players/");
