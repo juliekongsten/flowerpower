@@ -45,4 +45,6 @@ public interface FireBaseInterface {
     Map<String, Object> retrieveBeds(int GID);
 
     void leaveGame(int gid);
+
+    void clearPlayers();
 }

@@ -328,7 +328,9 @@ public class GameController {
     }
 
     public void deleteGame() {
+
         game.deleteGame();
+        game.clearPlayers();
     }
 
     public boolean isMyTurn(){

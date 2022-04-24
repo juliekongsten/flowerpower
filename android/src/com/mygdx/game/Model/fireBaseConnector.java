@@ -439,10 +439,6 @@ public class fireBaseConnector implements FireBaseInterface {
         playerRef.updateChildren(updates);
     }
 
-    @Override
-    public boolean getPlayersReady(int GID) {
-        return false;
-    }
 
 
     /**
@@ -547,6 +543,9 @@ public class fireBaseConnector implements FireBaseInterface {
 
     }
 
+    private void setPlayersReady(boolean ready){
+        this.playersReady = ready;
+    }
 
 
     public void setTurnToOtherPlayer(int gameID){
@@ -816,6 +815,11 @@ public class fireBaseConnector implements FireBaseInterface {
     }
     public FirebaseAuth getAuth(){
         return this.mAuth;
+    }
+
+    public void clearPlayers(){
+        System.out.println("clearing");
+        this.players = new ArrayList<>();
     }
 
 }
