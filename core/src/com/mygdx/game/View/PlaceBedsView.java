@@ -167,7 +167,6 @@ public class PlaceBedsView extends View{
             //Checks if replace-button is pressed
             Rectangle replaceBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-replace.getWidth()/2),FlowerPowerGame.HEIGHT-150,replace.getWidth(),replace.getHeight());
             if(replaceBounds.contains(pos.x,pos.y)){
-                System.out.println("REPLACE TOUCHED");
                 overlappingBeds = false;
                 bedsOutsideBoard = false;
             }
@@ -337,7 +336,6 @@ public class PlaceBedsView extends View{
         }
         this.bothReady = gameController.getPlayersReady();
         if(isReady && bothReady){
-            System.out.println("inside isREady");
             gameController.setMyBeds(beds);
             vm.set(new GameView(vm, gameController));
         }
