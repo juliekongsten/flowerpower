@@ -35,6 +35,7 @@ public class GameController {
 
     private boolean gameOver = false;
     private boolean won = false;
+    private Square hitSquare;
 
 
     public GameController(){
@@ -346,6 +347,7 @@ public class GameController {
 
     public void setTurnToOtherPlayer(){
         System.out.println("setTurnToOtherPlayer in controller");
+        this.hitSquare = this.game.getHit();
         this.game.setTurnToOtherPlayer();
     }
 
@@ -356,8 +358,8 @@ public class GameController {
 
     }
 
-    public Square getHit(){
-        return this.game.getHit();
+    public Square getHitSquare(){
+        return this.hitSquare;
 
     }
 
