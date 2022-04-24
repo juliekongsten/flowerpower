@@ -676,6 +676,7 @@ public class fireBaseConnector implements FireBaseInterface {
 
     public Map<String, Object> getHit(int GID){
         isDone = false;
+        hit = new HashMap<>();
         getOpMoveCount(GID);
         List<String> players = this.getPlayers(GID);
         String opUID = "";
@@ -712,7 +713,8 @@ public class fireBaseConnector implements FireBaseInterface {
         while (!isDone){
             System.out.println("getting moves");
         }
-        return this.hit;
+        System.out.println("This is the hit"+hit);
+        return hit;
     }
 
 
