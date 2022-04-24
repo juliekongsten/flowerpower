@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.ButtonController;
+import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Button;
 import com.mygdx.game.Model.Player;
@@ -31,9 +33,13 @@ public class HighscoreView extends View {
     private final Texture score;
     private final Stage stage;
     private final ImageButton backButton;
+    private GameController gameController;
+    private ButtonController buttonController;
 
     protected HighscoreView(ViewManager vm) {
         super(vm);
+        this.gameController = new GameController();
+        this.buttonController = new ButtonController();
         logo = new Texture("logo.png");
         highscore = new Texture("Highscorelist.png");
         email = new Texture("Email.png");
@@ -41,8 +47,7 @@ public class HighscoreView extends View {
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
-        Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
-        backButton = back.getButton();
+        backButton = buttonController.getBackButton();
         setBackButtonEvent();
         stage.addActor(backButton);
     }

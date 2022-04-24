@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.ButtonController;
 import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Bed;
@@ -56,6 +57,7 @@ public class GameView extends View{
     private float miss_y;
 
     private GameController gameController;
+    private ButtonController buttonController;
 
     private float board_x;
     private float my_board_y;
@@ -80,6 +82,7 @@ public class GameView extends View{
         super(vm);
         System.out.println("in gameview");
         this.gameController = vm.getController();
+        this.buttonController = new ButtonController();
         pool = new Texture("pool.png");
         createTextures();
         findStaticCoordinates();
@@ -94,9 +97,9 @@ public class GameView extends View{
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
-        backButton = back.getButton();
+        backButton = buttonController.getBackButton();
         setBackButtonEvent();
+        stage.addActor(backButton);
 
     }
 
@@ -200,7 +203,7 @@ public class GameView extends View{
                 }
                 if(yesBounds.contains(pos.x,pos.y)){
                     gameController.myForfeited();
-                    vm.set(new ExitView(vm, false, this.gameController));
+                    vm.set(new ExitView(vm, false));
                     gameController.clearPlayers();
                 }
             }
@@ -209,7 +212,7 @@ public class GameView extends View{
                 Rectangle exit_gameBounds = new Rectangle((float) (FlowerPowerGame.WIDTH/2-exit_game.getWidth()/2),
                         (float) FlowerPowerGame.HEIGHT/2-100,exit_game.getWidth(),exit_game.getHeight());
                 if(exit_gameBounds.contains(pos.x,pos.y)){
-                    vm.set(new ExitView(vm,true, this.gameController));
+                    vm.set(new ExitView(vm,true));
                     gameController.clearPlayers();
                 }
         }}
@@ -236,7 +239,7 @@ public class GameView extends View{
             boolean won = gameController.getWinner();
             //TODO: mulig ikke denne controlelren
             gameController.deleteGame(); //slette spill når det er ferdig
-            vm.set(new ExitView(vm, won, this.gameController));
+            vm.set(new ExitView(vm, won));
         }
         //If waiting we check if the opponent has made a move so we can give give feedback
         if (waiting){
