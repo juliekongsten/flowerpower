@@ -72,7 +72,7 @@ public class GameView extends View{
     private List<Square> myBoard;
     private List<Bed> myBeds;
     private List<Bed> opBeds;
-    private List<Square> squareList;
+    private List<Square> moveList;
 
     private final Stage stage;
     private final ImageButton backButton;
@@ -91,7 +91,7 @@ public class GameView extends View{
         gameController.receiveOpBeds();
         opBeds = gameController.getOpBeds();
         opBoard = gameController.getOpBoard();
-        squareList = new ArrayList<>();
+        moveList = new ArrayList<>(); // List for my moves on opBoard
         waiting = !gameController.isMyTurn(); //check, stopper?
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
@@ -155,9 +155,9 @@ public class GameView extends View{
             //squares and act accordingly
             if (!waiting && !opForfeitet){
                 for (Square square : opBoard){
-                    if (square.getBounds().contains(pos.x,pos.y) && !squareList.contains(square)){
+                    if (square.getBounds().contains(pos.x,pos.y) && !moveList.contains(square)){
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
-                        squareList.add(square);
+                        moveList.add(square);
                         System.out.println("square: "+square.getBounds());
                         System.out.println("is pressed");
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)

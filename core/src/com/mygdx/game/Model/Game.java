@@ -117,7 +117,7 @@ public class Game {
     public void storePlacedBeds(List<Bed> beds) {
         _FBIC.storeBeds(beds, GID);
     }
-
+/*
     public ArrayList<Square> getMyMoves() {
         System.out.println("Getting opponents moves");
         ArrayList<Square> squareList = _FBIC.getMoves(GID);
@@ -128,7 +128,7 @@ public class Game {
         System.out.println("Getting opponents moves");
         ArrayList<Square> squareList = _FBIC.getOpMoves(GID);
         return squareList;
-    }
+    }*/
 
 
     public void setMove(Square square) {

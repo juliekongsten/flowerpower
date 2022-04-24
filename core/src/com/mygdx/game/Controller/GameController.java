@@ -96,8 +96,10 @@ public class GameController {
             return false;
         }
         game.setMove(square);
+        // isSquareInBed(square, opBeds);
         square.setHit(true);
         return square.hasFlower();
+
     }
 
 
@@ -218,12 +220,12 @@ public class GameController {
 
     }
 
-    public ArrayList<Square> getMyMoves(){
+    /*public ArrayList<Square> getMyMoves(){
         return this.game.getMyMoves();
     }
     public ArrayList<Square> getOpMoves(){
         return this.game.getOpMoves();
-    }
+    }*/
 
 
 

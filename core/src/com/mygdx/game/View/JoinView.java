@@ -46,6 +46,7 @@ public class JoinView extends View {
     protected JoinView(ViewManager vm) {
         super(vm);
         this.buttonController = new ButtonController();
+        this.gameController = vm.getController();
         logo = new Texture("logo.png");
         pinText = new Texture("join_pin.png");
         join = new Texture("join.png");
