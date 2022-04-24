@@ -109,6 +109,7 @@ public class CreateView extends View {
             {
                 //Handle the input event.
                 vm.set(new MenuView(vm));
+                gameController.deleteGame();
                 return true;
             }
         });
@@ -142,8 +143,10 @@ public class CreateView extends View {
         font.setColor(Color.BLACK);
         font.draw(sb, gamePin, (float) FlowerPowerGame.WIDTH/2-40, 280);
         this.start = gameController.checkForGameStart();
+        System.out.println("Start DILDO: " + start);
         if (start){
             vm.set(new PlaceBedsView(vm));
+            System.out.println("Placebedsview DILDO"); //kommer hit selvom det kun er 1 player i db
         }
 
         sb.end();

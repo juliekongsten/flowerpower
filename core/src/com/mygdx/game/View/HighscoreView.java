@@ -59,6 +59,7 @@ public class HighscoreView extends View {
             public boolean handle(Event event)
             {
                 //Handle the input event.
+                //Handle the input event.
                 vm.set(new MenuView(vm));
                 return true;
             }

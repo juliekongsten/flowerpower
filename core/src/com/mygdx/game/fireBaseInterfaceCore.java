@@ -3,9 +3,14 @@ package com.mygdx.game;
 
 import com.mygdx.game.Model.Bed;
 import com.mygdx.game.Model.Player;
+import com.mygdx.game.Model.Square;
+
+import java.util.ArrayList;
+
 import java.util.Map;
 
 import java.util.HashMap;
+
 import java.util.List;
 
 /**
@@ -51,9 +56,10 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public void setPlayerReady(int GID){}
 
     @Override
-    public boolean getPlayersReady(int GID) {
-        return false;
+    public List<Boolean> getPlayersReady(int GID) {
+        return null;
     }
+
 
     @Override
     public boolean isMyTurn(int gameID) {
@@ -79,6 +85,35 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     }
 
     @Override
+    public void forfeitedGame(int gid) {}
+
+
+    @Override
+    public void setMove(Square square, int GID) {
+
+    }
+
+    @Override
+    public boolean getOpHasForfeited() {
+        return false;
+    }
+
+    @Override
+    public void OpHasForfeited(int gamePin){
+
+    }
+
+    @Override
+    public void clearPlayers() {
+
+    }
+
+    public ArrayList<Square> getMoves(int GID) {
+    return null;
+    }
+
+
+    @Override
     public List<String> getPlayers(int gameID){
         return null;
     }
@@ -90,11 +125,18 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     @Override
     public void signOut() {}
+    @Override
+    public ArrayList<Square> getOpMoves(int GID){return null; }
+
+    ;
 
     /**@Override
     public void writeUserDataToDb(Player player) {
 
     }**/
+
+    @Override
+    public void setTurnToOtherPlayer(int GID){}
 
 
 }

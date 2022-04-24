@@ -17,15 +17,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mygdx.game.Model.CustomException;
-
-
 
 
 import static android.content.ContentValues.TAG;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,10 +39,14 @@ public class fireBaseConnector implements FireBaseInterface {
      private Exception exception = null;
      private boolean isDone = false;
      private String playerTurn;
-     private List<String> players;
+     private List<String> players = new ArrayList<>();
      private List<Integer> gameIDs;
+     private static int moveCount = 1;
+
      private Map<String, Object> beds;
      private boolean playersReady = true;
+     private String UID;
+     private List<Boolean> playersReadyList;
 
 
     /**
@@ -55,6 +55,8 @@ public class fireBaseConnector implements FireBaseInterface {
     public fireBaseConnector() {
         database = FirebaseDatabase.getInstance("https://flowerpower-9b405-default-rtdb.europe-west1.firebasedatabase.app");
         mAuth = FirebaseAuth.getInstance();
+        //TODO: Find out if this is okay, and just use this.UID instead of getUID later
+
     }
 
 
@@ -227,14 +229,10 @@ public class fireBaseConnector implements FireBaseInterface {
     }
 
 
-    //TODO: hvordan fikse dette?
-    /*public boolean emailAlreadyInUse(String email){
-        UserRecord userRecord = mAuth.getUserByEmail(email);
-    }*/
-
     public boolean getIsDone(){
         return this.isDone;
     }
+
 
     /**
      *
@@ -249,7 +247,6 @@ public class fireBaseConnector implements FireBaseInterface {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<Integer, Object> map = (Map<Integer, Object>) dataSnapshot.getValue();
-                //System.out.println(map);
                 gameIDs.addAll(map.keySet());
                 isDone=true;
             }
@@ -310,21 +307,17 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference playerRef = gameRef.child(GID + "/Players/");
         DatabaseReference userRef = playerRef.child(opUID);
         DatabaseReference bedsRef = userRef.child("/Beds");
-        bedsRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                    isDone=true;
-                }
-                else {
-                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                    Map<String, Object> map = (Map<String, Object>) task.getResult().getValue();
-                    beds = map;
-                    isDone=true;
-                }
+        bedsRef.get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+                isDone=true;
             }
-
+            else {
+                Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                Map<String, Object> map = (Map<String, Object>) task.getResult().getValue();
+                beds = map;
+                isDone=true;
+            }
         });
         /*bedsRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -360,6 +353,7 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Players/");
         DatabaseReference userRef = playerRef.child(this.getUID());
+        DatabaseReference forfeitedRef = playerRef.child(this.getUID());
 
         Map uidData = new HashMap();
         uidData.put("Username", this.getUsername());
@@ -369,6 +363,10 @@ public class fireBaseConnector implements FireBaseInterface {
         readyData.put(displayName[0],false);
         DatabaseReference readyRef = gameRef.child(GID+"/Ready");
         readyRef.setValue(readyData);
+
+        Map forfeitedGame = new HashMap();
+        forfeitedGame.put("Forfeited", false);
+        forfeitedRef.updateChildren(forfeitedGame);
 
 
 
@@ -408,8 +406,13 @@ public class fireBaseConnector implements FireBaseInterface {
         readyData.put(displayName[0],false);
         DatabaseReference readyRef = gameRef.child(gameID+"/Ready");
         readyRef.updateChildren(readyData);
-        //check user logged in - getID
-        //check gamepin - if the same, get user into the game
+
+        //Added forfeited if the players joins the game
+        DatabaseReference forfeitedRef = playerRef.child(this.getUID());
+        Map forfeitedGame = new HashMap();
+        forfeitedGame.put("Forfeited", false);
+        forfeitedRef.updateChildren(forfeitedGame);
+
         //ready(gameID,displayName[0]);
         //setTurnToOtherPlayer(gameID);
     }
@@ -425,15 +428,120 @@ public class fireBaseConnector implements FireBaseInterface {
         gameRef.child(String.valueOf(gamePIN)).removeValue();
     }
 
+    @Override
+    public void forfeitedGame(int gamePin) {
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gamePin+"/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        DatabaseReference forfeitedRef = userRef.child("/Forfeited");
+        forfeitedRef.setValue(true);
+    }
+
+
+    /*@Override
+    public boolean getPlayersReady(int GID) {
+        return false;
+    }*/
+
+
+    private void setPlayersReady(boolean ready){
+        this.playersReady=ready;
+    }
+
+    public List<String> getPlayers(int gameID){
+        System.out.println("this is the size"+players.size());
+        //only get players from database if the size is less than 2
+        // it will never change after there is 2 players there, so then you just keep it locally
+        if (players.size() < 2) {
+            isDone = false;
+            DatabaseReference gameRef = database.getReference().child("/Games");
+            DatabaseReference playerRef = gameRef.child(gameID + "/Players/");
+            List<String> foundPlayers = new ArrayList<>();
+            playerRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", task.getException());
+                        isDone = true;
+                    } else {
+                        Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                        Map<String, Object> map = (Map<String, Object>) task.getResult().getValue();
+                        System.out.println(map);
+                        /*for (String player : map.keySet()){
+                            if (!players.contains(player)){
+                                players.add(player);
+                            }
+                        }*/
+                        foundPlayers.addAll(map.keySet());
+                        System.out.println("key: " + players);
+                        isDone = true;
+
+                    }
+                }
+
+            });
+            while (!isDone) {
+                //waiting
+                System.out.println("please be done"); //don't remove
+            }
+            this.players=foundPlayers;
+
+        }
+        return this.players;
+    }
+
+    public void clearPlayers(){
+        System.out.println("clearingPlayers");
+        this.players = new ArrayList<>();
+    }
+
+    public void setPlayersReady(boolean ready){
+        this.playersReady=ready;
+    }
+
+
+
+    public void OpHasForfeited(int gamePin){
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(gamePin+"/Players/");
+        List<String> players = getPlayers(gamePin);
+        for (String player : players) {
+            if (!player.equals(this.getUID())){
+                DatabaseReference userRef = playerRef.child(player);
+                DatabaseReference forfeitedRef = userRef.child("/Forfeited");
+                forfeitedRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task.getException());
+                        }
+                        else {
+                            Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                            String value = String.valueOf(task.getResult().getValue());
+                            setOpHasForfeited(value);
+                        }
+                    }
+
+                });
+            }
+        }
+    }
+
+    private boolean Forfeited = false;
+    public void setOpHasForfeited(String forfeited){
+         Forfeited = Boolean.parseBoolean(forfeited);
+    }
+
+    public boolean getOpHasForfeited(){
+        return Forfeited;
+    }
+
+
     /**
      * ready gets called when a user presses ready to say that the game can start
      * @param GID the gamePin ID
      */
-
-
-    @Override
     public void setPlayerReady(int GID){
-        System.out.println("Kommer hit");
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID+"/Ready");
         Map<String, Object> updates = new HashMap<>();
@@ -442,134 +550,61 @@ public class fireBaseConnector implements FireBaseInterface {
         playerRef.updateChildren(updates);
     }
 
-    /*@Override
-    public boolean getPlayersReady(int GID) {
-        return false;
-    }*/
-
-
-    /**
-     * getPlayers gets all the in the game with this gameID
-     * @param gameID
-     * @return List<String> for player UID
-     */
-    //TODO: legge inn før join game så man sjekker at listen er allerede full
-
-    public List<String> getPlayers(int gameID){
+    public List<Boolean> getPlayersReady(int GID) {
         isDone=false;
-        players = new ArrayList<>();
-        DatabaseReference gameRef = database.getReference().child("/Games");
-        DatabaseReference playerRef = gameRef.child(gameID+"/Players/");
-        playerRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                }
-                else {
-                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                    Map<String, Object> map = (Map<String, Object>) task.getResult().getValue();
-                    System.out.println(map);
-                    players.addAll(map.keySet());
-                    System.out.println("key: " + players);
-                    isDone=true;
-                }
-            }
-
-        });
-    /*playerRef.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-            System.out.println(map);
-            players.addAll(map.keySet());
-            System.out.println("key: " + players);
-            isDone=true;
-        }
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            System.out.println("The read failed: " + databaseError.getCode());
-            isDone=true;
-        }
-    });*/
-        //mDatabase.child("users").child(userId).get();
-        //bytter verdi til den andre spilleren i turn
-        //må man ha noe sjekk? er bare to brukere så burde jo fint kunne bare bytte
-        while(!isDone){
-            //waiting
-            System.out.println("Dont delete me");
-        }
-        return players;
-    }
-
-    public void setPlayersReady(boolean ready){
-        this.playersReady=ready;
-    }
-
-    @Override
-    public boolean getPlayersReady(int GID) {
-        isDone=false;
-        setPlayersReady(true);
         System.out.println("Ready start FBIC: "+playersReady);
-
+        playersReadyList = new ArrayList<>();
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference readyRef = gameRef.child(GID+"/Ready/");
-        readyRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
-                System.out.println(map.containsValue(false));
-
-                if (map.containsValue(false)){
-                    System.out.println("Values:");
-                    Collection<Object> values = map.values();
-                    for (Object value: values){
-                        System.out.println(value);
-                    }
-                    setPlayersReady(false);
-                }
-
-                System.out.println("Ready after ondatachange: "+playersReady);
-                isDone=true;
+        readyRef.get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e("firebase", "Error getting data", task.getException());
+                isDone = true;
+            } else {
+                Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                Map<String, Boolean> map = (Map<String, Boolean>) task.getResult().getValue();
+                map.values();
+                System.out.println(map.values());
+                this.playersReadyList.addAll(map.values());
+                System.out.println("NEST SITE: " + playersReady);
+                System.out.println("key: " + players);
+                isDone = true;
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println("The read failed: " + error.getCode());
-                setPlayersReady(false);
-                isDone=true;
-            }
-
-
         });
-
-        while (!isDone){
+        while (!isDone) {
             //waiting
-            System.out.println("waiting"); //don't remove
+            System.out.println("please be done"); //don't remove
         }
-        System.out.println("FBIC playersready: "+this.playersReady);
-        return this.playersReady;
-
-
-
+        System.out.println("LAST LIST:" + this.playersReadyList);
+        return this.playersReadyList;
     }
 
 
-
-    public void setTurnToOtherPlayer(int gameID){
+    public void setTurnToOtherPlayer(int GID){
+        System.out.println("setTurnToOtherPlayer in connector");
         DatabaseReference gameRef = database.getReference().child("/Games");
-        List<String> players = getPlayers(gameID);
+        List<String> players = getPlayers(GID);
         //har en liste med players
         //sjekker hvem som allerede har turn
+        //String turn = getTurn(GID);
+        //System.out.println("Turn in connector: "+turn);
+        //Compare to myself as we KNOW it will the other players turn??
         for (String name : players){
-            if (name != getTurn(gameID)){
+            System.out.println("Name: "+name);
+            String uid = this.getUID();
+            System.out.println("Uid: "+uid);
+            if (!name.equals(uid)){
                 Map turnData = new HashMap();
                 turnData.put("Turn", name);
-                DatabaseReference turnRef = gameRef.child(gameID+"/Turn");
+                System.out.println("Its their turn");
+                DatabaseReference turnRef = gameRef.child(GID+"/Turn");
                 turnRef.setValue(turnData);
-                return;
+                break;
+            } else {
+                System.out.println("Its not their turn");
             }
         }
+        System.out.println("Turn after for loop: "+getTurn(GID));
     }
 
     private void setPlayerTurn(String name){
@@ -583,6 +618,7 @@ public class fireBaseConnector implements FireBaseInterface {
      */
     public String getTurn(int gameID){
         //TODO: Implement check for if this is yooou
+        System.out.println("GAME ID: " + gameID);
         isDone = false;
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(gameID+"/Turn");
@@ -611,7 +647,7 @@ public class fireBaseConnector implements FireBaseInterface {
 
     public boolean isMyTurn(int gameID){
         String turn = getTurn(gameID);
-        String name = getUID(); //returnere
+        String name = this.getUID(); //returnere
         System.out.println("Turn: "+turn);
         System.out.println("Name: "+name);
         System.out.println("Is my turn: "+name.equals(turn));
@@ -625,19 +661,181 @@ public class fireBaseConnector implements FireBaseInterface {
 
     /**
      * Når en spiller gjør et move må det legges inn under spilleren i databasen, under moves
-     * @param gamePIN
+     * @param GID
      */
-    public void setMove(int gamePIN){
+    public void setMove(Square square, int GID){
+        DatabaseReference gameRef = database.getReference().child("/Games");
+        DatabaseReference playerRef = gameRef.child(GID + "/Players/");
+        DatabaseReference userRef = playerRef.child(this.getUID());
+        DatabaseReference movesRef = userRef.child("/Moves");
 
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("pos_x", square.getX());
+        result.put("pos_y", square.getY());
+        result.put("Flower", square.hasFlower());
+        result.put("Size", square.getSide());
+
+        Map<String, Object> moveValues = result;
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/Move"+moveCount, moveValues);
+        moveCount++;
+        movesRef.updateChildren(childUpdates);
     }
 
     /**
      * Man må kunne hente alle movsene til den andre spilleren
-     * @param gamePIN
+     * @param GID
      * @return List (forslag)
      */
-    public void getMoves(int gamePIN){
+    public ArrayList<Square> getMoves(int GID){
+        // Getting the UID for the opponent
+        isDone = false;
+        ArrayList<Square> squareList = new ArrayList<>();
+        while(!isDone) {
+            DatabaseReference gameRef = database.getReference().child("/Games");
+            DatabaseReference playerRef = gameRef.child(GID + "/Players/");
+            DatabaseReference userRef = playerRef.child(this.getUID());
+            DatabaseReference movesRef = userRef.child("/Moves");
+            movesRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                    if (!(map== null)) {
+                        System.out.println("HER ER MOVSENE: " + map);
+
+                        for (String move : map.keySet()) {
+                            map.get(move);
+                            System.out.println("Dette er square til MOVESENE " + map.get(move));
+                        }
+                        //Trenger vel egt å bare sjekke siste verdi lagt til?
+
+                        for (Object value : map.values()) {
+                            //Default values
+                            int x = 0;
+                            int y = 0;
+                            int size = 0;
+                            System.out.println("DETTE ER MOVESENE VERDI: " + value);
+                            String formatString = value.toString().replace("{", "").replace("}", "");
+                            String[] values = formatString.split(",");
+
+                            for (int i = 0; i < values.length; i++) {
+                                System.out.println("MOVSENE verdien en og en: " + values[i]);
+                                if (values[i].contains("pos_x")) {
+                                    String[] pos_x = values[i].split("=");
+                                    x = Integer.parseInt(pos_x[1]);
+                                }
+                                if (values[i].contains("pos_y")) {
+                                    String[] pos_y = values[i].split("=");
+                                    y = Integer.parseInt(pos_y[1]);
+                                }
+                                if (values[i].contains("Size")) {
+                                    String[] sizeString = values[i].split("=");
+                                    size = Integer.parseInt(sizeString[1]);
+                                }
+
+                            }
+                            Square square = new Square(x, y, size);
+                            squareList.add(square);
+                            // DE BLIR PRINTET SLIK: DETTE ER MOVESENE VERDI: {pos_y=10, Flower=false, pos_x=10}
+                            //TODO: sjekke om det er et bed hos meg
+                        }
+                    }
+                    System.out.println("MOVSENE SIN LIST: " + squareList);
+                    isDone = true;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                    isDone = true;
+                }
+            });
+            }
+        return squareList;
     }
+
+    /**
+     * Method for getting the opponents moves
+     * @param GID game id
+     * @return list of square from opponent
+     */
+
+    public ArrayList<Square> getOpMoves(int GID){
+        // Getting the UID for the opponent
+        isDone = false;
+        ArrayList<Square> squareList = new ArrayList<>();
+        List<String> players = this.getPlayers(GID);
+        String opUID = "";
+        for (int i =0; i < players.size(); i++){
+            if(!players.get(i).equals(getUID())){
+                opUID = players.get(i);
+            }
+        }
+        System.out.println("opUid: "+ opUID);
+        while(!isDone) {
+            DatabaseReference gameRef = database.getReference().child("/Games");
+            DatabaseReference playerRef = gameRef.child(GID + "/Players/");
+            DatabaseReference userRef = playerRef.child(opUID);
+            DatabaseReference movesRef = userRef.child("/Moves");
+            movesRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                    if (!(map== null)) {
+                        System.out.println("HER ER MOVSENE: " + map);
+
+                        for (String move : map.keySet()) {
+                            map.get(move);
+                            System.out.println("Dette er square til MOVESENE " + map.get(move));
+                        }
+                        //Trenger vel egt å bare sjekke siste verdi lagt til?
+
+                        for (Object value : map.values()) {
+                            //Default values
+                            int x = 0;
+                            int y = 0;
+                            int size = 0;
+                            System.out.println("DETTE ER MOVESENE VERDI: " + value);
+                            String formatString = value.toString().replace("{", "").replace("}", "");
+                            String[] values = formatString.split(",");
+
+                            for (int i = 0; i < values.length; i++) {
+                                System.out.println("MOVSENE verdien en og en: " + values[i]);
+                                if (values[i].contains("pos_x")) {
+                                    String[] pos_x = values[i].split("=");
+                                    x = Integer.parseInt(pos_x[1]);
+                                }
+                                if (values[i].contains("pos_y")) {
+                                    String[] pos_y = values[i].split("=");
+                                    y = Integer.parseInt(pos_y[1]);
+                                }
+                                if (values[i].contains("Size")) {
+                                    String[] sizeString = values[i].split("=");
+                                    size = Integer.parseInt(sizeString[1]);
+                                }
+
+                            }
+                            Square square = new Square(x, y, size);
+                            squareList.add(square);
+                            // DE BLIR PRINTET SLIK: DETTE ER MOVESENE VERDI: {pos_y=10, Flower=false, pos_x=10}
+                            //TODO: sjekke om det er et bed hos meg
+                        }
+                    }
+                    System.out.println("MOVSENE SIN LIST: " + squareList);
+                    isDone = true;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                    isDone = true;
+                }
+            });
+        }
+        return squareList;
+    }
+
+
 
     /**
      * Man må kunne sette (i en liste feks) hvor man har plassert blomsterbedene
