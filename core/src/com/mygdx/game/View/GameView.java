@@ -236,6 +236,7 @@ public class GameView extends View{
         if (gameOver){
             boolean won = gameController.getWinner();
             //TODO: mulig ikke denne controlelren
+            gameController.deleteGame();
             vm.set(new ExitView(vm, won, this.gameController));
         }
         //If waiting we check if the opponent has made a move so we can give give feedback
