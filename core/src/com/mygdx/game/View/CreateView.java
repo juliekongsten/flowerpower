@@ -95,6 +95,7 @@ public class CreateView extends View {
             {
                 //Handle the input event.
                 vm.set(new MenuView(vm));
+                gameController.deleteGame();
                 return true;
             }
         });
