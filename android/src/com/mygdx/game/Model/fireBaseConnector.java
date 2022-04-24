@@ -661,7 +661,9 @@ public class fireBaseConnector implements FireBaseInterface {
                 } else {
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
                     Map<String, Object> map = (Map<String, Object>) task.getResult().getValue();
-                    opMoveCount = map.keySet().size();
+                    if(map!=null){
+                        opMoveCount = map.keySet().size();
+                    }
                     isDone = true;
                 }
             }
