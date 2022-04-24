@@ -60,6 +60,7 @@ public class ExitView extends View{
             }
              */
             if(to_startBounds.contains(pos.x,pos.y)){
+                gameController.clearPlayers();
                 vm.set(new MenuView(vm));
             }
             if(log_outBounds.contains(pos.x, pos.y)){
