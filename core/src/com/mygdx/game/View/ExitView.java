@@ -5,7 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.ButtonController;
 import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.Controller.PlayerController;
 import com.mygdx.game.FlowerPowerGame;
@@ -23,15 +29,19 @@ public class ExitView extends View{
     private Texture log_out;
     private PlayerController playerController;
     private GameController gameController;
+    private ButtonController buttonController;
+    private final ImageButton logOutButton;
+    private final Stage stage;
 
     private boolean winner;
 
 
 
-    protected ExitView(ViewManager vm, boolean won, GameController gameController) {
+    protected ExitView(ViewManager vm, boolean won) {
         super(vm);
         this.playerController = new PlayerController();
-        this.gameController = gameController;
+        this.gameController = vm.getController();
+        this.buttonController = new ButtonController();
         this.logo = new Texture("small_logo.png");
         this.gameOver = new Texture("game_over.png");
         this.replay = new Texture("replay.png");
@@ -43,6 +53,26 @@ public class ExitView extends View{
         this.log_out = new Texture("log_out.png");
 
         this.winner = won;
+        stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
+        Gdx.input.setInputProcessor(stage);
+
+        logOutButton = buttonController.getLogOutButton();
+        setPlaybookButtonEvent();
+        stage.addActor(logOutButton);
+    }
+    private void setPlaybookButtonEvent() {
+        logOutButton.addListener(new EventListener()
+        {
+            @Override
+            public boolean handle(Event event)
+            {
+                //Handle the input event.
+                //vm.set(new PlaybookView(vm));
+                playerController.logOut();
+                vm.set(new StartView(vm));
+                return true;
+            }
+        });
     }
 
     @Override
@@ -63,11 +93,7 @@ public class ExitView extends View{
                 gameController.clearPlayers();
                 vm.set(new MenuView(vm));
             }
-            if(log_outBounds.contains(pos.x, pos.y)){
-                //TODO log out and exit the application
-                playerController.logOut();
-                vm.set(new StartView(vm));
-            }
+
         }
 
 

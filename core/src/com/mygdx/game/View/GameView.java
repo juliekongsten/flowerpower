@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.Controller.ButtonController;
 import com.mygdx.game.Controller.GameController;
 import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Bed;
@@ -56,6 +57,7 @@ public class GameView extends View{
     private float miss_y;
 
     private GameController gameController;
+    private ButtonController buttonController;
 
     private float board_x;
     private float my_board_y;
@@ -80,6 +82,7 @@ public class GameView extends View{
         super(vm);
         System.out.println("in gameview");
         this.gameController = vm.getController();
+        this.buttonController = new ButtonController();
         pool = new Texture("pool.png");
         createTextures();
         findStaticCoordinates();
@@ -94,9 +97,9 @@ public class GameView extends View{
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        Button back = new Button("back.png", 20, FlowerPowerGame.HEIGHT - 20);
-        backButton = back.getButton();
+        backButton = buttonController.getBackButton();
         setBackButtonEvent();
+        stage.addActor(backButton);
 
     }
 
