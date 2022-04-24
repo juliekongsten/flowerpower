@@ -442,10 +442,10 @@ public class fireBaseConnector implements FireBaseInterface {
         playerRef.updateChildren(updates);
     }
 
-    @Override
+    /*@Override
     public boolean getPlayersReady(int GID) {
         return false;
-    }
+    }*/
 
 
     /**
@@ -500,6 +500,10 @@ public class fireBaseConnector implements FireBaseInterface {
             System.out.println("Dont delete me");
         }
         return players;
+    }
+
+    public void setPlayersReady(boolean ready){
+        this.playersReady=ready;
     }
 
     @Override
