@@ -225,7 +225,7 @@ public class GameView extends View{
         //TODO: Give feedback to user that your square has been hit/miss
         //Do not draw the flower/miss as this is done in render
 
-        gameController.getOpMoves();
+        //gameController.getOpMoves();
 
 
     }
@@ -245,11 +245,8 @@ public class GameView extends View{
         if (waiting){
             //TODO: Find way to get square from controller
             //TODO: Find out if we should implement this as squarelistener instead and how
-            this.receiveOpMove();
-            /*Square square = new Square(1,1,1); //should get this from controller
-            if (square != null){
-                receiveOpMove();
-            }*/
+
+            // this.receiveOpMove();
 
         }
     }
