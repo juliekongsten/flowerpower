@@ -140,7 +140,6 @@ public class Game {
          */
     public void deleteGame () {
         //notify the other user too!
-        System.out.println("LEAVING GAME DILDO");
         _FBIC.leaveGame(GID);
 
     }
@@ -175,9 +174,6 @@ public class Game {
 
     public boolean checkForGameStart(){
         List<String> players =_FBIC.getPlayers(this.GID); //returnerer 2 selvom det kun er 1 i db
-        System.out.println("NATALIA DILDO: " + GID);
-        System.out.println("Størrelse dildo: " + players.size());
-        System.out.println("Liste dildo: " + players);
 
         if (players.size() == 0) {
             return false;
