@@ -45,4 +45,6 @@ public interface FireBaseInterface {
     boolean getOpHasForfeited();
 
     void OpHasForfeited(int gid);
+
+    void clearPlayers();
 }

@@ -93,6 +93,11 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     }
 
     @Override
+    public void clearPlayers() {
+
+    }
+
+    @Override
     public List<String> getPlayers(int gameID){
         return null;
     }

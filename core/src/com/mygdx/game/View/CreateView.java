@@ -40,6 +40,16 @@ public class CreateView extends View {
         highscore_x = FlowerPowerGame.WIDTH-highscore.getWidth()-10;
         this.gamePin = gamePin;
         this.start= gameController.checkForGameStart();
+       // checkGame();
+    }
+
+    private void checkGame() {
+        System.out.println("HIT KOMMER VI");
+        System.out.println("GID: " + gameController.getGID());
+        if (gameController.getGID() > 0) {
+            System.out.print("GETGID: " + gameController.getGID());
+            gameController.deleteGame();
+        }
     }
 
 
@@ -93,7 +103,7 @@ public class CreateView extends View {
         System.out.println("Start DILDO: " + start);
         if (start){
             vm.set(new PlaceBedsView(vm));
-            System.out.println("Placebedsview DILDO");
+            System.out.println("Placebedsview DILDO"); //kommer hit selvom det kun er 1 player i db
         }
 
         sb.end();

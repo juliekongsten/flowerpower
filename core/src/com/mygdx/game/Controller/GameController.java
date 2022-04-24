@@ -300,7 +300,13 @@ public class GameController {
     }
 
     public void deleteGame() {
+        System.out.println("deleting");
         game.deleteGame();
+        game.clearPlayers();
+    }
+
+    public void clearPlayers(){
+        game.clearPlayers();
     }
 
     public boolean isMyTurn(){

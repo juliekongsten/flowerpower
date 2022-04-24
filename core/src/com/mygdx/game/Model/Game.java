@@ -152,8 +152,23 @@ public class Game {
     }
 
     public boolean checkForGameStart(){
-        List<String> players =_FBIC.getPlayers(this.GID);
-        return players.size() == 2;
+        List<String> players =_FBIC.getPlayers(this.GID); //returnerer 2 selvom det kun er 1 i db
+        System.out.println("NATALIA DILDO: " + GID);
+        System.out.println("Størrelse dildo: " + players.size());
+        System.out.println("Liste dildo: " + players);
+
+        if (players.size() == 0) {
+            return false;
+        } else if (players.size() == 1) {
+            return false;
+        } else if (players.size() == 2) {
+            return true;
+        }
+        return false;
+    }
+
+    public void clearPlayers(){
+        _FBIC.clearPlayers();
     }
 
 }
