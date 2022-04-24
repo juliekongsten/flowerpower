@@ -108,10 +108,8 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     }
 
-    public ArrayList<Square> getMoves(int GID) {
-    return null;
-    }
-
+    @Override
+    public Map<String, Object> getHit(int GID){return null;}
 
     @Override
     public List<String> getPlayers(int gameID){
@@ -127,13 +125,6 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public void signOut() {}
     @Override
     public ArrayList<Square> getOpMoves(int GID){return null; }
-
-    ;
-
-    /**@Override
-    public void writeUserDataToDb(Player player) {
-
-    }**/
 
     @Override
     public void setTurnToOtherPlayer(int GID){}

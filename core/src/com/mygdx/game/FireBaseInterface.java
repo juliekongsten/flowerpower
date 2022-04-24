@@ -37,13 +37,12 @@ public interface FireBaseInterface {
 
     void setTurnToOtherPlayer(int GID);
 
+    Map<String, Object> getHit(int GID);
     //void writeUserDataToDb(Player player);
     void createGame(int GID);
     void joinGame(int GID);
     void storeBeds(List<Bed> beds, int GID);
     void setMove(Square square, int GID);
-    ArrayList<Square> getMoves(int GID);
-    ArrayList<Square> getOpMoves(int GID);
     Map<String, Object> retrieveBeds(int GID);
 
     void leaveGame(int gid);

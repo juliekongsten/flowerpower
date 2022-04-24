@@ -26,6 +26,9 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     }
 
     @Override
+    public Map<String, Object> getHit(int GID){return null;}
+
+    @Override
     public List<String> getPlayers(int gameID){
         return null;
     }
@@ -91,13 +94,6 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
 
     }
 
-    @Override
-    public ArrayList<Square> getMoves(int GID) {
-return null;
-    }
-    @Override
-    public ArrayList<Square> getOpMoves(int GID){return null; }
-
     public Map<String, Object> retrieveBeds(int GID) {
         return null;
     }
@@ -119,10 +115,10 @@ return null;
 
     @Override
     public void OpHasForfeited(int gid) {
-
-    public void clearPlayers() {
-
     }
+
+    @Override
+    public void clearPlayers() {}
 
     @Override
     public void signOut() {}
