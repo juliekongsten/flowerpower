@@ -56,9 +56,10 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public void setPlayerReady(int GID){}
 
     @Override
-    public boolean getPlayersReady(int GID) {
-        return false;
+    public List<Boolean> getPlayersReady(int GID) {
+        return null;
     }
+
 
     @Override
     public boolean isMyTurn(int gameID) {

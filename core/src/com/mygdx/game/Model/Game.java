@@ -94,12 +94,19 @@ public class Game {
         this._FBIC.setPlayerReady(this.GID);
     }
 
-    public boolean getPlayersReady() {
+    public boolean getPlayersReady(){
         //Get opponents ready value from database
-        boolean ready = this._FBIC.getPlayersReady(this.GID);
-        //System.out.println("Game getplayersready: "+ready);
-        return ready;
+        List<Boolean> ready = this._FBIC.getPlayersReady(this.GID);
+        System.out.println("Game getplayersready: "+ready);
+        if (ready.contains(false) || ready.isEmpty()){
+            return false;
+        }
+        else if (!ready.isEmpty()){
+            return true;
+        }
+        return false;
     }
+
 
     /**
      * tells the db to store the bed objects

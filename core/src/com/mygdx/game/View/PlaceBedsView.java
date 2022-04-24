@@ -283,25 +283,6 @@ public class PlaceBedsView extends View{
      * Checks if the other player is ready and sends player to gameview if both players are ready
      * @param sb
      */
-    /*
-    private void checkOtherPlayer(SpriteBatch sb){
-        boolean opReady = gameController.getPlayersReady();
-        System.out.println("In check other player");
-
-        if (opReady){
-            System.out.println("opready<3");
-            gameController.sendMyBeds(beds);
-            System.out.println("after sendmybeds");
-            vm.set(new GameView(vm, gameController));
-            System.out.println("after vm set");
-        } else{
-            //Draw waiting-graphics
-            sb.draw(waiting_black,0,0);
-            sb.draw(waiting_text,(float) (FlowerPowerGame.WIDTH/2-waiting_text.getWidth()/2),(float) FlowerPowerGame.HEIGHT/2);
-        }
-
-    }
-     */
 
     @Override
     public void render(SpriteBatch sb) {
@@ -358,7 +339,6 @@ public class PlaceBedsView extends View{
             System.out.println("inside isREady");
             gameController.setMyBeds(beds);
             vm.set(new GameView(vm, gameController));
-            //checkOtherPlayer(sb);
         }
         if (isReady && !bothReady) {
             sb.draw(waiting_black, 0, 0);
