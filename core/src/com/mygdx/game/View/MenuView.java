@@ -35,19 +35,9 @@ public class MenuView extends View {
         join = new Texture("join.png");
         create = new Texture("create.png");
         checkGame();
-    }
-
-    private void checkGame() {
-        System.out.println("HIT KOMMER VI");
-        System.out.println("GID: " + gameController.getGID());
-        if (gameController.getGID() > 0) {
-            System.out.print("GETGID: " + gameController.getGID());
-            gameController.deleteGame();
-        }
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
-
 
         Button playbook = new Button("playbook.png", 10, 15);
         playbookButton = playbook.getButton();

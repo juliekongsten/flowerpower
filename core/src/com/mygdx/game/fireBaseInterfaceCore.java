@@ -87,9 +87,6 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     @Override
     public void forfeitedGame(int gid) {}
 
-    public void clearPlayers() {
-
-    }
 
     @Override
     public void setMove(Square square, int GID) {
@@ -130,19 +127,6 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
     public void signOut() {}
     @Override
     public ArrayList<Square> getOpMoves(int GID){return null; }
-
-    @Override
-    public void forfeitedGame(int gamePin) {}
-
-    @Override
-    public boolean getOpHasForfeited() {
-        return false;
-    }
-
-    @Override
-    public void OpHasForfeited(int gid) {
-
-    }
 
     ;
 

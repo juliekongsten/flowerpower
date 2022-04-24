@@ -60,7 +60,6 @@ public class PlaceBedsView extends View{
     private boolean overlappingBeds = false;
     private boolean bedsOutsideBoard = false;
     private boolean goBack;
-    private boolean bothReady;
     private boolean opponent_exited = false; //If the opponent exited the game before it started.
 
     private final Stage stage;
