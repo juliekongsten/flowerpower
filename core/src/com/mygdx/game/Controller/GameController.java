@@ -44,7 +44,6 @@ public class GameController {
         numberSquaresHeight = 6;
         numberSquaresWidth = 9;
         gameStarted = false;
-        this.distance = game.getDistance();
 
 
 
@@ -60,6 +59,7 @@ public class GameController {
 
         Game game = new Game(GID);
         this.game = game;
+        this.distance = game.getDistance();
         gameStarted = true;
 
     }
@@ -69,6 +69,7 @@ public class GameController {
         Game game = new Game();
         this.game = game;
         this.GID = game.getGID();
+        this.distance = game.getDistance();
         gameStarted = true;
     }
 

@@ -17,7 +17,7 @@ public class Game {
 
     private int GID;
     private FireBaseInterface _FBIC;
-    private int distance = 359;
+    private int distance;
 
     // TODO: må mer metoder til for å connecte med firebaseconnector
 
@@ -30,6 +30,7 @@ public class Game {
     public Game(int existingGID) {
         this.GID = existingGID;
         this._FBIC = FlowerPowerGame.getFBIC();
+        this.distance = 359;
         List<Integer> gameIDs = _FBIC.getGameIDs();
 
         String i = Integer.toString(existingGID);
@@ -58,6 +59,7 @@ public class Game {
      */
     public Game() {
         this._FBIC = FlowerPowerGame.getFBIC();
+        this.distance = 359;
         this.GID = generateGameID();
         System.out.println("THIS IS THE GID IN GAME CLASS: " + this.GID);
         _FBIC.createGame(GID);
