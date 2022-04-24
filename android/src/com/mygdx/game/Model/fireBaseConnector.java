@@ -510,10 +510,8 @@ public class fireBaseConnector implements FireBaseInterface {
         return players;
     }
 
-    @Override
-    public boolean getPlayersReady(int GID) {
+    public List<Boolean> getPlayersReady(int GID) {
         isDone=false;
-        setPlayersReady(true);
         System.out.println("Ready start FBIC: "+playersReady);
 
 
@@ -878,6 +876,11 @@ public class fireBaseConnector implements FireBaseInterface {
     }
     public FirebaseAuth getAuth(){
         return this.mAuth;
+    }
+
+    public void clearPlayers(){
+        System.out.println("clearing");
+        this.players = new ArrayList<>();
     }
 
 }

@@ -80,11 +80,6 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
     }
 
     @Override
-    public boolean isMyTurn(int gameID) {
-        return false;
-    }
-
-    @Override
     public void joinGame(int GID){}
 
     @Override
@@ -124,6 +119,8 @@ return null;
 
     @Override
     public void OpHasForfeited(int gid) {
+
+    public void clearPlayers() {
 
     }
 

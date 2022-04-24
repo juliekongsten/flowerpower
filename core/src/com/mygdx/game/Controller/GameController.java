@@ -309,6 +309,7 @@ public class GameController {
        return game.hasForfeited();
     }
 
+
     public void deleteGame() {
         System.out.println("deleting");
         game.deleteGame();
@@ -318,6 +319,11 @@ public class GameController {
     public void clearPlayers(){
         game.clearPlayers();
     }
+
+    public void clearPlayers(){
+        game.clearPlayers();
+    }
+
 
     public boolean isMyTurn(){
         boolean myTurn = this.game.isMyTurn();

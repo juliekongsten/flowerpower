@@ -58,9 +58,18 @@ public class MenuView extends View {
         highscoreButton = highscore.getButton();
         setHighscoreButtonEvent();
         stage.addActor(highscoreButton);
+
+        checkGame();
     }
 
-    private void setPlaybookButtonEvent() {
+    private void checkGame() {
+        if (gameController.getGID() > 0) {
+            gameController.deleteGame();
+        }
+    }
+
+
+        private void setPlaybookButtonEvent() {
         playbookButton.addListener(new EventListener()
         {
             @Override
