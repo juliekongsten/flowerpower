@@ -281,12 +281,16 @@ public class GameView extends View{
         }
 
         //draws the hits on myboard - må hentes
+
         Square hitSquare = gameController.getHitSquare();
+
         for (Square square : myBoard) {
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
-            if(hitSquare.getX()==x && hitSquare.getY()==y){
-                square.setHit(true);
+            if(hitSquare!=null){
+                if(hitSquare.getX()==x && hitSquare.getY()==y){
+                    square.setHit(true);
+                }
             }
             if (square.isHit()) {
                 if (square.hasFlower()) {
