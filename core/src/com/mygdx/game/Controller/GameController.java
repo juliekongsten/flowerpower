@@ -31,7 +31,7 @@ public class GameController {
     private List<Bed> myBeds = new ArrayList<>();
     private List<Bed> opBeds = new ArrayList<>();
 
-    private int distance = 359;
+    private int distance;
 
     private boolean gameOver = false;
     private boolean won = false;
@@ -44,6 +44,7 @@ public class GameController {
         numberSquaresHeight = 6;
         numberSquaresWidth = 9;
         gameStarted = false;
+        this.distance = game.getDistance();
 
 
 
@@ -51,6 +52,10 @@ public class GameController {
         setMyBeds(null);
 
     }
+
+
+
+
     public void joinGame(int GID) {
 
         Game game = new Game(GID);
@@ -79,6 +84,7 @@ public class GameController {
         }
         return false;
     }
+
 
     public List<Square> getOpBoard(){ return opBoard; }
     public List<Square> getMyBoard(){ return myBoard; }
@@ -348,6 +354,12 @@ public class GameController {
         return start;
 
     }
+
+    public Square getHit(){
+        return this.game.getHit();
+
+    }
+
 
 
 

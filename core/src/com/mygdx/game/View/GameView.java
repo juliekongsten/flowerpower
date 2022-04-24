@@ -219,11 +219,10 @@ public class GameView extends View{
 
     //TODO: hente ut denne når det er din turn
     protected void receiveOpMove(){
-        //Should only be called when the opponent has made a move
-        //TODO: Give feedback to user that your square has been hit/miss
-        //Do not draw the flower/miss as this is done in render
 
-        //gameController.getOpMoves();
+        Square square = gameController.getHit();
+
+
 
 
     }
@@ -278,6 +277,7 @@ public class GameView extends View{
      */
     //TODO: (low priority) Consider implementing a list "hitSquares" that all hit squares are added to so that we could iterate through only these
     private void drawHits(SpriteBatch sb) {
+        //draws the hits on opBoard
         for (Square square : opBoard) {
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
@@ -290,9 +290,14 @@ public class GameView extends View{
             }
         }
 
+        //draws the hits on myboard - må hentes
+        Square hitSquare = gameController.getHit();
         for (Square square : myBoard) {
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
+            if(hitSquare.getX()==x && hitSquare.getY()==y){
+                square.setHit(true);
+            }
             if (square.isHit()) {
                 if (square.hasFlower()) {
                     sb.draw(flower, x, y);
