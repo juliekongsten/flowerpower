@@ -31,10 +31,11 @@ public class GameController {
     private List<Bed> myBeds = new ArrayList<>();
     private List<Bed> opBeds = new ArrayList<>();
 
-    private int distance = 359;
+    private int distance;
 
     private boolean gameOver = false;
     private boolean won = false;
+    private Square hitSquare;
 
 
     public GameController(){
@@ -51,10 +52,15 @@ public class GameController {
         setMyBeds(null);
 
     }
+
+
+
+
     public void joinGame(int GID) {
 
         Game game = new Game(GID);
         this.game = game;
+        this.distance = game.getDistance();
         gameStarted = true;
 
     }
@@ -64,6 +70,7 @@ public class GameController {
         Game game = new Game();
         this.game = game;
         this.GID = game.getGID();
+        this.distance = game.getDistance();
         gameStarted = true;
     }
 
@@ -74,11 +81,16 @@ public class GameController {
     }
 
     public boolean isSquareInBed(Square square, List<Bed> beds){
+        boolean isInBed = false;
         for (Bed bed : beds){
-            return bed.getBounds().contains(square.getBounds().x, square.getBounds().y);
+            if (bed.getBounds().contains(square.getBounds().x+2, square.getBounds().y+2)){
+                isInBed = true;
+                break;
+            }
         }
-        return false;
+        return isInBed;
     }
+
 
     public List<Square> getOpBoard(){ return opBoard; }
     public List<Square> getMyBoard(){ return myBoard; }
@@ -96,8 +108,10 @@ public class GameController {
             return false;
         }
         game.setMove(square);
+        // isSquareInBed(square, opBeds);
         square.setHit(true);
         return square.hasFlower();
+
     }
 
 
@@ -111,6 +125,7 @@ public class GameController {
             }*/
             game.storePlacedBeds(myBeds);
             for (Square mySquare : myBoard){
+                mySquare.setHasFlower(false); //nullstille tilfelle det var igjen fra tidligere
                 if (isSquareInBed(mySquare,myBeds)){
                     mySquare.setHasFlower(true);
                 }
@@ -136,9 +151,9 @@ public class GameController {
         //TODO: (Low priority) Get x- and y-values without hardkoding :D
         //må hente x og y-verdier fra view heller sånn at vi får riktige :D
         //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
-        int x = 26+15;
+        int x = 26+15; //201
         int my_y = 65+12;
-        int op_y = 424+12;
+        int op_y = 424+12; //596
         for (int i = 0; i< numberSquaresHeight; i++){
             for (int j = 0; j< numberSquaresWidth; j++){
                 Square mySquare = new Square(x, my_y, squaresize);
@@ -218,12 +233,12 @@ public class GameController {
 
     }
 
-    public ArrayList<Square> getMyMoves(){
+    /*public ArrayList<Square> getMyMoves(){
         return this.game.getMyMoves();
     }
     public ArrayList<Square> getOpMoves(){
         return this.game.getOpMoves();
-    }
+    }*/
 
 
 
@@ -337,6 +352,8 @@ public class GameController {
 
     public void setTurnToOtherPlayer(){
         System.out.println("setTurnToOtherPlayer in controller");
+        //this.hitSquare = this.game.getHit();
+        //null første gang du bytter  - du startyet
         this.game.setTurnToOtherPlayer();
     }
 
@@ -346,6 +363,14 @@ public class GameController {
         return start;
 
     }
+
+    public Square getHitSquare(){
+        //ikke eksisterer - den eksisterer ikke
+        this.hitSquare = this.game.getHit();
+        return this.hitSquare;
+
+    }
+
 
 
 

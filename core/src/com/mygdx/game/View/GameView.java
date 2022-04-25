@@ -72,7 +72,8 @@ public class GameView extends View{
     private List<Square> myBoard;
     private List<Bed> myBeds;
     private List<Bed> opBeds;
-    private List<Square> squareList;
+    private List<Square> moveList;
+    private Square hitSquare;
 
     private final Stage stage;
     private final ImageButton backButton;
@@ -91,8 +92,9 @@ public class GameView extends View{
         gameController.receiveOpBeds();
         opBeds = gameController.getOpBeds();
         opBoard = gameController.getOpBoard();
-        squareList = gameController.getMyMoves();
+        moveList = new ArrayList<>(); // List for my moves on opBoard
         waiting = !gameController.isMyTurn(); //check, stopper?
+        hitSquare=null;
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -154,13 +156,13 @@ public class GameView extends View{
             //If player is not waiting on opponents move we check if player presses any of opponents
             //squares and act accordingly
             if (!waiting && !opForfeitet){
+                //det du gjør
+
                 for (Square square : opBoard){
-                    if (square.getBounds().contains(pos.x,pos.y) && !squareList.contains(square)){
+                    if (square.getBounds().contains(pos.x,pos.y) && !moveList.contains(square)){
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
-                        boolean flower = gameController.hitSquare(square);
-                        //squareList.add(square);
-                    System.out.println("square: "+square.getBounds());
-                    
+                        moveList.add(square);
+                        System.out.println("square: "+square.getBounds());
                         System.out.println("is pressed");
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
                         boolean hasFlower = gameController.hitSquare(square);
@@ -178,10 +180,9 @@ public class GameView extends View{
                             miss_y = square.getBounds().y;
                             //When you miss it's opponents turn
                             System.out.println("Miss!");
-                            waiting = true;
-                            gameController.setTurnToOtherPlayer();
-
                         }
+                        waiting = true;
+                        gameController.setTurnToOtherPlayer();
 
                         //TODO: Give feedback to controller so that the other player also is notified (or implement squarelistener in some way)
                     }
@@ -219,17 +220,6 @@ public class GameView extends View{
     }
 
 
-    //TODO: hente ut denne når det er din turn
-    protected void receiveOpMove(){
-        //Should only be called when the opponent has made a move
-        //TODO: Give feedback to user that your square has been hit/miss
-        //Do not draw the flower/miss as this is done in render
-
-        gameController.getOpMoves();
-
-
-    }
-
     @Override
     public void update(float dt) {
         handleInput();
@@ -245,11 +235,8 @@ public class GameView extends View{
         if (waiting){
             //TODO: Find way to get square from controller
             //TODO: Find out if we should implement this as squarelistener instead and how
-            this.receiveOpMove();
-            /*Square square = new Square(1,1,1); //should get this from controller
-            if (square != null){
-                receiveOpMove();
-            }*/
+
+            // this.receiveOpMove();
 
         }
     }
@@ -283,6 +270,7 @@ public class GameView extends View{
      */
     //TODO: (low priority) Consider implementing a list "hitSquares" that all hit squares are added to so that we could iterate through only these
     private void drawHits(SpriteBatch sb) {
+        //draws the hits on opBoard
         for (Square square : opBoard) {
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
@@ -295,9 +283,19 @@ public class GameView extends View{
             }
         }
 
+        //draws the hits on myboard - må hentes
+
+        Square hitSquare = gameController.getHitSquare();
+        //System.out.println(hitSquare);
         for (Square square : myBoard) {
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
+            if(hitSquare!=null){
+                if(hitSquare.getX()==x && hitSquare.getY()==y){
+                    square.setHit(true);
+                   // square.setHasFlower(hitSquare.hasFlower());
+                }
+            }
             if (square.isHit()) {
                 if (square.hasFlower()) {
                     sb.draw(flower, x, y);
@@ -359,7 +357,11 @@ public class GameView extends View{
         sb.draw(op_board, board_x, op_board_y);
 
         if (waiting && !opForfeitet){
+            //boolean waitingBefore = waiting;
             waiting = !gameController.isMyTurn();
+            /*if (!waiting){
+                hitSquare = gameController.getHitSquare();
+            }*/
         }
 
         //Draws message (your turn/waiting) in the pool
