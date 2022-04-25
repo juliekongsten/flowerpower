@@ -690,7 +690,7 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference gameRef = database.getReference().child("/Games");
         DatabaseReference playerRef = gameRef.child(GID + "/Players/");
         DatabaseReference userRef = playerRef.child(opUID);
-        DatabaseReference movesRef = userRef.child("/Moves/Move"+this.opMoveCount);
+        DatabaseReference movesRef = userRef.child("/Moves/Move"+opMoveCount);
         movesRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {

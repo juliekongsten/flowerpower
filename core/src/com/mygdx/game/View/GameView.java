@@ -73,6 +73,7 @@ public class GameView extends View{
     private List<Bed> myBeds;
     private List<Bed> opBeds;
     private List<Square> moveList;
+    private Square hitSquare;
 
     private final Stage stage;
     private final ImageButton backButton;
@@ -93,6 +94,7 @@ public class GameView extends View{
         opBoard = gameController.getOpBoard();
         moveList = new ArrayList<>(); // List for my moves on opBoard
         waiting = !gameController.isMyTurn(); //check, stopper?
+        hitSquare=null;
 
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -283,8 +285,8 @@ public class GameView extends View{
 
         //draws the hits on myboard - må hentes
 
-        Square hitSquare = gameController.getHitSquare();
-        System.out.println(hitSquare);
+        //Square hitSquare = gameController.getHitSquare();
+        //System.out.println(hitSquare);
         for (Square square : myBoard) {
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
@@ -355,7 +357,11 @@ public class GameView extends View{
         sb.draw(op_board, board_x, op_board_y);
 
         if (waiting && !opForfeitet){
+            //boolean waitingBefore = waiting;
             waiting = !gameController.isMyTurn();
+            if (!waiting){
+                hitSquare = gameController.getHitSquare();
+            }
         }
 
         //Draws message (your turn/waiting) in the pool

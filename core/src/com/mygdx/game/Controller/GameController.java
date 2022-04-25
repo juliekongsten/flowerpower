@@ -81,10 +81,14 @@ public class GameController {
     }
 
     public boolean isSquareInBed(Square square, List<Bed> beds){
+        boolean isInBed = false;
         for (Bed bed : beds){
-            return bed.getBounds().contains(square.getBounds().x, square.getBounds().y);
+            if (bed.getBounds().contains(square.getBounds().x, square.getBounds().y)){
+                isInBed = true;
+                break;
+            }
         }
-        return false;
+        return isInBed;
     }
 
 
@@ -347,7 +351,7 @@ public class GameController {
 
     public void setTurnToOtherPlayer(){
         System.out.println("setTurnToOtherPlayer in controller");
-        this.hitSquare = this.game.getHit();
+        //this.hitSquare = this.game.getHit();
         //null første gang du bytter  - du startyet
         this.game.setTurnToOtherPlayer();
     }
