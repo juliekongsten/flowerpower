@@ -1,6 +1,7 @@
 package com.mygdx.game.View;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -16,10 +17,12 @@ public class PlaybookView extends View{
     private final ImageButton backButton;
     private ButtonController buttonController;
     private final Stage stage;
+    private final Texture playbook;
 
 
     public PlaybookView(ViewManager vm) {
         super(vm);
+        playbook = new Texture("playbook_text.png");
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
         this.buttonController = new ButtonController();
@@ -56,7 +59,10 @@ public class PlaybookView extends View{
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         ScreenUtils.clear((float)180/255,(float)245/255,(float) 162/255,1);
+        sb.draw(playbook,FlowerPowerGame.WIDTH/2-playbook.getWidth()/2,200);
         sb.end();
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
 
     }
 }
