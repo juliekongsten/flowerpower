@@ -663,6 +663,7 @@ public class fireBaseConnector implements FireBaseInterface {
                     Map<String, Object> map = (Map<String, Object>) task.getResult().getValue();
                     if(map!=null){
                         opMoveCount = map.keySet().size();
+                        System.out.println("Opmovecount er: " + opMoveCount);
                     }
                     isDone = true;
                 }
@@ -672,6 +673,7 @@ public class fireBaseConnector implements FireBaseInterface {
         while (!isDone){
             System.out.println("getting moves");
         }
+        System.out.println("Opmovecount er: " + opMoveCount);
     }
 
     public Map<String, Object> getHit(int GID){

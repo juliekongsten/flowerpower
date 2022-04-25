@@ -348,6 +348,7 @@ public class GameController {
     public void setTurnToOtherPlayer(){
         System.out.println("setTurnToOtherPlayer in controller");
         this.hitSquare = this.game.getHit();
+        //null første gang du bytter  - du startyet
         this.game.setTurnToOtherPlayer();
     }
 
@@ -359,6 +360,8 @@ public class GameController {
     }
 
     public Square getHitSquare(){
+        //ikke eksisterer - den eksisterer ikke
+        this.hitSquare = this.game.getHit();
         return this.hitSquare;
 
     }

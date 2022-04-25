@@ -155,6 +155,7 @@ public class GameView extends View{
             //squares and act accordingly
             if (!waiting && !opForfeitet){
                 //det du gjør
+
                 for (Square square : opBoard){
                     if (square.getBounds().contains(pos.x,pos.y) && !moveList.contains(square)){
                         //Lets controller know a square was hit, gets feedback from controller of if it was a hit/miss or if you pressed square already is pressed before (then nothing will happen)
@@ -283,14 +284,14 @@ public class GameView extends View{
         //draws the hits on myboard - må hentes
 
         Square hitSquare = gameController.getHitSquare();
-
+        System.out.println(hitSquare);
         for (Square square : myBoard) {
             int x = (int) square.getBounds().x;
             int y = (int) square.getBounds().y;
             if(hitSquare!=null){
                 if(hitSquare.getX()==x && hitSquare.getY()==y){
                     square.setHit(true);
-                    square.setHasFlower(hitSquare.hasFlower());
+                   // square.setHasFlower(hitSquare.hasFlower());
                 }
             }
             if (square.isHit()) {
