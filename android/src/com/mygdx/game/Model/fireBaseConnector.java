@@ -246,6 +246,7 @@ public class fireBaseConnector implements FireBaseInterface {
         DatabaseReference usersRef = database.getReference().child("users").child(this.getUID());
         DatabaseReference scoreRef = usersRef.child("/Score");
         int currentScore = this.getScore(this.UID);
+        System.out.println("Dette er currentScore : " + currentScore);
         scoreRef.setValue(currentScore+1);
     }
 

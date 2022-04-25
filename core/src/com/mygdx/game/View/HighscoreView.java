@@ -102,7 +102,10 @@ public class HighscoreView extends View {
         font.getData().setScale((float) 1.25);
         font.setColor(Color.BLACK);
         float y = 300;
-        HashMap<String, Integer> map = this.getMap();
+
+        if (map==null){
+            HashMap<String, Integer> map = this.getMap();
+        }
         Iterator hmIterator = map.entrySet().iterator();
 
         while(hmIterator.hasNext()){
