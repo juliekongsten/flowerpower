@@ -151,7 +151,11 @@ public class Game {
 
     public boolean hasForfeited() {
         _FBIC.OpHasForfeited(GID);
-        return _FBIC.getOpHasForfeited();
+        boolean value = _FBIC.getOpHasForfeited();
+        if(value){
+            _FBIC.updateScore();
+        }
+        return value;
     }
 
     public void excited() {
