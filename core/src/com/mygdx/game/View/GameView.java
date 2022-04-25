@@ -285,7 +285,7 @@ public class GameView extends View{
 
         //draws the hits on myboard - må hentes
 
-        //Square hitSquare = gameController.getHitSquare();
+        Square hitSquare = gameController.getHitSquare();
         //System.out.println(hitSquare);
         for (Square square : myBoard) {
             int x = (int) square.getBounds().x;
@@ -359,9 +359,9 @@ public class GameView extends View{
         if (waiting && !opForfeitet){
             //boolean waitingBefore = waiting;
             waiting = !gameController.isMyTurn();
-            if (!waiting){
+            /*if (!waiting){
                 hitSquare = gameController.getHitSquare();
-            }
+            }*/
         }
 
         //Draws message (your turn/waiting) in the pool

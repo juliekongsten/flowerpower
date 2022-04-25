@@ -351,7 +351,7 @@ public class GameController {
 
     public void setTurnToOtherPlayer(){
         System.out.println("setTurnToOtherPlayer in controller");
-        //this.hitSquare = this.game.getHit();
+        this.hitSquare = this.game.getHit();
         //null første gang du bytter  - du startyet
         this.game.setTurnToOtherPlayer();
     }
