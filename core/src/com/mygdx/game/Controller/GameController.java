@@ -2,6 +2,7 @@ package com.mygdx.game.Controller;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Button;
+import com.mygdx.game.Model.HighScoreList;
 import com.mygdx.game.Model.Player;
 import com.mygdx.game.Model.Game;
 
@@ -36,6 +37,7 @@ public class GameController {
     private boolean gameOver = false;
     private boolean won = false;
     private Square hitSquare;
+    private HighScoreList highScoreList;
 
 
     public GameController(){
@@ -299,8 +301,15 @@ public class GameController {
         }
         else if (opBedsFullyHit){
             won = true;
+            player.updateScore();
             gameOver = true;
         }
+    }
+    public HashMap<String, Integer> getHighScore(){
+        this.highScoreList = new HighScoreList();
+        HashMap<String, Integer> topFive = highScoreList.getTopFive();
+        return topFive;
+
     }
 
     /**
