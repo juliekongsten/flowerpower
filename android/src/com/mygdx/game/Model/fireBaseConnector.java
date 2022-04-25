@@ -705,7 +705,8 @@ public class fireBaseConnector implements FireBaseInterface {
                         hit = null;
                     }
                     else {
-                        hit = map;
+                        setHit(map);
+                        //hit = map;
                     }
                     isDone = true;
                 }
@@ -715,8 +716,12 @@ public class fireBaseConnector implements FireBaseInterface {
         while (!isDone){
             System.out.println("getting moves");
         }
-        System.out.println("This is the hit"+hit);
+        //System.out.println("This is the hit"+hit);
         return hit;
+    }
+    public void setHit(Map<String, Object> map){
+        this.hit = map;
+        System.out.println("This is the hit"+hit);
     }
 
 
