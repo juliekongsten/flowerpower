@@ -335,8 +335,8 @@ public class GameController {
 
     public void deleteGame() {
         System.out.println("deleting");
-        game.deleteGame();
         game.clearPlayers();
+        game.deleteGame();
     }
 
     public void clearPlayers(){
