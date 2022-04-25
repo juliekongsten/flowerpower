@@ -83,7 +83,7 @@ public class GameController {
     public boolean isSquareInBed(Square square, List<Bed> beds){
         boolean isInBed = false;
         for (Bed bed : beds){
-            if (bed.getBounds().contains(square.getBounds().x, square.getBounds().y)){
+            if (bed.getBounds().contains(square.getBounds().x+2, square.getBounds().y+2)){
                 isInBed = true;
                 break;
             }
