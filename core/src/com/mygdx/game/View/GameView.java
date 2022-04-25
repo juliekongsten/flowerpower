@@ -290,6 +290,7 @@ public class GameView extends View{
             if(hitSquare!=null){
                 if(hitSquare.getX()==x && hitSquare.getY()==y){
                     square.setHit(true);
+                    square.setHasFlower(hitSquare.hasFlower());
                 }
             }
             if (square.isHit()) {
