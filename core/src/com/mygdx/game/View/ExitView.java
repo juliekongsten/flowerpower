@@ -90,7 +90,8 @@ public class ExitView extends View{
             }
              */
             if(to_startBounds.contains(pos.x,pos.y)){
-                gameController.clearPlayers();
+                //gameController.clearPlayers();
+                gameController.deleteGame();
                 vm.set(new MenuView(vm));
             }
 
