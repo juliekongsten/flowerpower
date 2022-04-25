@@ -126,6 +126,28 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
 
     @Override
     public void setTurnToOtherPlayer(int GID){}
+    @Override
+    public int getScore(String UID) {
+        return 0;
+    }
+
+    @Override
+    public ArrayList<String> getUserIDs() {
+        return null;
+    }
+
+    @Override
+    public String getNameFromUID(String UID) {
+        return null;
+    }
+
+    @Override
+    public HashMap<Integer, String> getScoreMap() {
+        return null;
+    }
+    @Override
+    public void updateScore(int score){}
+
 
 
 }

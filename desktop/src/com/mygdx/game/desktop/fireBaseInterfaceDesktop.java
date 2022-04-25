@@ -6,6 +6,7 @@ import com.mygdx.game.Model.Player;
 import com.mygdx.game.Model.Square;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -122,6 +123,29 @@ public class fireBaseInterfaceDesktop implements FireBaseInterface {
 
     @Override
     public void signOut() {}
+
+    @Override
+    public int getScore(String UID) {
+        return 0;
+    }
+
+    @Override
+    public ArrayList<String> getUserIDs() {
+        return null;
+    }
+
+    @Override
+    public String getNameFromUID(String UID) {
+        return null;
+    }
+
+
+    @Override
+    public HashMap<Integer, String> getScoreMap() {
+        return null;
+    }
+    @Override
+    public void updateScore(int score) {}
 
 
 }

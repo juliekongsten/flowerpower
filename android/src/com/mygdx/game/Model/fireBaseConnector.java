@@ -41,6 +41,7 @@ public class fireBaseConnector implements FireBaseInterface {
      private String playerTurn;
      private List<String> players = new ArrayList<>();
      private List<Integer> gameIDs;
+    private ArrayList<String> userIDs;
      private static int moveCount = 1;
      private int opMoveCount = 1;
      private Map<String, Object> beds;
@@ -48,6 +49,10 @@ public class fireBaseConnector implements FireBaseInterface {
      private boolean playersReady = true;
      private String UID;
      private List<Boolean> playersReadyList;
+    private int score;
+    private int highScore;
+    private String nameFromUID;
+    private  HashMap< Integer, String> scoreMap;
 
 
     /**
@@ -125,9 +130,10 @@ public class fireBaseConnector implements FireBaseInterface {
                 DatabaseReference usersRef = database.getReference().child("users").child(user.getUid());
                 //TODO: put in whole object simultaneously
                 // Her kan mer data puttes når vi ønsker å lagre highscore osv.
-                Map<String, String> userData = new HashMap<String, String>();
+                Map userData = new HashMap<>();
                 userData.put("Mail", user.getEmail());
-                // TODO: legge inn score
+                usersRef.setValue(userData);
+                userData.put("Score", 0);
                 usersRef.setValue(userData);
 
             }
@@ -227,7 +233,127 @@ public class fireBaseConnector implements FireBaseInterface {
 
         }
 
+    }/**
+     * Method that updates the score for the user
+     * Increments the score
+     * @param score for the user
+     */
+
+    public void updateScore(int score){
+        DatabaseReference usersRef = database.getReference().child("users").child(this.getUID());
+        DatabaseReference scoreRef = usersRef.child("/Score");
+        scoreRef.setValue(score+1);
+
     }
+
+    /**
+     * Gets the score for the current user
+     * @return score for the user
+     */
+
+    public int getScore(String userID){
+        isDone = false;
+        score = 0;
+        DatabaseReference usersRef = database.getReference().child("users").child(userID);
+        DatabaseReference scoreRef = usersRef.child("/Score");
+        scoreRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                    isDone = true;
+                } else {
+                    Object userScore = task.getResult().getValue();
+                    if(userScore==null){
+                        score = 0; // User doesn't have score attribute yet
+                        isDone=true;
+                    }else{
+                        score = Integer.parseInt(userScore.toString());
+                        System.out.println("Dette er final score i else : " + score);
+                        Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                        isDone = true;
+                    }
+                    isDone=true;
+                }
+            }
+        });
+        while(!isDone) {
+            //System.out.println("Getting the score! ");
+            System.out.println("Dette er score i while : " + this.score);
+        }
+        System.out.println("Dette er score: " + score);
+        return this.score;
+    }
+
+    public String getNameFromUID(String UID){
+        isDone = false;
+        DatabaseReference usersRef = database.getReference().child("users").child(UID);
+        DatabaseReference scoreRef = usersRef.child("/Mail");
+        scoreRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                    isDone = true;
+                } else {
+                    Object username = task.getResult().getValue();
+                    nameFromUID = username.toString();
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                    isDone = true;
+                }
+            }
+        });
+        while(!isDone) {
+            System.out.println("Getting the username! ");
+        }
+        return nameFromUID;
+
+    }
+
+    public ArrayList<String> getUserIDs(){
+        isDone = false;
+        userIDs = new ArrayList<>();
+        DatabaseReference gameRef = database.getReference().child("/users");
+        System.out.println( "Dette er gameRef : " + gameRef);
+        gameRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                    isDone=true;
+                }else{
+                    Map<String, Object> map = (Map<String, Object>) task.getResult().getValue();
+                    userIDs.addAll(map.keySet());
+                    System.out.println("Dette er userIDS: " + userIDs);
+                    isDone=true;
+                }
+                isDone=true;
+            }
+        }
+        );
+
+        while(!isDone){
+            System.out.println( "Getting highscores userIDs : " + this.userIDs);
+            System.out.println( "Getting highscores");
+        }
+
+        return this.userIDs;
+
+
+    }
+
+    public HashMap<Integer, String> getScoreMap(){
+        return this.scoreMap;
+    }
+
+
+
+
+
+
+
+
+
 
 
     public boolean getIsDone(){

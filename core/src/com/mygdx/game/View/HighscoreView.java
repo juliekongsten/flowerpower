@@ -19,8 +19,13 @@ import com.mygdx.game.FlowerPowerGame;
 import com.mygdx.game.Model.Button;
 import com.mygdx.game.Model.Player;
 
+import com.mygdx.game.Model.HighScoreList;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 
 
@@ -35,9 +40,12 @@ public class HighscoreView extends View {
     private final ImageButton backButton;
     private GameController gameController;
     private ButtonController buttonController;
+    private HighScoreList highScoreList;
+
 
     protected HighscoreView(ViewManager vm) {
         super(vm);
+        //this.highScoreList = new HighScoreList();
         this.gameController = new GameController();
         this.buttonController = new ButtonController();
         logo = new Texture("logo.png");
@@ -81,29 +89,28 @@ public class HighscoreView extends View {
 
     private void printHighscoreList(SpriteBatch sb) {
         //TODO get list of top 10 best players, with score (DB), where nr1 in the list is the best
-        List<Player> players = new ArrayList<>();
-        Player pl1 = new Player();
-        Player pl2 = new Player();
-        pl1.update_dummyplayer("natalia@gmail.com", "100");
-        pl2.update_dummyplayer("sandra@gmail.com", "80");
-        players.add(pl2);
-        players.add(pl1);
+
 
         BitmapFont font = new BitmapFont();
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         font.getData().setScale((float) 1.25);
         font.setColor(Color.BLACK);
-        float y = 255;
-        for (Player player : players) {
+        float y = 300;
+        HashMap<String, Integer> map = this.gameController.getHighScore();
+        Iterator hmIterator = map.entrySet().iterator();
+
+        while(hmIterator.hasNext()){
+            Map.Entry mapElement= (Map.Entry)hmIterator.next();
             float username_x = FlowerPowerGame.WIDTH / 2 - highscore.getWidth() / 2 - 30;
-            float score_x = FlowerPowerGame.WIDTH / 2 + 70;
-            font.draw(sb, player.getDummyUsername(), username_x, y); //TODO update the right getters here
-            font.draw(sb, player.getScore(), score_x, y);
-            y -= -40;
+            float score_x = FlowerPowerGame.WIDTH / 2 + 100;
+            font.draw(sb, mapElement.getKey().toString(), username_x, y); //TODO update the right getters here
+            font.draw(sb, mapElement.getValue().toString(), score_x, y);
+            y = y - 40;
+        }
 
         }
 
-    }
+
 
     @Override
     public void render(SpriteBatch sb) {

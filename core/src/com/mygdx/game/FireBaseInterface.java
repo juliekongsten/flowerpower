@@ -54,4 +54,9 @@ public interface FireBaseInterface {
     void OpHasForfeited(int gid);
 
     void clearPlayers();
+    int getScore(String uid);
+    ArrayList<String> getUserIDs();
+    String getNameFromUID(String UID);
+    HashMap<Integer, String> getScoreMap();
+    void updateScore(int score);
 }
