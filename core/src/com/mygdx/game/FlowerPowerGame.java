@@ -49,8 +49,6 @@ public class FlowerPowerGame extends ApplicationAdapter {
 		//TODO: remove
 		_FBIC.writeToDb("message","jasså!");
 		_FBIC.readFromDb();
-		ArrayList<String> newList = _FBIC.getUserIDs();
-		System.out.println("userIDS er: " + newList);
 
 		//_FBIC.signIn("testuser2@gmail.com", "123456");
 	}

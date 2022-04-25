@@ -41,23 +41,29 @@ public class HighscoreView extends View {
     private GameController gameController;
     private ButtonController buttonController;
     private HighScoreList highScoreList;
+    private HashMap<String, Integer> map;
 
 
     protected HighscoreView(ViewManager vm) {
         super(vm);
         //this.highScoreList = new HighScoreList();
-        this.gameController = new GameController();
+        this.gameController = vm.getController();
         this.buttonController = new ButtonController();
         logo = new Texture("logo.png");
         highscore = new Texture("Highscorelist.png");
         email = new Texture("Email.png");
         score = new Texture("Score.png");
-
+        //map = gameController.getHighScore();
         stage = new Stage(new FitViewport(FlowerPowerGame.WIDTH, FlowerPowerGame.HEIGHT));
         Gdx.input.setInputProcessor(stage);
         backButton = buttonController.getBackButton();
         setBackButtonEvent();
         stage.addActor(backButton);
+    }
+
+   private HashMap<String, Integer> getMap(){
+        map = gameController.getHighScore();
+        return this.map;
     }
 
     private void setBackButtonEvent() {
@@ -96,7 +102,7 @@ public class HighscoreView extends View {
         font.getData().setScale((float) 1.25);
         font.setColor(Color.BLACK);
         float y = 300;
-        HashMap<String, Integer> map = this.gameController.getHighScore();
+        HashMap<String, Integer> map = this.getMap();
         Iterator hmIterator = map.entrySet().iterator();
 
         while(hmIterator.hasNext()){
