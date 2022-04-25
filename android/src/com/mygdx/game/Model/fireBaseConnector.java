@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.MutableData;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.Transaction;
 import com.mygdx.game.FireBaseInterface;
 import com.google.firebase.database.DataSnapshot;
@@ -244,10 +245,13 @@ public class fireBaseConnector implements FireBaseInterface {
 
     public void updateScore(){
         DatabaseReference usersRef = database.getReference().child("users").child(this.getUID());
-        DatabaseReference scoreRef = usersRef.child("/Score");
-        int currentScore = this.getScore(this.UID);
-        System.out.println("Dette er currentScore : " + currentScore);
-        scoreRef.setValue(currentScore+1);
+        //DatabaseReference scoreRef = usersRef.child("/Score");
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("/Score", ServerValue.increment(1));
+        usersRef.updateChildren(updates);
+        //int currentScore = this.getScore(this.UID);
+        //System.out.println("Dette er currentScore : " + currentScore);
+        //scoreRef.setValue(currentScore+1);
     }
 
     /**
