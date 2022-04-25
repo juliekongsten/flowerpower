@@ -69,7 +69,7 @@ public class MenuView extends View {
             public boolean handle(Event event)
             {
                 //Handle the input event.
-                //vm.set(new PlaybookView(vm));
+                vm.set(new PlaybookView(vm));
                 System.out.println("PLAYBOOK");
                 return true;
             }
