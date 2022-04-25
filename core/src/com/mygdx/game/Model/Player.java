@@ -91,11 +91,7 @@ public class Player {
         return _FBIC.getUsername();
     }
 
-    public void updateScore(){
-        _FBIC.updateScore(this.score);
-        this.score=_FBIC.getScore(this.UID);
-        System.out.println("Dette er scoren i player: " + this.score);
-    }
+
 
     public Integer getScore() {
        // return _FBIC.getScore(this.UID);

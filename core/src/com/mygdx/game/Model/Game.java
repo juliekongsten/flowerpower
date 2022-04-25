@@ -188,6 +188,10 @@ public class Game {
         }
         return false;
     }
+    public void updateScore(){
+        _FBIC.updateScore();
+        //System.out.println("Dette er scoren i player: " + this.score);
+    }
 
     public void clearPlayers() {
         _FBIC.clearPlayers();

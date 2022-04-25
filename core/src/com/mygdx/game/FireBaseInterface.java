@@ -58,5 +58,5 @@ public interface FireBaseInterface {
     ArrayList<String> getUserIDs();
     String getNameFromUID(String UID);
     HashMap<Integer, String> getScoreMap();
-    void updateScore(int score);
+    void updateScore();
 }

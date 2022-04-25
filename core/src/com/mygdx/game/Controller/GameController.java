@@ -301,7 +301,7 @@ public class GameController {
         }
         else if (opBedsFullyHit){
             won = true;
-            player.updateScore();
+            game.updateScore();
             gameOver = true;
         }
     }

@@ -146,7 +146,7 @@ public class fireBaseInterfaceCore implements FireBaseInterface{
         return null;
     }
     @Override
-    public void updateScore(int score){}
+    public void updateScore(){}
 
 
 
