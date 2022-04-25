@@ -125,6 +125,7 @@ public class GameController {
             }*/
             game.storePlacedBeds(myBeds);
             for (Square mySquare : myBoard){
+                mySquare.setHasFlower(false); //nullstille tilfelle det var igjen fra tidligere
                 if (isSquareInBed(mySquare,myBeds)){
                     mySquare.setHasFlower(true);
                 }
@@ -150,9 +151,9 @@ public class GameController {
         //TODO: (Low priority) Get x- and y-values without hardkoding :D
         //må hente x og y-verdier fra view heller sånn at vi får riktige :D
         //henter nå fra printsetting i gameview, er nok lurt å gjøre det mindre hardkoding
-        int x = 26+15;
+        int x = 26+15; //201
         int my_y = 65+12;
-        int op_y = 424+12;
+        int op_y = 424+12; //596
         for (int i = 0; i< numberSquaresHeight; i++){
             for (int j = 0; j< numberSquaresWidth; j++){
                 Square mySquare = new Square(x, my_y, squaresize);
@@ -351,7 +352,7 @@ public class GameController {
 
     public void setTurnToOtherPlayer(){
         System.out.println("setTurnToOtherPlayer in controller");
-        this.hitSquare = this.game.getHit();
+        //this.hitSquare = this.game.getHit();
         //null første gang du bytter  - du startyet
         this.game.setTurnToOtherPlayer();
     }
