@@ -81,7 +81,7 @@ public class CreateView extends View {
             public boolean handle(Event event)
             {
                 //Handle the input event.
-                //vm.set(new PlaybookView(vm));
+                vm.set(new PlaybookView(vm));
                 System.out.println("PLAYBOOK");
                 return true;
             }
@@ -143,10 +143,8 @@ public class CreateView extends View {
         font.setColor(Color.BLACK);
         font.draw(sb, gamePin, (float) FlowerPowerGame.WIDTH/2-40, 280);
         this.start = gameController.checkForGameStart();
-        System.out.println("Start DILDO: " + start);
         if (start){
             vm.set(new PlaceBedsView(vm));
-            System.out.println("Placebedsview DILDO"); //kommer hit selvom det kun er 1 player i db
         }
 
         sb.end();
