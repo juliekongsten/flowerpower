@@ -583,10 +583,12 @@ public class fireBaseConnector implements FireBaseInterface {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, String> map = (Map<String, String>) dataSnapshot.getValue();
-
-                for (String name : map.values()) {
-                    setPlayerTurn(name);
+                if (map != null){
+                    for (String name : map.values()) {
+                        setPlayerTurn(name);
+                    }
                 }
+
                 isDone=true;
             }
             @Override
